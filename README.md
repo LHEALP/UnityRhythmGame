@@ -1,6 +1,19 @@
 # UnityRhythmGame
 
-The upload was completed at 2020-05-29 23:56:00 (UTC + 9).
+Full Project and Doc upload was completed at 2020-05-29 23:56:00 (UTC + 9).
+
+upgrade unity from 2018.3.11f1 to 2019.3.10f1
++ minimized unnecessary code deletion and copyright problems.
+
+bgm provider : SHK
+https://blog.naver.com/soundholick
+
+Whisper of the summer night (acoustic ver.)
+https://youtu.be/I4Yox9jqRb0
+
+Milky Way
+https://youtu.be/J6N3cy2LNEk
+
 -------------------------
 유니티엔진 리듬게임(노트방식)
 require Unity 2019.3.10f1 (64-bit)
