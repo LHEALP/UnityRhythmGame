@@ -15,6 +15,16 @@ Milky Way
 https://youtu.be/J6N3cy2LNEk
 
 -------------------------
+Play Video
+
+[![Watch the video](https://img.youtube.com/vi/WKaMFs3Du6g/0.jpg)](https://youtu.be/WKaMFs3Du6g)
+
+[![Watch the video](https://img.youtube.com/vi/T_xeteBYZ88/0.jpg)](https://youtu.be/T_xeteBYZ88)
+
+[![Watch the video](https://img.youtube.com/vi/GhWhDXBq6aM/0.jpg)](https://youtu.be/GhWhDXBq6aM)
+
+
+-------------------------
 유니티엔진 리듬게임(노트방식)
 require Unity 2019.3.10f1 (64-bit)
 
