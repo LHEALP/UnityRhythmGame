@@ -1,5 +1,6 @@
 # UnityRhythmGame
-
+sorry plz wait. I have some problem
+--
 Upload doc and project until 2020-05-29 22:00:00 (UTC + 9)
 -------------------------
 유니티엔진 리듬게임(노트방식)
