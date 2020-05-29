@@ -19,6 +19,7 @@ Play Video
 
 [![Watch the video](https://img.youtube.com/vi/WKaMFs3Du6g/0.jpg)](https://youtu.be/WKaMFs3Du6g)
 
+-------------------------
 The music used in the video below did not be uploaded to Github due to copyright issues.
 
 [![Watch the video](https://img.youtube.com/vi/T_xeteBYZ88/0.jpg)](https://youtu.be/T_xeteBYZ88)
