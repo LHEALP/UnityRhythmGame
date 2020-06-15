@@ -4,7 +4,7 @@ Full Project and Doc upload was completed at 2020-05-29 23:56:00 (UTC + 9).
 + upgrade unity from 2018.3.11f1 to 2019.3.10f1
 + unnecessary code deletion and minimized copyright problems.
 
-Doc used a translator.
+Doc(Eng) used a translator.
 https://translate.kakao.com/
 https://translate.google.co.kr/
 
