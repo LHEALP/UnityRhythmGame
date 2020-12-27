@@ -6,10 +6,7 @@ using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
-    public string ClassName { set; get; }
-
     public int PlayerClass { set; get; }
-
 
     public bool isEditMode = false;
 

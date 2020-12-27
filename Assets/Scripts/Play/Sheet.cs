@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class Sheet : MonoBehaviour
 {
-    // sheet의 정보를 담은 스크립트 입니다.
-
     // [SheetInfo]
     public string AudioFileName { set; get; }
     public string AudioViewTime { set; get; }
@@ -24,39 +22,18 @@ public class Sheet : MonoBehaviour
     public string Difficult { set; get; }
 
     // [NoteInfo]
-    public float X { set; get; }
-    public float NoteTime { set; get; }
-    public float NoteType { set; get; }
-    public float LongNoteTime { set; get; }
-
-    public float FirstNoteTime { set; get; }
-
-
     public List<float> noteList1 = new List<float>();
     public List<float> noteList2 = new List<float>();
     public List<float> noteList3 = new List<float>();
     public List<float> noteList4 = new List<float>();
-
-
-    int laneNumber;
-    float noteTime;
-    int noteType;
-    int longNoteTime;
 
     void Awake()
     {
         DontDestroyOnLoad(gameObject);
     }
 
-
-    public void SetNote(int laneNumber, float noteTime, int noteType, int longNoteTime)
+    public void SetNote(int laneNumber, float noteTime)
     {
-        this.laneNumber = laneNumber;
-        this.noteTime = noteTime;
-        this.noteType = noteType;
-        this.longNoteTime = longNoteTime;
-
-        //숏노트
         if (laneNumber.Equals(1))
             noteList1.Add(noteTime);
         else if (laneNumber.Equals(2))
@@ -65,7 +42,6 @@ public class Sheet : MonoBehaviour
             noteList3.Add(noteTime);
         else if (laneNumber.Equals(4))
             noteList4.Add(noteTime);
-
     }
 
     void showInfo()

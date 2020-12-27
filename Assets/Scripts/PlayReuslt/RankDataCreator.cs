@@ -13,9 +13,6 @@ public class RankDataCreator : MonoBehaviour
     string strClassScore;
     string strSongScore;
 
-
-
-
     int className;
     int num;
     

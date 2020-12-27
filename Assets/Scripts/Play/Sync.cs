@@ -5,8 +5,6 @@ using UnityEngine;
 public class Sync : MonoBehaviour
 {
     Player player;
-
-    // 음악의 싱크를 담당하는 스크립트입니다.
     AudioSource music;
 
     AudioSource playTik;
@@ -21,7 +19,6 @@ public class Sync : MonoBehaviour
     //float musicBeat = 4.0f;
     //float stdBeat = 4.0f;
    
-
     public float oneBeatTime = 0f;
     public float beatPerSample = 0f;
 
@@ -40,26 +37,21 @@ public class Sync : MonoBehaviour
     public float scrollSpeed; //곡 bpm에 따른 기본 배속
     public float userSpeedRate;
 
-
     void Start()
     {
         player = FindObjectOfType<Player>();
 
         playTik = GetComponent<AudioSource>();
         music = FindObjectOfType<SongManager>().GetComponent<AudioSource>();
-        //music = GameObject.Find("Music").GetComponent<AudioSource>();
         sheet = GameObject.Find("Sheet").GetComponent<Sheet>();
         generator = GameObject.Find("GeneratorNote").GetComponent<GeneratorNote>();
 
         scrollSpeed = 10.0f;
         userSpeedRate = 1f;
 
-        if (player.isEditMode)
-            scrollSpeed = 2.0f;
-
         musicBPM = sheet.Bpm;
         // 현재곡의 주파수값
-        frequency = (float)music.clip.frequency;
+        frequency = music.clip.frequency;
         // 시작점
         offset = sheet.Offset;
         // 시작점 초를 샘플로 변환
@@ -75,17 +67,7 @@ public class Sync : MonoBehaviour
         // 1바 시간값
         barPerSec = oneBeatTime * 4.0f;
         // 1바 샘플값
-        //barPerSample = barPerSec * playMusic.clip.frequency;
-
-        //playMusic.PlayDelayed(0.8f); // 유저 배속에따라 조절필요
-        //playMusic.Play();
-        
-    }
-
-
-    void Update()
-    {
-        //StartCoroutine(PlayTik());
+        //barPerSample = barPerSec * playMusic.clip.frequency;     
     }
 
     IEnumerator PlayTik()

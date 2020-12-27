@@ -1,5 +1,7 @@
+SheetVersion0
+
 [SheetInfo]
-AudioFileName=Milky Way.mp3
+AudioFileName=Milky Way
 AudioViewTime=30
 ImageFileName=Milky Way_Img
 BPM=155
@@ -13,7 +15,7 @@ Title=Milky Way
 Artist=SHK
 Source=SHK
 Sheet=LHEALP
-Difficult=Lv.4
+Difficult=4
 
 [NoteInfo]
 64,192,1550,1,0,0:0:0:0:

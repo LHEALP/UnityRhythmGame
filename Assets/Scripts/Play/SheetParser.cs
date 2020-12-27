@@ -6,33 +6,22 @@ using System;
 
 public class SheetParser : MonoBehaviour
 {
-    // sheet를 파싱하는 스크립트 입니다.
-
-    StreamReader reader = null;
-
     TextAsset textAsset;
     StringReader strReader;
 
     Sheet sheet;
-    Note note;
-    BeatBar beatBar;
     SongManager songManager;
 
-    string sheetText;
+    string sheetText = "";
     string songName;
     string[] textSplit;
-
-    bool isFirstNote = true;
 
     void Awake()
     {
         sheet = GameObject.Find("Sheet").GetComponent<Sheet>();
         songManager = GameObject.Find("SongSelect").GetComponent<SongManager>();
-        
-        textSplit = null;
-        sheetText = "";
+     
         songName = songManager.songName;
-
         textAsset = Resources.Load(songName + "/" + songName + "_data") as TextAsset;
         strReader = new StringReader(textAsset.text);
 
@@ -42,75 +31,55 @@ public class SheetParser : MonoBehaviour
     // 불러온 텍스트를 한줄씩 읽어, 원하는 부분 잘라내어 저장
     public void ParseSheet()
     {
+        int version = 1;
+        int laneNumber = 1;
+        float noteTime = 1;
+
         while(sheetText != null)
         {
             sheetText = strReader.ReadLine();
             textSplit = sheetText.Split('=');
 
-            if (textSplit[0].Equals("AudioFileName"))
-                sheet.AudioFileName = textSplit[1];
-            else if (textSplit[0].Equals("AudioViewTime"))
-                sheet.AudioViewTime = textSplit[1];
-            else if (textSplit[0].Equals("ImageFileName"))
-                sheet.ImageFileName = textSplit[1];
-            else if (textSplit[0].Equals("BPM"))
-                sheet.Bpm = Single.Parse(textSplit[1]);
-            else if (textSplit[0].Equals("Offset"))
-                sheet.Offset = Single.Parse(textSplit[1]);
-            else if (textSplit[0].Equals("Beat"))
-                sheet.Beat = Int32.Parse(textSplit[1]);
-            else if (textSplit[0].Equals("Bit"))
-                sheet.Bit = Int32.Parse(textSplit[1]);
-            else if (textSplit[0].Equals("Bar"))
-                sheet.BarCnt = Int32.Parse(textSplit[1]);
-            else if (textSplit[0].Equals("Title"))
-                sheet.Title = textSplit[1];
-            else if (textSplit[0].Equals("Artist"))
-                sheet.Artist = textSplit[1];
-            else if (textSplit[0].Equals("Source"))
-                sheet.Source = textSplit[1];
-            else if (textSplit[0].Equals("Sheet"))
-                sheet.SheetBy = textSplit[1];
-            else if (textSplit[0].Equals("Difficult"))
-                sheet.Difficult = textSplit[1];
-            else if (sheetText.Equals("[NoteInfo]"))
+            if (textSplit[0] == "SheetVersion0")       version = 0;
+            else if (textSplit[0] == "AudioFileName")  sheet.AudioFileName = textSplit[1];
+            else if (textSplit[0] == "AudioViewTime")  sheet.AudioViewTime = textSplit[1];
+            else if (textSplit[0] == "ImageFileName")  sheet.ImageFileName = textSplit[1];
+            else if (textSplit[0] == "BPM")            sheet.Bpm = float.Parse(textSplit[1]);
+            else if (textSplit[0] == "Offset")         sheet.Offset = float.Parse(textSplit[1]);
+            else if (textSplit[0] == "Beat")           sheet.Beat = int.Parse(textSplit[1]);
+            else if (textSplit[0] == "Bit")            sheet.Bit = int.Parse(textSplit[1]);
+            else if (textSplit[0] == "Bar")            sheet.BarCnt = int.Parse(textSplit[1]);
+            else if (textSplit[0] == "Title")          sheet.Title = textSplit[1];
+            else if (textSplit[0] == "Artist")         sheet.Artist = textSplit[1];
+            else if (textSplit[0] == "Source")         sheet.Source = textSplit[1];
+            else if (textSplit[0] == "Sheet")          sheet.SheetBy = textSplit[1];
+            else if (textSplit[0] == "Difficult")      sheet.Difficult = textSplit[1];
+            else if (sheetText == "[NoteInfo]")
             {
-                while (sheetText != null)
+                while ((sheetText = strReader.ReadLine()) != null)
                 {
-                    sheetText = strReader.ReadLine();
                     textSplit = sheetText.Split(',');
 
-                    int laneNumber;
-                    Int32.TryParse(textSplit[0], out laneNumber);
-                    if (laneNumber.Equals(64))
-                        laneNumber = 1;
-                    else if (laneNumber.Equals(192))
-                        laneNumber = 2;
-                    else if (laneNumber.Equals(320))
-                        laneNumber = 3;
-                    else if (laneNumber.Equals(448))
-                        laneNumber = 4;
-
-                    float noteTime;
-                    Single.TryParse(textSplit[2], out noteTime);
-
-                    int noteType;
-                    Int32.TryParse(textSplit[3], out noteType);
-
-                    int longNoteTime;
-                    Int32.TryParse(textSplit[5], out longNoteTime);
-
-                    sheet.SetNote(laneNumber, noteTime, noteType, longNoteTime);
-
-                    if (isFirstNote.Equals(true))
+                    if (version == 0)
                     {
-                        sheet.FirstNoteTime = noteTime;
-                        isFirstNote = false;
+                        int.TryParse(textSplit[0], out laneNumber);
+                        float.TryParse(textSplit[2], out noteTime);
+
+                        if (laneNumber == 64) laneNumber = 1;
+                        else if (laneNumber == 192) laneNumber = 2;
+                        else if (laneNumber == 320) laneNumber = 3;
+                        else if (laneNumber == 448) laneNumber = 4;
                     }
+                    else
+                    {
+                        int.TryParse(textSplit[1], out laneNumber);
+                        float.TryParse(textSplit[0], out noteTime);
+                    }
+
+                    sheet.SetNote(laneNumber, noteTime);
                 }
             }
         }
-        reader.Close();
     }
 
 }

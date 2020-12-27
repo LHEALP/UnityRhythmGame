@@ -16,13 +16,6 @@ public class Judgement : MonoBehaviour
     float currentNoteTime3;
     float currentNoteTime4;
 
-    // 롱
-    /*
-    float currentLongNoteTime1;
-    float currentLongNoteTime2;
-    float currentLongNoteTime3;
-    float currentLongNoteTime4;*/
-
     // 판정 배율(frequency값에 기반)
     float greatRate = 3025f;
     float goodRate = 7050f;
@@ -30,18 +23,10 @@ public class Judgement : MonoBehaviour
 
     int laneNum;
 
-    //숏
     Queue<float> judgeLane1 = new Queue<float>();
     Queue<float> judgeLane2 = new Queue<float>();
     Queue<float> judgeLane3 = new Queue<float>();
     Queue<float> judgeLane4 = new Queue<float>();
-
-    //롱
-    /*
-    Queue<float> judgeLaneLong1 = new Queue<float>();
-    Queue<float> judgeLaneLong2 = new Queue<float>();
-    Queue<float> judgeLaneLong3 = new Queue<float>();
-    Queue<float> judgeLaneLong4 = new Queue<float>();*/
 
     void Start()
     {
@@ -49,10 +34,8 @@ public class Judgement : MonoBehaviour
         SetQueue();
         songManager = GameObject.Find("SongSelect").GetComponent<SongManager>();
         score = GameObject.Find("Score").GetComponent<Score>();
-        
     }
 
-    
     void Update()
     {
         // 입력 외 판정(반복문에서 계속 체킹)
@@ -110,57 +93,6 @@ public class Judgement : MonoBehaviour
                 score.ProcessScore(0);
             }
         }
-
-        /*
-        // 롱노트 판정
-        // 1번 레인
-        if (judgeLaneLong1.Count > 0)
-        {
-            currentLongNoteTime1 = judgeLaneLong1.Peek();
-            currentLongNoteTime1 = currentLongNoteTime1 * 0.001f * songManager.music.clip.frequency;
-
-            if (currentLongNoteTime1 + missRate <= currentTime)
-            {
-                judgeLaneLong1.Dequeue();
-                score.ProcessScore(0);
-            }
-        }
-        // 2번 레인
-        if (judgeLaneLong2.Count > 0)
-        {
-            currentLongNoteTime2 = judgeLaneLong2.Peek();
-            currentLongNoteTime2 = currentLongNoteTime2 * 0.001f * songManager.music.clip.frequency;
-
-            if (currentLongNoteTime2 + missRate <= currentTime)
-            {
-                judgeLaneLong2.Dequeue();
-                score.ProcessScore(0);
-            }
-        }
-        // 3번 레인
-        if (judgeLaneLong3.Count > 0)
-        {
-            currentLongNoteTime3 = judgeLaneLong3.Peek();
-            currentLongNoteTime3 = currentLongNoteTime3 * 0.001f * songManager.music.clip.frequency;
-
-            if (currentLongNoteTime3 + missRate <= currentTime)
-            {
-                judgeLaneLong3.Dequeue();
-                score.ProcessScore(0);
-            }
-        }
-        // 4번 레인
-        if (judgeLaneLong4.Count > 0)
-        {
-            currentLongNoteTime4 = judgeLaneLong4.Peek();
-            currentLongNoteTime4 = currentLongNoteTime4 * 0.001f * songManager.music.clip.frequency;
-
-            if (currentLongNoteTime4 + missRate <= currentTime)
-            {
-                judgeLaneLong4.Dequeue();
-                score.ProcessScore(0);
-            }
-        }*/
     }
 
     // 잘돌아가긴하는데 여러 상황을 만들어야함
@@ -283,117 +215,6 @@ public class Judgement : MonoBehaviour
                 }
             }
         }
-
-        /*
-        // 롱노트 판정
-        if (laneNum.Equals(5))
-        {
-            if (currentLongNoteTime1 > currentTime - missRate && currentLongNoteTime1 < currentTime + missRate)
-            {
-                if (currentLongNoteTime1 > currentTime - goodRate && currentLongNoteTime1 < currentTime + goodRate)
-                {
-                    // 그레잇판정
-                    if (currentLongNoteTime1 > currentTime - greatRate && currentLongNoteTime1 < currentTime + greatRate)
-                    {
-                        judgeLaneLong1.Dequeue();
-                        score.ProcessScore(2);
-                    }
-                    // 굿판정
-                    else
-                    {
-                        judgeLaneLong1.Dequeue();
-                        score.ProcessScore(1);
-                    }
-                }
-                // 너무 빨리 입력했을때 미스처리
-                else
-                {
-                    judgeLaneLong1.Dequeue();
-                    score.ProcessScore(0);
-                }
-            }
-        }
-        if (laneNum.Equals(6))
-        {
-            if (currentLongNoteTime2 > currentTime - missRate && currentLongNoteTime2 < currentTime + missRate)
-            {
-                if (currentLongNoteTime2 > currentTime - goodRate && currentLongNoteTime2 < currentTime + goodRate)
-                {
-                    // 그레잇판정
-                    if (currentLongNoteTime2 > currentTime - greatRate && currentLongNoteTime2 < currentTime + greatRate)
-                    {
-                        judgeLaneLong2.Dequeue();
-                        score.ProcessScore(2);
-                    }
-                    // 굿판정
-                    else
-                    {
-                        judgeLaneLong2.Dequeue();
-                        score.ProcessScore(1);
-                    }
-                }
-                // 너무 빨리 입력했을때 미스처리
-                else
-                {
-                    judgeLaneLong2.Dequeue();
-                    score.ProcessScore(0);
-                }
-            }
-        }
-        if (laneNum.Equals(7))
-        {
-            if (currentLongNoteTime3 > currentTime - missRate && currentLongNoteTime3 < currentTime + missRate)
-            {
-                if (currentLongNoteTime3 > currentTime - goodRate && currentLongNoteTime3 < currentTime + goodRate)
-                {
-                    // 그레잇판정
-                    if (currentLongNoteTime3 > currentTime - greatRate && currentLongNoteTime3 < currentTime + greatRate)
-                    {
-                        judgeLaneLong3.Dequeue();
-                        score.ProcessScore(2);
-                    }
-                    // 굿판정
-                    else
-                    {
-                        judgeLaneLong3.Dequeue();
-                        score.ProcessScore(1);
-                    }
-                }
-                // 너무 빨리 입력했을때 미스처리
-                else
-                {
-                    judgeLaneLong3.Dequeue();
-                    score.ProcessScore(0);
-                }
-            }
-        }
-        if (laneNum.Equals(8))
-        {
-            if (currentLongNoteTime4 > currentTime - missRate && currentLongNoteTime4 < currentTime + missRate)
-            {
-                if (currentLongNoteTime4 > currentTime - goodRate && currentLongNoteTime4 < currentTime + goodRate)
-                {
-                    // 그레잇판정
-                    if (currentLongNoteTime4 > currentTime - greatRate && currentLongNoteTime4 < currentTime + greatRate)
-                    {
-                        judgeLaneLong4.Dequeue();
-                        score.ProcessScore(2);
-                    }
-                    // 굿판정
-                    else
-                    {
-                        judgeLaneLong4.Dequeue();
-                        score.ProcessScore(1);
-                    }
-                }
-                // 너무 빨리 입력했을때 미스처리
-                else
-                {
-                    judgeLaneLong4.Dequeue();
-                    score.ProcessScore(0);
-                }
-            }
-        }*/
     }
 
     // 각 레인의 노트 시간들을 큐에 저장
@@ -408,17 +229,6 @@ public class Judgement : MonoBehaviour
             judgeLane3.Enqueue(noteTime);
         foreach (float noteTime in sheet.noteList4)
             judgeLane4.Enqueue(noteTime);
-
-        // 롱
-        /*
-        foreach (float longNoteTime in sheet.longNoteList1)
-            judgeLaneLong1.Enqueue(longNoteTime);
-        foreach (float longNoteTime in sheet.longNoteList2)
-            judgeLaneLong2.Enqueue(longNoteTime);
-        foreach (float longNoteTime in sheet.longNoteList3)
-            judgeLaneLong3.Enqueue(longNoteTime);
-        foreach (float longNoteTime in sheet.longNoteList4)
-            judgeLaneLong4.Enqueue(longNoteTime);*/
     }
     
 }

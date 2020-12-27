@@ -7,28 +7,16 @@ public class Note : MonoBehaviour
 {
     Player player;
 
-    // 노트 정보를 담은 스크립트입니다.
     Sync sync;
-    //Transform judgebar;
-    //Vector3 judgePos;
     Transform destoryPos;
     Vector3 desPos;
 
-
-    // 숏노트, 롱노트
     float speed;
-
-
-    // 판정 및 점수
-    float distance;
     public int score;
 
     void Start()
     {
         player = FindObjectOfType<Player>();
-
-        //judgebar = GameObject.Find("JudgeBar").GetComponent<Transform>();
-        //judgePos = judgebar.transform.position;
 
         if (!player.isEditMode)
         {
@@ -45,23 +33,15 @@ public class Note : MonoBehaviour
         StartCoroutine(MoveNote());
     }
 
-    // 노트 하락
     IEnumerator MoveNote()
     {
-        if (!player.isEditMode)
+        if (transform.position.y > desPos.y)
         {
-            if (transform.position.y > desPos.y)
-            {
-                transform.Translate(Vector3.down * speed * Time.smoothDeltaTime);
-            }
-            else
-            {
-                gameObject.SetActive(false);
-            }
+            transform.Translate(Vector3.down * speed * Time.smoothDeltaTime);
         }
         else
         {
-            transform.Translate(Vector3.down * speed * Time.smoothDeltaTime);
+            gameObject.SetActive(false);
         }
 
         yield return null;
@@ -87,6 +67,6 @@ public class Note : MonoBehaviour
     // 싱크 확인용 메소드 -> Sync.cs
     public void RotateNote()
     { 
-            transform.Rotate(Vector3.back * 45f);
+         transform.Rotate(Vector3.back * 45f);
     }
 }

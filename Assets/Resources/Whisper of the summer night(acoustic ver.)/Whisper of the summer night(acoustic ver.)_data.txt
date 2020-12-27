@@ -1,5 +1,7 @@
+SheetVersion0
+
 [SheetInfo]
-AudioFileName=Whisper of the summer night(acoustic ver.).mp3
+AudioFileName=Whisper of the summer night(acoustic ver.)
 AudioViewTime=30
 ImageFileName=Whisper of the summer night(acoustic ver.)_Img
 BPM=71
@@ -13,7 +15,7 @@ Title=Whisper of the summer night(acoustic ver.)
 Artist=SHK
 Source=SHK
 Sheet=LHEALP
-Difficult=Lv.2.5
+Difficult=2.5
 
 [NoteInfo]
 448,192,3396,1,0,0:0:0:0:
