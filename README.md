@@ -1,10 +1,39 @@
 # UnityRhythmGame
-sorry plz wait. I have some problem
---
-Upload doc and project until 2020-05-29 22:00:00 (UTC + 9)
+
+Full Project and Doc upload was completed at 2020-05-29 23:56:00 (UTC + 9).
++ upgrade unity from 2018.3.11f1 to 2019.3.10f1
++ unnecessary code deletion and minimized copyright problems.
+
+Doc(Eng) used a translator.
+https://translate.kakao.com/
+https://translate.google.co.kr/
+
+-------------------------
+bgm provider : SHK
+https://blog.naver.com/soundholick
+
+Whisper of the summer night (acoustic ver.)
+https://youtu.be/I4Yox9jqRb0
+
+Milky Way
+https://youtu.be/J6N3cy2LNEk
+
+-------------------------
+Play Video
+
+[![Watch the video](https://img.youtube.com/vi/WKaMFs3Du6g/0.jpg)](https://youtu.be/WKaMFs3Du6g)
+
+-------------------------
+The music used in the video below did not be uploaded to Github due to copyright issues.
+
+[![Watch the video](https://img.youtube.com/vi/T_xeteBYZ88/0.jpg)](https://youtu.be/T_xeteBYZ88)
+
+[![Watch the video](https://img.youtube.com/vi/GhWhDXBq6aM/0.jpg)](https://youtu.be/GhWhDXBq6aM)
+
+
 -------------------------
 유니티엔진 리듬게임(노트방식)
-require Unity 2018.3.11f1 (64-bit)
+require Unity 2019.3.10f1 (64-bit)
 
 스크립트는 씬별로 폴더마다 저장되어 있습니다.
 리듬게임의 핵심은 Play에 담겨있습니다.(노트 생성 및 판정등)
