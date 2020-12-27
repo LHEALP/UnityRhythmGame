@@ -18,6 +18,8 @@ public class SongItemDisplay : MonoBehaviour
 
     public SongManager songManager;
 
+    Player player;
+
     // static을 사용하지 않으면 이벤트가 변수값을 전부 기억하고 있기 때문에, 전에 한번이라도 눌렀던적 있다면
     // 다른것을 한번 누르고 다시 눌러도 씬이 전환되지 않기 위함.
     static string songCheck = "";
@@ -29,6 +31,8 @@ public class SongItemDisplay : MonoBehaviour
         if (item != null) Prime(item);
 
         songManager = GameObject.Find("SongSelect").GetComponent<SongManager>();
+
+        player = FindObjectOfType<Player>();
     }
 
     public void Prime(SongItem item)
@@ -61,8 +65,8 @@ public class SongItemDisplay : MonoBehaviour
                 songCheck = item.songName;
                 clickCnt++;
             }
-            
 
+            Debug.Log(item.songName);
             // 노래 미리듣기
             songManager.PlayAudioPreview(item.songName);
 
@@ -72,7 +76,10 @@ public class SongItemDisplay : MonoBehaviour
             {
                 songManager.SelectSong(item.songName);
                 clickCnt = 0; // ESC를 눌러 돌아왔을때 제대로 작동하기 위함
-                SceneManager.LoadScene("Play");
+                if (!player.isEditMode)
+                    SceneManager.LoadSceneAsync("Play");
+                else
+                    SceneManager.LoadSceneAsync("NoteEditor");
             }
 
 

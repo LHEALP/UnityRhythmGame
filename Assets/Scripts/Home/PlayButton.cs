@@ -7,12 +7,12 @@ using UnityEngine.SceneManagement;
 public class PlayButton : MonoBehaviour
 {
     Dropdown dropDownClass;
-    //Player player;
+    Player player;
 
     void Start()
     {
         dropDownClass = GameObject.Find("ClassDropdown").GetComponent<Dropdown>();
-        //player = GameObject.Find("Player").GetComponent<Player>();
+        player = GameObject.Find("Player").GetComponent<Player>();
     }
 
     public void OnClickPlayButton()
@@ -20,5 +20,7 @@ public class PlayButton : MonoBehaviour
         //player.PlayerClass = dropDownClass.value;
 
         SceneManager.LoadScene("SongSelect");
+
+        player.isEditMode = false;
     }
 }

@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Sync : MonoBehaviour
 {
+    Player player;
+
     // 음악의 싱크를 담당하는 스크립트입니다.
     AudioSource music;
 
@@ -41,13 +43,19 @@ public class Sync : MonoBehaviour
 
     void Start()
     {
+        player = FindObjectOfType<Player>();
+
         playTik = GetComponent<AudioSource>();
-        music = GameObject.Find("Music").GetComponent<AudioSource>();
+        music = FindObjectOfType<SongManager>().GetComponent<AudioSource>();
+        //music = GameObject.Find("Music").GetComponent<AudioSource>();
         sheet = GameObject.Find("Sheet").GetComponent<Sheet>();
         generator = GameObject.Find("GeneratorNote").GetComponent<GeneratorNote>();
 
         scrollSpeed = 10.0f;
         userSpeedRate = 1f;
+
+        if (player.isEditMode)
+            scrollSpeed = 2.0f;
 
         musicBPM = sheet.Bpm;
         // 현재곡의 주파수값

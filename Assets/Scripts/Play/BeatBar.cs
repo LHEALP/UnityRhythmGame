@@ -6,6 +6,7 @@ using System;
 public class BeatBar : MonoBehaviour
 {
     // 바의 정보를 담은 스크립트입니다.
+    Player player;
     Sheet sheet;
     Sync sync;
     Transform judgebar;
@@ -16,8 +17,13 @@ public class BeatBar : MonoBehaviour
 
     void Start()
     {
-        judgebar = GameObject.Find("JudgeBar").GetComponent<Transform>();
-        judgePos = judgebar.transform.position;
+        player = FindObjectOfType<Player>();
+
+        if (!player.isEditMode)
+        {
+            judgebar = GameObject.Find("JudgeBar").GetComponent<Transform>();
+            judgePos = judgebar.transform.position;
+        }
         sheet = GameObject.Find("Sheet").GetComponent<Sheet>();
         sync = GameObject.Find("Sync").GetComponent<Sync>();
         barCnt = sheet.BarCnt;

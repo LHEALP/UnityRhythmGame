@@ -7,7 +7,6 @@ public class SongDisplay : MonoBehaviour
     public Transform targetTransform;
     public SongItemDisplay itemDisplayPrefab;
 
-    //InventoryDisplay.cs
 
     public void Prime(List<SongItem> items)
     {

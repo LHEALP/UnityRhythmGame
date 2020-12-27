@@ -5,10 +5,12 @@ using System;
 
 public class Note : MonoBehaviour
 {
+    Player player;
+
     // 노트 정보를 담은 스크립트입니다.
     Sync sync;
-    Transform judgebar;
-    Vector3 judgePos;
+    //Transform judgebar;
+    //Vector3 judgePos;
     Transform destoryPos;
     Vector3 desPos;
 
@@ -23,10 +25,17 @@ public class Note : MonoBehaviour
 
     void Start()
     {
-        judgebar = GameObject.Find("JudgeBar").GetComponent<Transform>();
-        judgePos = judgebar.transform.position;
-        destoryPos = GameObject.Find("DestroyNote").GetComponent<Transform>();
-        desPos = destoryPos.transform.position;
+        player = FindObjectOfType<Player>();
+
+        //judgebar = GameObject.Find("JudgeBar").GetComponent<Transform>();
+        //judgePos = judgebar.transform.position;
+
+        if (!player.isEditMode)
+        {
+            destoryPos = GameObject.Find("DestroyNote").GetComponent<Transform>();
+            desPos = destoryPos.transform.position;
+        }
+
         sync = GameObject.Find("Sync").GetComponent<Sync>();
         speed = sync.scrollSpeed * sync.userSpeedRate;
     }
@@ -39,13 +48,20 @@ public class Note : MonoBehaviour
     // 노트 하락
     IEnumerator MoveNote()
     {
-        if (transform.position.y > desPos.y)
+        if (!player.isEditMode)
         {
-            transform.Translate(Vector3.down * speed * Time.smoothDeltaTime);
+            if (transform.position.y > desPos.y)
+            {
+                transform.Translate(Vector3.down * speed * Time.smoothDeltaTime);
+            }
+            else
+            {
+                gameObject.SetActive(false);
+            }
         }
         else
         {
-            gameObject.SetActive(false);
+            transform.Translate(Vector3.down * speed * Time.smoothDeltaTime);
         }
 
         yield return null;

@@ -56,7 +56,9 @@ public class SongManager : MonoBehaviour
     public void StopSong(bool isInputESC)
     {
         this.isInputESC = isInputESC;
+
         music.Stop();
+
     }
 
     // 곡이 선택되었을 때 미리듣기

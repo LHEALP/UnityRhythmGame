@@ -10,6 +10,9 @@ public class Player : MonoBehaviour
 
     public int PlayerClass { set; get; }
 
+
+    public bool isEditMode = false;
+
     void Awake()
     {
         DontDestroyOnLoad(gameObject);

@@ -20,4 +20,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/PlayResult.unity
     guid: 6ab0598771911f34f807ad17f7b1c4ca
+  - enabled: 1
+    path: Assets/Scenes/NoteEditor.unity
+    guid: 8ae64369a76a2ae41996c648abe17809
   m_configObjects: {}
