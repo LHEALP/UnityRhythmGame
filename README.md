@@ -1,9 +1,13 @@
 # UnityRhythmGame
 
-2020-12-28 02:04 (UTC + 9) Modified
+2020-12-29 23:36 (UTC + 9) Modified
 
 ## 중요! Important!
 
+https://github.com/LHEALP/Runthm <br/>
+노트 에디터 프로젝트가 **공개**되었습니다! <br/>
+Note editor project has been **public**!<br/>
+<br/>
 오랜만입니다.<br/>
 노트 에디터를 공개할 예정입니다. https://github.com/LHEALP/Runthm <br/>
 11월부터 프로젝트를 새롭게 생성하여 조금씩 작업하였으며 어느정도 큰 틀은 완성된 상태입니다.<br/>
