@@ -1,6 +1,10 @@
 [Description]
-title: BUNGEE
-artist: OhMyGirl
+Title: BUNGEE
+Artist: OhMyGirl
+
+[Audio]
+BPM: 128
+Offset: 0
 
 [Note]
 0, 0, 1

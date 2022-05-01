@@ -19,5 +19,9 @@ public class Sheet
 {
     public string title;
     public string artist;
+
+    public int bpm;
+    public int offset;
+
     public List<Note> notes = new List<Note>();
 }

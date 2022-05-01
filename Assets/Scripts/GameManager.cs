@@ -1,0 +1,58 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class GameManager : MonoBehaviour
+{
+    static GameManager instance;
+    public static GameManager Instance
+    {
+        get
+        {
+            return instance;
+        }
+    }
+
+    public Sheet sheet;
+
+    void Awake()
+    {
+        if (instance == null)
+            instance = this;
+    }
+
+    void Start()
+    {
+        Select();
+    }
+
+    void Update()
+    {
+        
+    }
+
+    // 리스트에서 프리뷰하기 위해 아이템을 한 번 눌렀을 때
+    public void Select()
+    {
+        // UI에 앨범이미지, 음악등 미리보기
+
+        // 리스트UI에서 클릭되면 데이터 받아와서 Insert에 AudioClip 넘겨줘서 바인딩
+        //AudioManager.Instance.Insert();
+        AudioManager.Instance.Play();
+
+        // 아무튼 앨범이미지 바인딩 등
+    }
+
+    // 리스트에서 플레이하기 위해 아이템을 두 번 눌렀을 때(게임 시작)
+    public void Play()
+    {
+        // 여기에 화면 페이드
+
+        // 파싱, 생성 등
+        sheet = Parser.Instance.Parse("BUNGEE");        
+        
+        // 게임 재생
+        AudioManager.Instance.Play();
+        // 노트 하강
+    }
+}

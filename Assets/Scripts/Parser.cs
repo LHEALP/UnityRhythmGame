@@ -4,33 +4,33 @@ using UnityEngine;
 using System.IO;
 using System;
 
-public class Parser : MonoBehaviour
+public class Parser
 {
-    Sheet sheet = new Sheet();
+    static Parser instance;
+    public static Parser Instance
+    {
+        get
+        {
+            if (instance == null)
+                instance = new Parser();
+            return instance;
+        }
+    }
+
     enum Step
     {
         Description,
+        Audio,
         Note,
     }
     Step currentStep = Step.Description;
 
-    void Start()
+    public Sheet Parse(string title)
     {
-        Parse();
-
-        Debug.Log(sheet.title);
-        Debug.Log(sheet.artist);
-        foreach (Note note in sheet.notes)
-        {
-            Debug.Log($"{note.time}, {note.type}, {note.line}");
-        }
-    }
-
-    void Parse()
-    {
+        Sheet sheet = new Sheet();
         string readLine = string.Empty;
 
-        using (StreamReader sr = new StreamReader($"{Application.dataPath}/BUNGEE.sheet"))
+        using (StreamReader sr = new StreamReader($"{Application.dataPath}/Sheet/{title}/{title}.sheet"))
         {
             readLine = sr.ReadLine();
 
@@ -41,6 +41,11 @@ public class Parser : MonoBehaviour
                     currentStep = Step.Description;
                     readLine = sr.ReadLine();
                 }
+                else if (readLine.StartsWith("[Audio]"))
+                {
+                    currentStep = Step.Audio;
+                    readLine = sr.ReadLine();
+                }
                 else if (readLine.StartsWith("[Note]"))
                 {
                     currentStep = Step.Note;
@@ -49,10 +54,17 @@ public class Parser : MonoBehaviour
 
                 if (currentStep == Step.Description)
                 {
-                    if (readLine.StartsWith("title"))
+                    if (readLine.StartsWith("Title"))
                         sheet.title = readLine.Split(':')[1].Trim();
-                    else if (readLine.StartsWith("artist"))
+                    else if (readLine.StartsWith("Artist"))
                         sheet.artist = readLine.Split(':')[1].Trim();
+                }
+                else if (currentStep == Step.Audio)
+                {
+                    if (readLine.StartsWith("BPM"))
+                        sheet.bpm = int.Parse(readLine.Split(':')[1].Trim());
+                    else if (readLine.StartsWith("Offset"))
+                        sheet.offset = int.Parse(readLine.Split(':')[1].Trim());
                 }
                 else if (currentStep == Step.Note)
                 {
@@ -65,6 +77,8 @@ public class Parser : MonoBehaviour
                 readLine = sr.ReadLine();
             }
         }
+
+        return sheet;
     }
 
 }
