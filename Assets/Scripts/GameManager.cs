@@ -56,7 +56,7 @@ public class GameManager : MonoBehaviour
         // 화면 페이드 인
         
         // 게임 재생
-        AudioManager.Instance.Play();
+        //AudioManager.Instance.Play();
         // 노트 하강
     }
 }
