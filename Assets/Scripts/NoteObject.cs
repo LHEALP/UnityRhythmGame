@@ -7,12 +7,13 @@ public abstract class NoteObject : MonoBehaviour
     /// <summary>
     /// 노트 하강 속도
     /// </summary>
-    public float speed;
+    public float speed = 1f;
 
     /// <summary>
     /// 노트 하강
     /// </summary>
     public abstract void Move();
+    public abstract IEnumerator IEMove();
 
     /// <summary>
     /// 노트 위치지정 (배속조절)
@@ -22,16 +23,23 @@ public abstract class NoteObject : MonoBehaviour
 
 public class NoteShort : NoteObject
 {
-    GameObject note;
-
     public override void Move()
     {
-        Debug.Log("숏");
+        StartCoroutine(IEMove());
+    }
+
+    public override IEnumerator IEMove()
+    {
+        while (true)
+        {
+            transform.position += Vector3.down * speed * Time.deltaTime;
+            yield return null;
+        }
     }
 
     public override void SetPosition()
     {
-        note.transform.position = Vector3.zero;
+        transform.position = new Vector3(transform.position.x, transform.position.y * speed, transform.position.z);
     }
 }
 
@@ -41,7 +49,7 @@ public class NoteLong : NoteObject
     GameObject head;
     GameObject tail;
 
-    void Start()
+    void Awake()
     {
         head = transform.GetChild(0).gameObject;
         tail = transform.GetChild(1).gameObject;
@@ -50,13 +58,24 @@ public class NoteLong : NoteObject
 
     public override void Move()
     {
-        Debug.Log("롱");
+        StartCoroutine(IEMove());
+    }
+
+    public override IEnumerator IEMove()
+    {
+        while (true)
+        {
+            head.transform.position += Vector3.down * speed * Time.deltaTime;
+            tail.transform.position += Vector3.down * speed * Time.deltaTime;
+            lineRenderer.SetPositions(new Vector3[]{head.transform.position, tail.transform.position});
+            yield return null;
+        }
     }
 
     public override void SetPosition()
     {
-        head.transform.position = Vector3.zero;
-        tail.transform.position = Vector3.zero;
+        head.transform.position = new Vector3(head.transform.position.x, head.transform.position.y * speed, head.transform.position.z);
+        tail.transform.position = new Vector3(tail.transform.position.x, tail.transform.position.y * speed, tail.transform.position.z);
 
         lineRenderer.SetPositions(new Vector3[] { head.transform.position, tail.transform.position});
     }
