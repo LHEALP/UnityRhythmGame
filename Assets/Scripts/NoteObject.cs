@@ -20,7 +20,7 @@ public abstract class NoteObject : MonoBehaviour
     /// <summary>
     /// 노트 위치지정 (배속조절)
     /// </summary>
-    public abstract void SetPosition();
+    public abstract void SetPosition(Vector3 pos);
 }
 
 public class NoteShort : NoteObject
@@ -39,9 +39,9 @@ public class NoteShort : NoteObject
         }
     }
 
-    public override void SetPosition()
+    public override void SetPosition(Vector3 pos)
     {
-        transform.position = new Vector3(transform.position.x, transform.position.y * speed, transform.position.z);
+        transform.position = new Vector3(pos.x, pos.y, pos.z);
     }
 }
 
@@ -74,7 +74,7 @@ public class NoteLong : NoteObject
         }
     }
 
-    public override void SetPosition()
+    public override void SetPosition(Vector3 pos)
     {
         head.transform.position = new Vector3(head.transform.position.x, head.transform.position.y * speed, head.transform.position.z);
         tail.transform.position = new Vector3(tail.transform.position.x, tail.transform.position.y * speed, tail.transform.position.z);

@@ -37,4 +37,9 @@ public class AudioManager : MonoBehaviour
     {
         audioSource.clip = clip;
     }
+
+    public float GetTime()
+    {
+        return audioSource.time;
+    }
 }
