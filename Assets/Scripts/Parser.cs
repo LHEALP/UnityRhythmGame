@@ -68,10 +68,14 @@ public class Parser
                 }
                 else if (currentStep == Step.Note)
                 {
-                    int time = int.Parse(readLine.Split(',')[0].Trim());
-                    int type = int.Parse(readLine.Split(',')[1].Trim());
-                    int line = int.Parse(readLine.Split(',')[2].Trim());
-                    sheet.notes.Add(new Note(time, type, line));
+                    string[] s = readLine.Split(',');
+                    int time = int.Parse(s[0].Trim());
+                    int type = int.Parse(s[1].Trim());
+                    int line = int.Parse(s[2].Trim());
+                    int tail = -1;
+                    if (s.Length > 3)
+                        tail = int.Parse(readLine.Split(',')[3].Trim());
+                    sheet.notes.Add(new Note(time, type, line, tail));
                 }
 
                 readLine = sr.ReadLine();

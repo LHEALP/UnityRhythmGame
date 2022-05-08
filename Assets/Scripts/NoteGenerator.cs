@@ -23,8 +23,6 @@ public class NoteGenerator : MonoBehaviour
         Long = 1,
     }
 
-    int[] previousLong = { -1, -1, -1, -1 };
-
     readonly float[] linePos = { -1.5f, -0.5f, 0.5f, 1.5f };
     readonly float defaultInterval = 0.005f; // 1배속 기준점 (1마디 전체가 화면에 그려지는 정도를 정의)
 
@@ -56,32 +54,23 @@ public class NoteGenerator : MonoBehaviour
             }
             else
             {
-                int p = previousLong[line];
-                if (p != note.time && p != -1) // 이전 타임과 현재 타임과 동일하지 않다면 끝지점임
-                {
-                    // Head and Tail
-                    GameObject obj = new GameObject("NoteLong");
-                    obj.transform.parent = parent.transform;
-                    GameObject head = Instantiate(notePrefab, new Vector3(linePos[line], p * defaultInterval, 0f), Quaternion.identity, obj.transform);
-                    GameObject tail = Instantiate(notePrefab, new Vector3(linePos[line], note.time * defaultInterval, 0f), Quaternion.identity, obj.transform);
+                // Head and Tail
+                GameObject obj = new GameObject("NoteLong");
+                obj.transform.parent = parent.transform;
+                GameObject head = Instantiate(notePrefab, new Vector3(linePos[line], note.tail * defaultInterval, 0f), Quaternion.identity, obj.transform);
+                GameObject tail = Instantiate(notePrefab, new Vector3(linePos[line], note.time * defaultInterval, 0f), Quaternion.identity, obj.transform);
 
-                    head.AddComponent<LineRenderer>();
-                    LineRenderer lineRenderer = head.GetComponent<LineRenderer>();
-                    lineRenderer.material = lineRendererMaterial;
-                    lineRenderer.sortingOrder = 3;
-                    lineRenderer.widthMultiplier = 0.8f;
-                    lineRenderer.positionCount = 2;
-                    lineRenderer.SetPositions(new Vector3[] { head.transform.position, tail.transform.position });
+                head.AddComponent<LineRenderer>();
+                LineRenderer lineRenderer = head.GetComponent<LineRenderer>();
+                lineRenderer.material = lineRendererMaterial;
+                lineRenderer.sortingOrder = 3;
+                lineRenderer.widthMultiplier = 0.8f;
+                lineRenderer.positionCount = 2;
+                lineRenderer.SetPositions(new Vector3[] { head.transform.position, tail.transform.position });
 
-                    obj.AddComponent<NoteLong>(); // 호출시점 주의
-                    noteList.Add(obj.GetComponent<NoteObject>());
-
-                    previousLong[line] = -1; // 롱놋이 구성됨
-                }
-                else
-                    previousLong[line] = Mathf.Clamp(note.time, 1, note.time); // 롱놋 시작점 기록
+                obj.AddComponent<NoteLong>(); // 호출시점 주의
+                noteList.Add(obj.GetComponent<NoteObject>());
             }
-            
         }
 
         Drop();

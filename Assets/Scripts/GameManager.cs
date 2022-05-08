@@ -50,7 +50,7 @@ public class GameManager : MonoBehaviour
         // 화면 페이드 아웃
 
         // 파싱, 생성 등
-        sheet = Parser.Instance.Parse("Heart Shaker");
+        sheet = Parser.Instance.Parse("BUNGEE");
         NoteGenerator.Instance.Gen(sheet);
 
         // 화면 페이드 인
