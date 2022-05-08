@@ -6,8 +6,10 @@ public abstract class NoteObject : MonoBehaviour
 {
     /// <summary>
     /// 노트 하강 속도
+    /// interval에 따라 변해야함. 노트는 밀리세컨드 단위로 기록을 하고 있고 적절히 시각화하기 위해, 기본간격(defaultInterval)을 0.005 로 지정하고 있음 (이하로 지정시 현재 노트 그래픽이 겹칠 가능성 있음)
+    /// 그러므로 노트가 하강하는 속도는 5가 되어야함. ex) 0.01 = 10speed, 0.001 = 1speed
     /// </summary>
-    public float speed = 1f;
+    public float speed = 5f;
 
     /// <summary>
     /// 노트 하강
