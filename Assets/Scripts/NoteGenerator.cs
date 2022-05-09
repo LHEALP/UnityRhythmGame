@@ -25,7 +25,7 @@ public class NoteGenerator : MonoBehaviour
     }
 
     readonly float[] linePos = { -1.5f, -0.5f, 0.5f, 1.5f };
-    readonly float defaultInterval = 0.005f; // 1배속 기준점 (1마디 전체가 화면에 그려지는 정도를 정의)
+    readonly float defaultInterval = 0.01f; // 1배속 기준점 (1마디 전체가 화면에 그려지는 정도를 정의)
 
     IObjectPool<NoteShort> poolShort;
     public IObjectPool<NoteShort> PoolShort
@@ -79,7 +79,10 @@ public class NoteGenerator : MonoBehaviour
         return note.GetComponent<NoteLong>();
     }
 
-    List<NoteObject> noteList =  new List<NoteObject>();
+    int currentBar = 3; // 최초 플레이 시 3마디 먼저 생성
+    int next = 0;
+    int prev = 0;
+    List<NoteObject> releaseList = new List<NoteObject>();
 
     void Awake()
     {
@@ -87,9 +90,17 @@ public class NoteGenerator : MonoBehaviour
             instance = this;
     }
 
-    int currentBar = 3;
-    int next = 0;
-    int prev = 0;
+    public void OnGUI()
+    {
+        GUI.Label(new Rect(25, 25, 100, 30), PoolShort.CountInactive.ToString());
+        GUI.Label(new Rect(25, 75, 100, 30), PoolLong.CountInactive.ToString());
+    }
+
+    public void StartGen()
+    {
+        StartCoroutine(IEGenTimer(1.4f));
+        StartCoroutine(IEReleaseTimer(0.5f));
+    }
 
     public void Gen()
     {
@@ -111,29 +122,52 @@ public class NoteGenerator : MonoBehaviour
 
         foreach (Note note in reconNotes)
         {
+            NoteObject noteObject = null;
             switch (note.type)
             {
                 case (int)NoteType.Short:
-                    NoteShort noteShort = PoolShort.Get();
-                    // 포지션은 노트 시간 - 현재 음악 시간
-                    noteShort.SetPosition(new Vector3(linePos[note.line - 1], (note.time - AudioManager.Instance.GetTime() * 1000) * defaultInterval, 0f));
-                    noteShort.Move();
-                    // TODO: 객체 회수(Release)하는 부분 만들어야함
-                    // 회수 방안. 1) 좌표 비교 2) 오디오 시간 비교
-                    // TODO: 롱놋 구현 (추상클래스쪽도 수정필요)
+                    noteObject = PoolShort.Get();
+                    noteObject.SetPosition(new Vector3[] { new Vector3(linePos[note.line - 1], (note.time - AudioManager.Instance.GetTime() * 1000) * defaultInterval, 0f) });
                     break;
                 case (int)NoteType.Long:
-                    NoteLong noteLong = PoolLong.Get();
+                    noteObject = PoolLong.Get();
+                    noteObject.SetPosition(new Vector3[]                     // 포지션은 노트 시간 - 현재 음악 시간
+                    { 
+                        new Vector3(linePos[note.line - 1], (note.time - AudioManager.Instance.GetTime() * 1000) * defaultInterval, 0f),
+                        new Vector3(linePos[note.line - 1], (note.tail - AudioManager.Instance.GetTime() * 1000) * defaultInterval, 0f)
+                    });
                     break;
                 default:
                     break;
             }
+            noteObject.life = true;
+            noteObject.gameObject.SetActive(true);
+            noteObject.Move();
+            releaseList.Add(noteObject);
         }
     }
 
-    public void Init()
+    public void Release()
     {
-        StartCoroutine(IEGenTimer(1.428f));
+        List<NoteObject> reconNotes = new List<NoteObject>();
+        foreach (NoteObject note in releaseList)
+        {
+            if (!note.life)
+            {
+                if (note is NoteShort)
+                    PoolShort.Release(note as NoteShort);
+                else
+                    PoolLong.Release(note as NoteLong);
+
+                note.gameObject.SetActive(false);
+            }
+            else
+            {
+                reconNotes.Add(note);
+            }
+        }
+        releaseList.Clear();
+        releaseList.AddRange(reconNotes);
     }
 
     IEnumerator IEGenTimer(float interval)
@@ -145,6 +179,18 @@ public class NoteGenerator : MonoBehaviour
             currentBar++;
         }
     }
+
+    IEnumerator IEReleaseTimer(float interval)
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(interval);
+            Release();
+        }
+    }
+
+#if (LegacyGen)
+    List<NoteObject> noteList =  new List<NoteObject>();
 
     /// <summary>
     /// 노트를 한 번에 모두 생성하는 방식
@@ -190,4 +236,5 @@ public class NoteGenerator : MonoBehaviour
         foreach (NoteObject noteObject in noteList)
             noteObject.Move();
     }
+#endif
 }

@@ -51,7 +51,7 @@ public class GameManager : MonoBehaviour
 
         // 파싱, 생성 등
         sheet = Parser.Instance.Parse("Heart Shaker");
-        NoteGenerator.Instance.Init();
+        NoteGenerator.Instance.StartGen();
         //NoteGenerator.Instance.Gen(sheet);
 
         // 화면 페이드 인
