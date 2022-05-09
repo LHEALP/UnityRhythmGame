@@ -100,6 +100,7 @@ public class NoteGenerator : MonoBehaviour
     {
         StartCoroutine(IEGenTimer(GameManager.Instance.sheet.BarPerMilliSec * 0.001f)); // 음악의 1마디 시간마다 생성할 노트 오브젝트 탐색
         StartCoroutine(IEReleaseTimer(GameManager.Instance.sheet.BarPerMilliSec * 0.001f * 0.5f)); // 1마디 시간의 절반 주기로 해제할 노트 오브젝트 탐색
+        StartCoroutine(IEInterpolate(0.25f)); // 노트 위치 보간 TODO: 차후 튜닝 가능성 존재
     }
 
     public void Gen()
@@ -123,23 +124,26 @@ public class NoteGenerator : MonoBehaviour
         foreach (Note note in reconNotes)
         {
             NoteObject noteObject = null;
+
             switch (note.type)
             {
                 case (int)NoteType.Short:
                     noteObject = PoolShort.Get();
-                    noteObject.SetPosition(new Vector3[] { new Vector3(linePos[note.line - 1], (note.time - AudioManager.Instance.GetTime() * 1000) * defaultInterval, 0f) });
+                    //noteObject.SetPosition(new Vector3[] { new Vector3(linePos[note.line - 1], 30f, 0f) }); // 1) 일단 생성은 러프한 좌표에
+                    noteObject.SetPosition(new Vector3[] { new Vector3(linePos[note.line - 1], (note.time - AudioManager.Instance.GetMilliSec()) * defaultInterval, 0f) }); // 2) 원칙대로
                     break;
                 case (int)NoteType.Long:
-                    noteObject = PoolLong.Get();
-                    noteObject.SetPosition(new Vector3[]                     // 포지션은 노트 시간 - 현재 음악 시간
-                    { 
-                        new Vector3(linePos[note.line - 1], (note.time - AudioManager.Instance.GetTime() * 1000) * defaultInterval, 0f),
-                        new Vector3(linePos[note.line - 1], (note.tail - AudioManager.Instance.GetTime() * 1000) * defaultInterval, 0f)
+                    noteObject = PoolLong.Get();          
+                    noteObject.SetPosition(new Vector3[] // 포지션은 노트 시간 - 현재 음악 시간
+                    {
+                        new Vector3(linePos[note.line - 1], (note.time - AudioManager.Instance.GetMilliSec()) * defaultInterval, 0f),
+                        new Vector3(linePos[note.line - 1], (note.tail - AudioManager.Instance.GetMilliSec()) * defaultInterval, 0f)
                     });
                     break;
                 default:
                     break;
             }
+            noteObject.note = note;
             noteObject.life = true;
             noteObject.gameObject.SetActive(true);
             noteObject.Move();
@@ -186,6 +190,18 @@ public class NoteGenerator : MonoBehaviour
         {
             yield return new WaitForSeconds(interval);
             Release();
+        }
+    }
+
+    IEnumerator IEInterpolate(float rate)
+    {
+        while (true)
+        {
+            foreach (NoteObject note in releaseList)
+            {
+                note.Interpolate(AudioManager.Instance.GetMilliSec(), defaultInterval);
+            }
+            yield return new WaitForSeconds(rate);
         }
     }
 

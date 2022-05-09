@@ -38,8 +38,8 @@ public class AudioManager : MonoBehaviour
         audioSource.clip = clip;
     }
 
-    public float GetTime()
+    public float GetMilliSec()
     {
-        return audioSource.time;
+        return audioSource.time * 1000;
     }
 }
