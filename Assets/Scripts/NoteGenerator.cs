@@ -98,8 +98,8 @@ public class NoteGenerator : MonoBehaviour
 
     public void StartGen()
     {
-        StartCoroutine(IEGenTimer(1.4f));
-        StartCoroutine(IEReleaseTimer(0.5f));
+        StartCoroutine(IEGenTimer(GameManager.Instance.sheet.BarPerMilliSec * 0.001f)); // 음악의 1마디 시간마다 생성할 노트 오브젝트 탐색
+        StartCoroutine(IEReleaseTimer(GameManager.Instance.sheet.BarPerMilliSec * 0.001f * 0.5f)); // 1마디 시간의 절반 주기로 해제할 노트 오브젝트 탐색
     }
 
     public void Gen()
@@ -109,7 +109,7 @@ public class NoteGenerator : MonoBehaviour
 
         for (; next < notes.Count; next++)
         {
-            if (notes[next].time > currentBar * 1428) // 여기 마디시간계산 바꿔야함 168 BPM / 60 = 2.8, 4박자 / 2.8 = 1.428 = 1마디 시간
+            if (notes[next].time > currentBar * GameManager.Instance.sheet.BarPerMilliSec)
             {
                 break;
             }
