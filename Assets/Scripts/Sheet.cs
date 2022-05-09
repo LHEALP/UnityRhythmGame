@@ -19,11 +19,23 @@ public struct Note
 
 public class Sheet
 {
+    // [Description]
     public string title;
     public string artist;
 
+    // [Audio]
     public int bpm;
     public int offset;
+    public int[] signature;
 
+    // [Note]
     public List<Note> notes = new List<Note>();
+
+    
+    public int BarPerMilliSec { get; private set; }
+
+    public void Init()
+    {
+        BarPerMilliSec = (int)(signature[0] / (bpm / 60f) * 1000);
+    }
 }

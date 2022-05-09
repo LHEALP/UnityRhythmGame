@@ -65,6 +65,13 @@ public class Parser
                         sheet.bpm = int.Parse(readLine.Split(':')[1].Trim());
                     else if (readLine.StartsWith("Offset"))
                         sheet.offset = int.Parse(readLine.Split(':')[1].Trim());
+                    else if (readLine.StartsWith("Signature"))
+                    {
+                        string[] s = readLine.Split(':');
+                        s = s[1].Split('/');
+                        int[] sign = { int.Parse(s[0].Trim()), int.Parse(s[1].Trim()) };
+                        sheet.signature = sign;
+                    }
                 }
                 else if (currentStep == Step.Note)
                 {
