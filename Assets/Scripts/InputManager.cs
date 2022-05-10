@@ -5,20 +5,58 @@ using UnityEngine.InputSystem;
 
 public class InputManager : MonoBehaviour
 {
-    public void OnD()
+    public GameObject[] keyEffects = new GameObject[4];
+
+    void Start()
     {
-        Debug.Log("DŰ");
+        foreach (var effect in keyEffects)
+        {
+            effect.gameObject.SetActive(false);
+        }
     }
-    public void OnF()
+
+    public void OnD(InputAction.CallbackContext context)
     {
-        Debug.Log("FŰ");
+        if (context.started)
+        {
+            keyEffects[0].gameObject.SetActive(true);
+        }
+        else if (context.canceled)
+        {
+            keyEffects[0].gameObject.SetActive(false);
+        }
     }
-    public void OnJ()
+    public void OnF(InputAction.CallbackContext context)
     {
-        Debug.Log("JŰ");
+        if (context.started)
+        {
+            keyEffects[1].gameObject.SetActive(true);
+        }
+        else if (context.canceled)
+        {
+            keyEffects[1].gameObject.SetActive(false);
+        }
     }
-    public void OnK()
+    public void OnJ(InputAction.CallbackContext context)
     {
-        Debug.Log("KŰ");
+        if (context.started)
+        {
+            keyEffects[2].gameObject.SetActive(true);
+        }
+        else if (context.canceled)
+        {
+            keyEffects[2].gameObject.SetActive(false);
+        }
+    }
+    public void OnK(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            keyEffects[3].gameObject.SetActive(true);
+        }
+        else if (context.canceled)
+        {
+            keyEffects[3].gameObject.SetActive(false);
+        }
     }
 }
