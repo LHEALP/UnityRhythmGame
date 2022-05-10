@@ -1,6 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 
+
+public enum NoteType
+{
+    Short = 0,
+    Long = 1,
+}
+
 public struct Note
 {
     public int time;

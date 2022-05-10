@@ -6,6 +6,7 @@ using UnityEngine.InputSystem;
 public class InputManager : MonoBehaviour
 {
     public GameObject[] keyEffects = new GameObject[4];
+    Judgement judgement = null;
 
     void Start()
     {
@@ -13,12 +14,14 @@ public class InputManager : MonoBehaviour
         {
             effect.gameObject.SetActive(false);
         }
+        judgement = FindObjectOfType<Judgement>();
     }
 
     public void OnD(InputAction.CallbackContext context)
     {
         if (context.started)
         {
+            judgement.Judge(0);
             keyEffects[0].gameObject.SetActive(true);
         }
         else if (context.canceled)
@@ -30,6 +33,7 @@ public class InputManager : MonoBehaviour
     {
         if (context.started)
         {
+            judgement.Judge(1);
             keyEffects[1].gameObject.SetActive(true);
         }
         else if (context.canceled)
@@ -41,6 +45,7 @@ public class InputManager : MonoBehaviour
     {
         if (context.started)
         {
+            judgement.Judge(2);
             keyEffects[2].gameObject.SetActive(true);
         }
         else if (context.canceled)
@@ -52,6 +57,7 @@ public class InputManager : MonoBehaviour
     {
         if (context.started)
         {
+            judgement.Judge(3);
             keyEffects[3].gameObject.SetActive(true);
         }
         else if (context.canceled)

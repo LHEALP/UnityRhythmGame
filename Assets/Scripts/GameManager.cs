@@ -52,6 +52,8 @@ public class GameManager : MonoBehaviour
         // ÆÄ½Ì, »ý¼º µî
         sheet = Parser.Instance.Parse("Heart Shaker");
         sheet.Init();
+        Judgement judgement = FindObjectOfType<Judgement>();
+        judgement.Init();
         NoteGenerator.Instance.StartGen();
         //NoteGenerator.Instance.Gen(sheet);
 
