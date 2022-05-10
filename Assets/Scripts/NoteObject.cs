@@ -105,7 +105,7 @@ public class NoteLong : NoteObject
         if (head.transform.position.y > 12f)
         {
             head.transform.position = new Vector3(head.transform.position.x, (note.time - curruntTime) * interval, head.transform.position.z);
-            tail.transform.position = new Vector3(tail.transform.position.y, (note.tail - curruntTime) * interval, tail.transform.position.z);
+            tail.transform.position = new Vector3(tail.transform.position.x, (note.tail - curruntTime) * interval, tail.transform.position.z);
 
             lineRenderer.SetPositions(new Vector3[] { head.transform.position, tail.transform.position });
         }
