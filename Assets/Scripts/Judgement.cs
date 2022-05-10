@@ -43,10 +43,8 @@ public class Judgement : MonoBehaviour
     public void Judge(int line)
     {
         Note note = notes[line].Peek();
-
-        //if (note.type == (int)NoteType.Short)
-        //{
         int judgeTime = curruntTime - note.time;
+
         if (judgeTime < miss && judgeTime > -miss)
         {
             if (judgeTime < good && judgeTime > -good)
@@ -60,15 +58,35 @@ public class Judgement : MonoBehaviour
             {
                 Debug.Log("빨라서 Miss");
             }
-            notes[line].Dequeue();
         }
 
+        if (note.type == (int)NoteType.Short)
+        {
+            notes[line].Dequeue();
+        }
+    }
 
-        //}
-        //else if (note.type == (int)NoteType.Long)
-        //{
+    public void CheckLongNote(int line)
+    {
+        Note note = notes[line].Peek();
+        if (note.type != (int)NoteType.Long)
+            return;
 
-        //}
+        int judgeTime = curruntTime - note.tail;
+        if (judgeTime < good && judgeTime > -good)
+        {
+            if (judgeTime < great && judgeTime > -great)
+            {
+                Debug.Log("롱노트 완성");
+                // head와 동일한 판정으로 1콤보 추가
+            }
+            else
+            {
+                Debug.Log("롱노트 빨리 떼어버림");
+                // 테일 미스
+            }
+            notes[line].Dequeue();
+        }
     }
 
     IEnumerator IECheckMiss()

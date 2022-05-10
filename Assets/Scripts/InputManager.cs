@@ -26,6 +26,7 @@ public class InputManager : MonoBehaviour
         }
         else if (context.canceled)
         {
+            judgement.CheckLongNote(0);
             keyEffects[0].gameObject.SetActive(false);
         }
     }
@@ -38,6 +39,7 @@ public class InputManager : MonoBehaviour
         }
         else if (context.canceled)
         {
+            judgement.CheckLongNote(1);
             keyEffects[1].gameObject.SetActive(false);
         }
     }
@@ -50,6 +52,7 @@ public class InputManager : MonoBehaviour
         }
         else if (context.canceled)
         {
+            judgement.CheckLongNote(2);
             keyEffects[2].gameObject.SetActive(false);
         }
     }
@@ -62,6 +65,7 @@ public class InputManager : MonoBehaviour
         }
         else if (context.canceled)
         {
+            judgement.CheckLongNote(3);
             keyEffects[3].gameObject.SetActive(false);
         }
     }
