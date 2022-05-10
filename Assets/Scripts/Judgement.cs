@@ -40,8 +40,29 @@ public class Judgement : MonoBehaviour
         StartCoroutine(IECheckMiss());
     }
 
+    #region 테스트코드
+    int smiss = 0;
+    int sgood = 0;
+    int sgreat = 0;
+    int longc = 0;
+    int longf = 0;
+
+    GUIStyle style = new GUIStyle();
+
+    private void OnGUI()
+    {
+        style.fontSize = 28;
+        style.normal.textColor = Color.white;
+        GUI.Label(new Rect(50, 200, 800, 100), $"GREAT : {sgreat}, GOOD : {sgood}, MISS : {smiss}", style);
+        GUI.Label(new Rect(50, 350, 800, 100), $"롱성공 : {longc}, 롱실패 : {longf}", style);
+    }
+    #endregion
+
     public void Judge(int line)
     {
+        if (notes[line].Count <= 0)
+            return;
+
         Note note = notes[line].Peek();
         int judgeTime = curruntTime - note.time;
 
@@ -50,12 +71,19 @@ public class Judgement : MonoBehaviour
             if (judgeTime < good && judgeTime > -good)
             {
                 if (judgeTime < great && judgeTime > -great)
+                {
+                    sgreat++;
                     Debug.Log("Great");
+                }
                 else
+                {
+                    sgood++;
                     Debug.Log("Good");
+                }
             }
             else
             {
+                smiss++;
                 Debug.Log("빨라서 Miss");
             }
         }
@@ -68,6 +96,9 @@ public class Judgement : MonoBehaviour
 
     public void CheckLongNote(int line)
     {
+        if (notes[line].Count <= 0)
+            return;
+
         Note note = notes[line].Peek();
         if (note.type != (int)NoteType.Long)
             return;
@@ -77,13 +108,15 @@ public class Judgement : MonoBehaviour
         {
             if (judgeTime < great && judgeTime > -great)
             {
+                longc++;
                 Debug.Log("롱노트 완성");
-                // head와 동일한 판정으로 1콤보 추가
+                sgreat++; // Head 판정 따라가도록 변경해야함
             }
             else
             {
+                longf++;
                 Debug.Log("롱노트 빨리 떼어버림");
-                // 테일 미스
+                // 테일 미스인데 실제 카운팅은 안함
             }
             notes[line].Dequeue();
         }
@@ -101,6 +134,7 @@ public class Judgement : MonoBehaviour
                 int judgeTime = note.time - curruntTime;
                 if (judgeTime < -miss)
                 {
+                    smiss++;
                     Debug.Log("안쳐서 miss");
                     notes[i].Dequeue();
                 }
