@@ -1,18 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class InputManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public void OnD()
     {
-        
+        Debug.Log("DŰ");
     }
-
-    // Update is called once per frame
-    void Update()
+    public void OnF()
     {
-        
+        Debug.Log("FŰ");
+    }
+    public void OnJ()
+    {
+        Debug.Log("JŰ");
+    }
+    public void OnK()
+    {
+        Debug.Log("KŰ");
     }
 }
