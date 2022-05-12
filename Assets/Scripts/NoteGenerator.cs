@@ -84,17 +84,11 @@ public class NoteGenerator : MonoBehaviour
             instance = this;
     }
 
-    public void OnGUI()
-    {
-        GUI.Label(new Rect(25, 25, 100, 30), PoolShort.CountInactive.ToString());
-        GUI.Label(new Rect(25, 75, 100, 30), PoolLong.CountInactive.ToString());
-    }
-
     public void StartGen()
     {
         StartCoroutine(IEGenTimer(GameManager.Instance.sheet.BarPerMilliSec * 0.001f)); // 음악의 1마디 시간마다 생성할 노트 오브젝트 탐색
         StartCoroutine(IEReleaseTimer(GameManager.Instance.sheet.BarPerMilliSec * 0.001f * 0.5f)); // 1마디 시간의 절반 주기로 해제할 노트 오브젝트 탐색
-        StartCoroutine(IEInterpolate(0.25f)); // 노트 위치 보간 TODO: 차후 튜닝 가능성 존재
+        StartCoroutine(IEInterpolate(0.1f, 3f)); // 노트 위치 보간 TODO: 차후 튜닝 가능성 존재
     }
 
     public void Gen()
@@ -187,14 +181,18 @@ public class NoteGenerator : MonoBehaviour
         }
     }
 
-    IEnumerator IEInterpolate(float rate)
+    IEnumerator IEInterpolate(float rate, float duration)
     {
-        while (true)
+        float time = 0;
+        while (time < duration)
         {
+            float milli = AudioManager.Instance.GetMilliSec();
             foreach (NoteObject note in releaseList)
             {
-                note.Interpolate(AudioManager.Instance.GetMilliSec(), defaultInterval);
+                note.Interpolate(milli, defaultInterval);
+                //note.Interpolate(AudioManager.Instance.GetMilliSec(), defaultInterval);
             }
+            time += rate;
             yield return new WaitForSeconds(rate);
         }
     }
