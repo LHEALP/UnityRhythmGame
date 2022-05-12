@@ -130,6 +130,8 @@ public class Judgement : MonoBehaviour
 
             for (int i = 0; i < notes.Count; i++)
             {
+                if (notes[i].Count <= 0)
+                    break;
                 Note note = notes[i].Peek();
                 int judgeTime = note.time - curruntTime;
                 if (judgeTime < -miss)
