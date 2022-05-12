@@ -41,11 +41,6 @@ public class Judgement : MonoBehaviour
     }
 
     #region 테스트코드
-    int smiss = 0;
-    int sgood = 0;
-    int sgreat = 0;
-    int longc = 0;
-    int longf = 0;
 
     GUIStyle style = new GUIStyle();
 
@@ -53,8 +48,8 @@ public class Judgement : MonoBehaviour
     {
         style.fontSize = 28;
         style.normal.textColor = Color.white;
-        GUI.Label(new Rect(50, 200, 800, 100), $"GREAT : {sgreat}, GOOD : {sgood}, MISS : {smiss}", style);
-        GUI.Label(new Rect(50, 350, 800, 100), $"롱성공 : {longc}, 롱실패 : {longf}", style);
+        GUI.Label(new Rect(50, 200, 800, 100), $"GREAT : {GameManager.Instance.score.great}, GOOD : {GameManager.Instance.score.good}, MISS : {GameManager.Instance.score.miss}", style);
+        GUI.Label(new Rect(50, 350, 800, 100), $"Combo : {GameManager.Instance.score.combo}, longFaill : {GameManager.Instance.score.longMiss}", style);
     }
     #endregion
 
@@ -72,19 +67,18 @@ public class Judgement : MonoBehaviour
             {
                 if (judgeTime < great && judgeTime > -great)
                 {
-                    sgreat++;
-                    Debug.Log("Great");
+                    GameManager.Instance.score.great++;
                 }
                 else
                 {
-                    sgood++;
-                    Debug.Log("Good");
+                    GameManager.Instance.score.good++;
                 }
+                GameManager.Instance.score.combo++;
             }
             else
             {
-                smiss++;
-                Debug.Log("빨라서 Miss");
+                GameManager.Instance.score.fastMiss++;
+                GameManager.Instance.score.combo = 0;
             }
         }
 
@@ -93,7 +87,7 @@ public class Judgement : MonoBehaviour
             notes[line].Dequeue();
         }
     }
-
+    
     public void CheckLongNote(int line)
     {
         if (notes[line].Count <= 0)
@@ -108,15 +102,12 @@ public class Judgement : MonoBehaviour
         {
             if (judgeTime < great && judgeTime > -great)
             {
-                longc++;
-                Debug.Log("롱노트 완성");
-                sgreat++; // Head 판정 따라가도록 변경해야함
+                GameManager.Instance.score.great++;
+                GameManager.Instance.score.combo++;
             }
             else
             {
-                longf++;
-                Debug.Log("롱노트 빨리 떼어버림");
-                // 테일 미스인데 실제 카운팅은 안함
+                GameManager.Instance.score.longMiss++;
             }
             notes[line].Dequeue();
         }
@@ -136,8 +127,8 @@ public class Judgement : MonoBehaviour
                 int judgeTime = note.time - curruntTime;
                 if (judgeTime < -miss)
                 {
-                    smiss++;
-                    Debug.Log("안쳐서 miss");
+                    GameManager.Instance.score.miss++;
+                    GameManager.Instance.score.combo = 0;
                     notes[i].Dequeue();
                 }
             }
