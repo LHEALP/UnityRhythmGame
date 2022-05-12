@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
     }
 
     public Sheet sheet;
+    public Score score;
 
     void Awake()
     {
