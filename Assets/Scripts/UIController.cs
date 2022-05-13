@@ -31,19 +31,18 @@ public class UIController : MonoBehaviour
             uiObjectDic.Add(obj.Name, new UIActor(obj, null));
         }
 
-        UIActor actor = uiObjectDic["Btn_Play"];
-        actor.uiDelegate = Play;
+        uiObjectDic["Btn_Play"].action = Play;
     }
 
     void FindUI(string uiName)
     {
         UIActor actor = uiObjectDic[uiName];
-        if (actor.uiDelegate != null)
-            actor.uiDelegate.Invoke();
+        if (actor.action != null)
+            actor.action.Invoke(actor.uiObject);
     }
 
-    void Play()
+    void Play(UIObject uiObject)
     {
-        Debug.Log("PlayDelegate");
+        Debug.Log("PlayAction");
     }
 }

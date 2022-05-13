@@ -1,16 +1,16 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class UIActor
 {
-    public delegate void uiDele();
     public UIObject uiObject;
-    public uiDele uiDelegate;
+    public Action<UIObject> action;
 
-    public UIActor(UIObject uiObject, uiDele uiDelegate = null)
+    public UIActor(UIObject uiObject, Action<UIObject> action = null)
     {
         this.uiObject = uiObject;
-        this.uiDelegate = uiDelegate;
+        this.action = action;
     }
 }
