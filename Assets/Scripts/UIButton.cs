@@ -15,6 +15,6 @@ public class UIButton : UIObject
 
     public void OnClick()
     {
-        UIController.Instance.findAction.Invoke(Name);
+        UIController.Instance.find.Invoke(Name);
     }
 }

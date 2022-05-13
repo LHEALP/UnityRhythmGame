@@ -3601,8 +3601,9 @@ GameObject:
   - component: {fileID: 735758733}
   - component: {fileID: 735758735}
   - component: {fileID: 735758734}
+  - component: {fileID: 735758736}
   m_Layer: 5
-  m_Name: Combo
+  m_Name: UI_Combo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3725,6 +3726,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 735758732}
   m_CullTransparentMesh: 1
+--- !u!114 &735758736
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 735758732}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b492e785251be1d4e9031aac217c76c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &749113065
 GameObject:
   m_ObjectHideFlags: 0
@@ -5754,8 +5767,9 @@ GameObject:
   - component: {fileID: 1016497878}
   - component: {fileID: 1016497880}
   - component: {fileID: 1016497879}
+  - component: {fileID: 1016497881}
   m_Layer: 5
-  m_Name: Judgement
+  m_Name: UI_Judgement
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5878,6 +5892,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1016497877}
   m_CullTransparentMesh: 1
+--- !u!114 &1016497881
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1016497877}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b492e785251be1d4e9031aac217c76c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1021344281
 GameObject:
   m_ObjectHideFlags: 0
@@ -7732,7 +7758,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1395157319
 RectTransform:
   m_ObjectHideFlags: 0
@@ -9213,8 +9239,9 @@ GameObject:
   - component: {fileID: 1620353308}
   - component: {fileID: 1620353310}
   - component: {fileID: 1620353309}
+  - component: {fileID: 1620353311}
   m_Layer: 5
-  m_Name: Score
+  m_Name: UI_Score
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9337,6 +9364,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1620353307}
   m_CullTransparentMesh: 1
+--- !u!114 &1620353311
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1620353307}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b492e785251be1d4e9031aac217c76c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1620534253
 GameObject:
   m_ObjectHideFlags: 0
@@ -10008,7 +10047,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   parent: {fileID: 1081325745}
   notePrefab: {fileID: 524847784843648390, guid: 3b5e911c3cef1034bbc43d3e0dd1f50f, type: 3}
-  lineRendererMaterial: {fileID: 2100000, guid: d62af11f7051cc844a3d963fbd045444, type: 2}
+  lineRendererMaterial: {fileID: 2100000, guid: 18b7f4bcf146a1143b8726bb472a42b0, type: 2}
 --- !u!4 &1719851596
 Transform:
   m_ObjectHideFlags: 0
@@ -11034,7 +11073,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: dde28b389113464478be2c0d02f56ff4, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.1
   m_Pitch: 1
   Loop: 0
   Mute: 0

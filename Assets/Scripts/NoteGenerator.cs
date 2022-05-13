@@ -56,10 +56,12 @@ public class NoteGenerator : MonoBehaviour
     {
         GameObject note = new GameObject("NoteLong");
         note.transform.parent = parent.transform;
-        GameObject head = new GameObject("head");
+        GameObject head = Instantiate(notePrefab); //new GameObject("head");
+        head.name = "head";
         head.transform.parent = note.transform;
-        GameObject tail = new GameObject("tail");
+        GameObject tail = Instantiate(notePrefab); //new GameObject("tail");
         tail.transform.parent = note.transform;
+        tail.name = "tail";
 
         head.AddComponent<LineRenderer>();
         LineRenderer lineRenderer = head.GetComponent<LineRenderer>();

@@ -2,20 +2,29 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum JudgeType
+{
+    Great,
+    Good,
+    Miss
+}
+
 public class Judgement : MonoBehaviour
 {
     // 노트시간을 알아야함
     // 롱노트는 어떻게?
 
-    readonly int miss = 400;
-    readonly int good = 300;
-    readonly int great = 200;
+    readonly int miss = 600;
+    readonly int good = 400;
+    readonly int great = 250;
 
     List<Queue<Note>> notes = new List<Queue<Note>>();
     Queue<Note> note1 = new Queue<Note>();
     Queue<Note> note2 = new Queue<Note>();
     Queue<Note> note3 = new Queue<Note>();
     Queue<Note> note4 = new Queue<Note>();
+
+    int[] longNoteCheck = new int[4] { 0, 0, 0, 0 };
 
     int curruntTime = 0;
 
@@ -40,19 +49,6 @@ public class Judgement : MonoBehaviour
         StartCoroutine(IECheckMiss());
     }
 
-    #region 테스트코드
-
-    GUIStyle style = new GUIStyle();
-
-    private void OnGUI()
-    {
-        style.fontSize = 28;
-        style.normal.textColor = Color.white;
-        GUI.Label(new Rect(50, 200, 800, 100), $"GREAT : {GameManager.Instance.score.great}, GOOD : {GameManager.Instance.score.good}, MISS : {GameManager.Instance.score.miss}", style);
-        GUI.Label(new Rect(50, 350, 800, 100), $"Combo : {GameManager.Instance.score.combo}, longFaill : {GameManager.Instance.score.longMiss}", style);
-    }
-    #endregion
-
     public void Judge(int line)
     {
         if (notes[line].Count <= 0)
@@ -67,24 +63,32 @@ public class Judgement : MonoBehaviour
             {
                 if (judgeTime < great && judgeTime > -great)
                 {
-                    GameManager.Instance.score.great++;
+                    GameManager.Instance.score.data.great++;
+                    GameManager.Instance.score.data.judge = JudgeType.Great;
                 }
                 else
                 {
-                    GameManager.Instance.score.good++;
+                    GameManager.Instance.score.data.good++;
+                    GameManager.Instance.score.data.judge = JudgeType.Good;
                 }
-                GameManager.Instance.score.combo++;
+                GameManager.Instance.score.data.combo++;
             }
             else
             {
-                GameManager.Instance.score.fastMiss++;
-                GameManager.Instance.score.combo = 0;
+                GameManager.Instance.score.data.fastMiss++;
+                GameManager.Instance.score.data.judge = JudgeType.Miss;
+                GameManager.Instance.score.data.combo = 0;
             }
+            GameManager.Instance.score.SetScore();
         }
 
         if (note.type == (int)NoteType.Short)
         {
             notes[line].Dequeue();
+        }
+        else if (note.type == (int)NoteType.Long)
+        {
+            longNoteCheck[line] = 1;
         }
     }
     
@@ -102,13 +106,16 @@ public class Judgement : MonoBehaviour
         {
             if (judgeTime < great && judgeTime > -great)
             {
-                GameManager.Instance.score.great++;
-                GameManager.Instance.score.combo++;
+                GameManager.Instance.score.data.great++;
+                GameManager.Instance.score.data.judge = JudgeType.Great;
+                GameManager.Instance.score.data.combo++;
             }
             else
             {
-                GameManager.Instance.score.longMiss++;
+                GameManager.Instance.score.data.longMiss++;
             }
+            GameManager.Instance.score.SetScore();
+            longNoteCheck[line] = 0;
             notes[line].Dequeue();
         }
     }
@@ -125,11 +132,31 @@ public class Judgement : MonoBehaviour
                     break;
                 Note note = notes[i].Peek();
                 int judgeTime = note.time - curruntTime;
-                if (judgeTime < -miss)
+
+                if (note.type == (int)NoteType.Long)
                 {
-                    GameManager.Instance.score.miss++;
-                    GameManager.Instance.score.combo = 0;
-                    notes[i].Dequeue();
+                    if (longNoteCheck[note.line - 1] == 0) // Head가 판정처리가 안된 경우
+                    {
+                        if (judgeTime < -miss)
+                        {
+                            GameManager.Instance.score.data.miss++;
+                            GameManager.Instance.score.data.judge = JudgeType.Miss;
+                            GameManager.Instance.score.data.combo = 0;
+                            GameManager.Instance.score.SetScore();
+                            notes[i].Dequeue();
+                        }
+                    }
+                }
+                else
+                {
+                    if (judgeTime < -miss)
+                    {
+                        GameManager.Instance.score.data.miss++;
+                        GameManager.Instance.score.data.judge = JudgeType.Miss;
+                        GameManager.Instance.score.data.combo = 0;
+                        GameManager.Instance.score.SetScore();
+                        notes[i].Dequeue();
+                    }
                 }
             }
 

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -24,14 +25,14 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        score = new Score();
+        UIController.Instance.Init();
+        score.Init();
+
         Select();
         Play();
     }
 
-    void Update()
-    {
-        
-    }
 
     // 리스트에서 프리뷰하기 위해 아이템을 한 번 눌렀을 때
     public void Select()

@@ -11,8 +11,7 @@ public class UIController : MonoBehaviour
         get { return instance; }
     }
 
-    public Action<string> findAction;
-    delegate void uiDelegate();
+    public Func<string, UIActor> find;
     Dictionary<string, UIActor> uiObjectDic = new Dictionary<string, UIActor>();
 
     private void Awake()
@@ -21,9 +20,9 @@ public class UIController : MonoBehaviour
             instance = this;
     }
 
-    void Start()
+    public void Init()
     {
-        findAction = FindUI;
+        find = FindUI;
 
         UIObject[] objs = FindObjectsOfType<UIObject>();
         foreach (UIObject obj in objs)
@@ -31,14 +30,17 @@ public class UIController : MonoBehaviour
             uiObjectDic.Add(obj.Name, new UIActor(obj, null));
         }
 
-        uiObjectDic["Btn_Play"].action = Play;
+        //uiObjectDic["Btn_Play"].action = Play;
+        uiObjectDic["UI_Judgement"].action = GameManager.Instance.score.Ani;
+        uiObjectDic["UI_Combo"].action = GameManager.Instance.score.Ani;
     }
 
-    void FindUI(string uiName)
+    public UIActor FindUI(string uiName)
     {
         UIActor actor = uiObjectDic[uiName];
         if (actor.action != null)
             actor.action.Invoke(actor.uiObject);
+        return actor;
     }
 
     void Play(UIObject uiObject)

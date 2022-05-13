@@ -11,12 +11,15 @@ public class UIText : UIObject
     private void Start()
     {
         text = GetComponent<TextMeshProUGUI>();
-
-        Debug.Log(Name);
     }
 
     public void SetText(string _text)
     {
         text.text = _text;
+    }
+
+    public void ChangeText()
+    {
+        UIController.Instance.find.Invoke(Name);
     }
 }
