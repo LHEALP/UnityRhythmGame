@@ -1,6 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-
+using UnityEngine;
 
 public enum NoteType
 {
@@ -38,6 +38,9 @@ public class Sheet
     // [Note]
     public List<Note> notes = new List<Note>();
 
+
+    public AudioClip clip;
+    public Sprite img;
     
     public int BarPerMilliSec { get; private set; }
 

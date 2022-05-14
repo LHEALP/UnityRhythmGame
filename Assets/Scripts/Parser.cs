@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using System;
+using UnityEngine.Networking;
 
 public class Parser
 {
@@ -25,12 +26,18 @@ public class Parser
     }
     Step currentStep = Step.Description;
 
-    public Sheet Parse(string title)
+    public Sheet sheet;
+    string basePath = $"{Application.dataPath}/Sheet";
+
+    public AudioClip clip;
+    public Sprite img;
+
+    public IEnumerator IEParse(string title)
     {
         Sheet sheet = new Sheet();
         string readLine = string.Empty;
 
-        using (StreamReader sr = new StreamReader($"{Application.dataPath}/Sheet/{title}/{title}.sheet"))
+        using (StreamReader sr = new StreamReader($"{basePath}/{title}/{title}.sheet"))
         {
             readLine = sr.ReadLine();
 
@@ -89,7 +96,32 @@ public class Parser
             }
         }
 
-        return sheet;
+        yield return IEGetClip(title);
+        yield return IEGetImg(title);
+
+        sheet.clip = clip;
+        sheet.img = img;
+        GameManager.Instance.sheet = sheet;
     }
 
+    public IEnumerator IEGetClip(string title)
+    {
+        using (UnityWebRequest request = UnityWebRequestMultimedia.GetAudioClip($"{basePath}/{title}/{title}.mp3", AudioType.MPEG))
+        {
+            yield return request.SendWebRequest();
+            clip = DownloadHandlerAudioClip.GetContent(request);
+            clip.name = title;
+        }
+    }
+
+    public IEnumerator IEGetImg(string title)
+    {
+        using (UnityWebRequest request = UnityWebRequestTexture.GetTexture($"{basePath}/{title}/{title}.jpg"))
+        {
+            yield return request.SendWebRequest();
+            Texture2D t = DownloadHandlerTexture.GetContent(request);
+            img = Sprite.Create(t, new Rect(0, 0, t.width, t.height), new Vector2(0.5f, 0.5f));
+            img.name = title;
+        }
+    }
 }

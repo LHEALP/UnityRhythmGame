@@ -57,9 +57,9 @@ public class GameManager : MonoBehaviour
         // 화면 페이드 아웃
 
         // 파싱, 생성 등
-        sheet = Parser.Instance.Parse("Heart Shaker");
+        yield return Parser.Instance.IEParse("Heart Shaker");
         sheet.Init();
-        yield return AudioManager.Instance.IEInsertClip("Heart Shaker");
+        AudioManager.Instance.Insert(sheet.clip);
         Judgement judgement = FindObjectOfType<Judgement>();
         judgement.Init();
         NoteGenerator.Instance.StartGen();
