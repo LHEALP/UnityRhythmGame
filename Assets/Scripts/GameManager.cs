@@ -49,18 +49,24 @@ public class GameManager : MonoBehaviour
     // 리스트에서 플레이하기 위해 아이템을 두 번 눌렀을 때(게임 시작)
     public void Play()
     {
+        StartCoroutine(IEInitPlay());
+    }
+
+    IEnumerator IEInitPlay()
+    {
         // 화면 페이드 아웃
 
         // 파싱, 생성 등
         sheet = Parser.Instance.Parse("Heart Shaker");
         sheet.Init();
+        yield return AudioManager.Instance.IEInsertClip("Heart Shaker");
         Judgement judgement = FindObjectOfType<Judgement>();
         judgement.Init();
         NoteGenerator.Instance.StartGen();
         //NoteGenerator.Instance.Gen(sheet);
 
         // 화면 페이드 인
-        
+
         // 게임 재생
         AudioManager.Instance.Play();
         // 노트 하강
