@@ -78,7 +78,7 @@ public class NoteGenerator : MonoBehaviour
     int currentBar = 3; // 최초 플레이 시 3마디 먼저 생성
     int next = 0;
     int prev = 0;
-    List<NoteObject> releaseList = new List<NoteObject>();
+    List<NoteObject> toReleaseList = new List<NoteObject>();
 
     void Awake()
     {
@@ -137,14 +137,14 @@ public class NoteGenerator : MonoBehaviour
             noteObject.life = true;
             noteObject.gameObject.SetActive(true);
             noteObject.Move();
-            releaseList.Add(noteObject);
+            toReleaseList.Add(noteObject);
         }
     }
 
     public void Release()
     {
         List<NoteObject> reconNotes = new List<NoteObject>();
-        foreach (NoteObject note in releaseList)
+        foreach (NoteObject note in toReleaseList)
         {
             if (!note.life)
             {
@@ -160,8 +160,8 @@ public class NoteGenerator : MonoBehaviour
                 reconNotes.Add(note);
             }
         }
-        releaseList.Clear();
-        releaseList.AddRange(reconNotes);
+        toReleaseList.Clear();
+        toReleaseList.AddRange(reconNotes);
     }
 
     IEnumerator IEGenTimer(float interval)
@@ -189,7 +189,7 @@ public class NoteGenerator : MonoBehaviour
         while (time < duration)
         {
             float milli = AudioManager.Instance.GetMilliSec();
-            foreach (NoteObject note in releaseList)
+            foreach (NoteObject note in toReleaseList)
             {
                 note.Interpolate(milli, defaultInterval);
                 //note.Interpolate(AudioManager.Instance.GetMilliSec(), defaultInterval);
