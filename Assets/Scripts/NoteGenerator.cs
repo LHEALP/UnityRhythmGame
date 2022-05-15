@@ -111,6 +111,7 @@ public class NoteGenerator : MonoBehaviour
         }
         prev = next;
 
+        float currentTime = AudioManager.Instance.GetMilliSec();
         foreach (Note note in reconNotes)
         {
             NoteObject noteObject = null;
@@ -119,15 +120,14 @@ public class NoteGenerator : MonoBehaviour
             {
                 case (int)NoteType.Short:
                     noteObject = PoolShort.Get();
-                    //noteObject.SetPosition(new Vector3[] { new Vector3(linePos[note.line - 1], 30f, 0f) }); // 1) 일단 생성은 러프한 좌표에
-                    noteObject.SetPosition(new Vector3[] { new Vector3(linePos[note.line - 1], (note.time - AudioManager.Instance.GetMilliSec()) * defaultInterval, 0f) }); // 2) 원칙대로
+                    noteObject.SetPosition(new Vector3[] { new Vector3(linePos[note.line - 1], (note.time - currentTime) * defaultInterval, 0f) }); // 2) 원칙대로
                     break;
                 case (int)NoteType.Long:
                     noteObject = PoolLong.Get();          
                     noteObject.SetPosition(new Vector3[] // 포지션은 노트 시간 - 현재 음악 시간
                     {
-                        new Vector3(linePos[note.line - 1], (note.time - AudioManager.Instance.GetMilliSec()) * defaultInterval, 0f),
-                        new Vector3(linePos[note.line - 1], (note.tail - AudioManager.Instance.GetMilliSec()) * defaultInterval, 0f)
+                        new Vector3(linePos[note.line - 1], (note.time - currentTime) * defaultInterval, 0f),
+                        new Vector3(linePos[note.line - 1], (note.tail - currentTime) * defaultInterval, 0f)
                     });
                     break;
                 default:
@@ -192,7 +192,6 @@ public class NoteGenerator : MonoBehaviour
             foreach (NoteObject note in toReleaseList)
             {
                 note.Interpolate(milli, defaultInterval);
-                //note.Interpolate(AudioManager.Instance.GetMilliSec(), defaultInterval);
             }
             time += rate;
             yield return new WaitForSeconds(rate);
