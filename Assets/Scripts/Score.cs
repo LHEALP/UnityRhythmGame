@@ -61,6 +61,6 @@ public class Score
 
     public void Ani(UIObject uiObject)
     {
-        Debug.Log($"{uiObject.Name} : ui Ani");
+        //Debug.Log($"{uiObject.Name} : ui Ani");
     }
 }

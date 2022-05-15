@@ -6,7 +6,7 @@
             "id": "db05428a-50db-43af-b17c-8b51ce39b540",
             "actions": [
                 {
-                    "name": "D",
+                    "name": "NoteLine0",
                     "type": "Button",
                     "id": "209d56a0-a636-407a-ae54-a8ee286ececf",
                     "expectedControlType": "Button",
@@ -15,7 +15,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "F",
+                    "name": "NoteLine1",
                     "type": "Button",
                     "id": "e7b1732f-ef26-4377-9301-5ec8efed6a6c",
                     "expectedControlType": "Button",
@@ -24,7 +24,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "J",
+                    "name": "NoteLine2",
                     "type": "Button",
                     "id": "e46c3c23-582c-404a-902b-10f3602a61db",
                     "expectedControlType": "Button",
@@ -33,9 +33,27 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "K",
+                    "name": "NoteLine3",
                     "type": "Button",
                     "id": "53c3226d-2a41-4a18-bb7d-7af1f6c37556",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "SpeedDown",
+                    "type": "Button",
+                    "id": "84480ec6-379b-4f01-87b9-097aa18cacc2",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "SpeedUp",
+                    "type": "Button",
+                    "id": "40fa9caf-89b3-4f6e-bcfb-b22bce928c65",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -50,7 +68,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "D",
+                    "action": "NoteLine0",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -61,7 +79,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "F",
+                    "action": "NoteLine1",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -72,7 +90,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "J",
+                    "action": "NoteLine2",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -83,7 +101,29 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "K",
+                    "action": "NoteLine3",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d2759c70-999d-4424-93d8-9bf0e6f68ed8",
+                    "path": "<Keyboard>/1",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SpeedDown",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "26255616-73ec-4e04-a286-429f71ee312e",
+                    "path": "<Keyboard>/2",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SpeedUp",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

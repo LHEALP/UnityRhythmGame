@@ -19,7 +19,8 @@ public class NoteGenerator : MonoBehaviour
     public Material lineRendererMaterial;
 
     readonly float[] linePos = { -1.5f, -0.5f, 0.5f, 1.5f };
-    readonly float defaultInterval = 0.01f; // 1배속 기준점 (1마디 전체가 화면에 그려지는 정도를 정의)
+    readonly float defaultInterval = 0.005f; // 1배속 기준점 (1마디 전체가 화면에 그려지는 정도를 정의)
+    public float Interval { get; private set; }
 
     IObjectPool<NoteShort> poolShort;
     public IObjectPool<NoteShort> PoolShort
@@ -80,6 +81,8 @@ public class NoteGenerator : MonoBehaviour
     int prev = 0;
     List<NoteObject> toReleaseList = new List<NoteObject>();
 
+    Coroutine coInterpolate;
+
     void Awake()
     {
         if (instance == null)
@@ -88,9 +91,10 @@ public class NoteGenerator : MonoBehaviour
 
     public void StartGen()
     {
+        Interval = defaultInterval * GameManager.Instance.Speed;
         StartCoroutine(IEGenTimer(GameManager.Instance.sheet.BarPerMilliSec * 0.001f)); // 음악의 1마디 시간마다 생성할 노트 오브젝트 탐색
         StartCoroutine(IEReleaseTimer(GameManager.Instance.sheet.BarPerMilliSec * 0.001f * 0.5f)); // 1마디 시간의 절반 주기로 해제할 노트 오브젝트 탐색
-        StartCoroutine(IEInterpolate(0.1f, 3f)); // 노트 위치 보간 TODO: 차후 튜닝 가능성 존재
+        coInterpolate = StartCoroutine(IEInterpolate(0.1f, 3f)); // 노트 위치 보간 TODO: 차후 튜닝 가능성 존재
     }
 
     public void Gen()
@@ -112,6 +116,7 @@ public class NoteGenerator : MonoBehaviour
         prev = next;
 
         float currentTime = AudioManager.Instance.GetMilliSec();
+        float noteSpeed = Interval * 1000;
         foreach (Note note in reconNotes)
         {
             NoteObject noteObject = null;
@@ -120,19 +125,20 @@ public class NoteGenerator : MonoBehaviour
             {
                 case (int)NoteType.Short:
                     noteObject = PoolShort.Get();
-                    noteObject.SetPosition(new Vector3[] { new Vector3(linePos[note.line - 1], (note.time - currentTime) * defaultInterval, 0f) }); // 2) 원칙대로
+                    noteObject.SetPosition(new Vector3[] { new Vector3(linePos[note.line - 1], (note.time - currentTime) * Interval, 0f) }); // 2) 원칙대로
                     break;
                 case (int)NoteType.Long:
                     noteObject = PoolLong.Get();          
                     noteObject.SetPosition(new Vector3[] // 포지션은 노트 시간 - 현재 음악 시간
                     {
-                        new Vector3(linePos[note.line - 1], (note.time - currentTime) * defaultInterval, 0f),
-                        new Vector3(linePos[note.line - 1], (note.tail - currentTime) * defaultInterval, 0f)
+                        new Vector3(linePos[note.line - 1], (note.time - currentTime) * Interval, 0f),
+                        new Vector3(linePos[note.line - 1], (note.tail - currentTime) * Interval, 0f)
                     });
                     break;
                 default:
                     break;
             }
+            noteObject.speed = noteSpeed;
             noteObject.note = note;
             noteObject.life = true;
             noteObject.gameObject.SetActive(true);
@@ -164,6 +170,14 @@ public class NoteGenerator : MonoBehaviour
         toReleaseList.AddRange(reconNotes);
     }
 
+    public void Interpolate()
+    {
+        if (coInterpolate != null)
+            StopCoroutine(coInterpolate);
+
+        coInterpolate = StartCoroutine(IEInterpolate());
+    }
+
     IEnumerator IEGenTimer(float interval)
     {
         while (true)
@@ -183,15 +197,19 @@ public class NoteGenerator : MonoBehaviour
         }
     }
 
-    IEnumerator IEInterpolate(float rate, float duration)
+    IEnumerator IEInterpolate(float rate = 0.1f, float duration = 1f)
     {
         float time = 0;
+        Interval = defaultInterval * GameManager.Instance.Speed;
+        float noteSpeed = Interval * 1000;
         while (time < duration)
         {
             float milli = AudioManager.Instance.GetMilliSec();
+            
             foreach (NoteObject note in toReleaseList)
             {
-                note.Interpolate(milli, defaultInterval);
+                note.speed = noteSpeed;
+                note.Interpolate(milli, Interval);
             }
             time += rate;
             yield return new WaitForSeconds(rate);

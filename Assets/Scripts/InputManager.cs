@@ -17,7 +17,7 @@ public class InputManager : MonoBehaviour
         judgement = FindObjectOfType<Judgement>();
     }
 
-    public void OnD(InputAction.CallbackContext context)
+    public void OnNoteLine0(InputAction.CallbackContext context)
     {
         if (context.started)
         {
@@ -30,7 +30,7 @@ public class InputManager : MonoBehaviour
             keyEffects[0].gameObject.SetActive(false);
         }
     }
-    public void OnF(InputAction.CallbackContext context)
+    public void OnNoteLine1(InputAction.CallbackContext context)
     {
         if (context.started)
         {
@@ -43,7 +43,7 @@ public class InputManager : MonoBehaviour
             keyEffects[1].gameObject.SetActive(false);
         }
     }
-    public void OnJ(InputAction.CallbackContext context)
+    public void OnNoteLine2(InputAction.CallbackContext context)
     {
         if (context.started)
         {
@@ -56,7 +56,7 @@ public class InputManager : MonoBehaviour
             keyEffects[2].gameObject.SetActive(false);
         }
     }
-    public void OnK(InputAction.CallbackContext context)
+    public void OnNoteLine3(InputAction.CallbackContext context)
     {
         if (context.started)
         {
@@ -67,6 +67,22 @@ public class InputManager : MonoBehaviour
         {
             judgement.CheckLongNote(3);
             keyEffects[3].gameObject.SetActive(false);
+        }
+    }
+    public void OnSpeedDown(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            GameManager.Instance.Speed -= 0.1f;
+            NoteGenerator.Instance.Interpolate();
+        }
+    }
+    public void OnSpeedUp(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            GameManager.Instance.Speed += 0.1f;
+            NoteGenerator.Instance.Interpolate();
         }
     }
 }

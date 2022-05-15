@@ -16,6 +16,19 @@ public class GameManager : MonoBehaviour
 
     public Sheet sheet;
     public Score score;
+    float speed = 1.0f;
+    public float Speed
+    {
+        get
+        {
+            return speed;
+        }
+        set
+        {
+            speed = Mathf.Clamp(value, 1.0f, 5.0f);
+            Debug.Log(speed);
+        }
+    }
 
     void Awake()
     {
