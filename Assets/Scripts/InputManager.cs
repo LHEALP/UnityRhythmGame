@@ -75,6 +75,9 @@ public class InputManager : MonoBehaviour
         {
             GameManager.Instance.Speed -= 0.1f;
             NoteGenerator.Instance.Interpolate();
+
+            UIText speedUI = UIController.Instance.find.Invoke("UI_Speed").uiObject as UIText;
+            speedUI.SetText(GameManager.Instance.Speed.ToString("0.0"));
         }
     }
     public void OnSpeedUp(InputAction.CallbackContext context)
@@ -83,6 +86,9 @@ public class InputManager : MonoBehaviour
         {
             GameManager.Instance.Speed += 0.1f;
             NoteGenerator.Instance.Interpolate();
+
+            UIText speedUI = UIController.Instance.find.Invoke("UI_Speed").uiObject as UIText;
+            speedUI.SetText(GameManager.Instance.Speed.ToString("0.0"));
         }
     }
 }

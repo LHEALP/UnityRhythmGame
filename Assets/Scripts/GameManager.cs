@@ -26,7 +26,6 @@ public class GameManager : MonoBehaviour
         set
         {
             speed = Mathf.Clamp(value, 1.0f, 5.0f);
-            Debug.Log(speed);
         }
     }
 
@@ -75,6 +74,7 @@ public class GameManager : MonoBehaviour
         AudioManager.Instance.Insert(sheet.clip);
         Judgement judgement = FindObjectOfType<Judgement>();
         judgement.Init();
+        score.Clear();
         NoteGenerator.Instance.StartGen();
         //NoteGenerator.Instance.Gen(sheet);
 

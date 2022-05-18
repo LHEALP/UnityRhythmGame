@@ -13,6 +13,7 @@ public struct ScoreData
     public int longMiss; // 롱노트 완성 실패, miss 카운트는 하지 않음
 
     public string[] judgeText;
+    public Color[] judgeColor;
     public JudgeType judge;
     public int combo;
     public int score 
@@ -38,7 +39,7 @@ public class Score
 
     public Score()
     {
-        data.judgeText = Enum.GetNames(typeof(JudgeType));
+
     }
 
     public void Init()
@@ -46,21 +47,37 @@ public class Score
         uiJudgement = UIController.Instance.FindUI("UI_Judgement").uiObject as UIText;
         uiCombo = UIController.Instance.FindUI("UI_Combo").uiObject as UIText;
         uiScore = UIController.Instance.FindUI("UI_Score").uiObject as UIText;
+
+        AniPreset.Instance.Join(uiJudgement.Name);
+        AniPreset.Instance.Join(uiCombo.Name);
+        AniPreset.Instance.Join(uiScore.Name);
+    }
+
+    public void Clear()
+    {
+        data = new ScoreData();
+        data.judgeText = Enum.GetNames(typeof(JudgeType));
+        data.judgeColor = new Color[3] { Color.blue, Color.yellow, Color.red };
+        uiJudgement.SetText("");
+        uiCombo.SetText("");
+        uiScore.SetText("0");
     }
 
     public void SetScore()
     {
         uiJudgement.SetText(data.judgeText[(int)data.judge]);
+        uiJudgement.SetColor(data.judgeColor[(int)data.judge]);
         uiCombo.SetText($"{data.combo}");
         uiScore.SetText($"{data.score}");
 
-        UIController.Instance.find.Invoke(uiJudgement.Name);
-        UIController.Instance.find.Invoke(uiCombo.Name);
-        //UIController.Instance.find.Invoke(uiScore.Name);
+        AniPreset.Instance.PlayPop(uiJudgement.Name, uiJudgement.rect);
+        AniPreset.Instance.PlayPop(uiCombo.Name, uiCombo.rect);
+        //UIController.Instance.find.Invoke(uiJudgement.Name);
+        //UIController.Instance.find.Invoke(uiCombo.Name);
     }
 
     public void Ani(UIObject uiObject)
     {
-        //Debug.Log($"{uiObject.Name} : ui Ani");
+        //AniPreset.Instance.PlayPop(uiObject.Name, uiObject.rect);
     }
 }

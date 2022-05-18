@@ -94,7 +94,7 @@ public class NoteGenerator : MonoBehaviour
         Interval = defaultInterval * GameManager.Instance.Speed;
         StartCoroutine(IEGenTimer(GameManager.Instance.sheet.BarPerMilliSec * 0.001f)); // 음악의 1마디 시간마다 생성할 노트 오브젝트 탐색
         StartCoroutine(IEReleaseTimer(GameManager.Instance.sheet.BarPerMilliSec * 0.001f * 0.5f)); // 1마디 시간의 절반 주기로 해제할 노트 오브젝트 탐색
-        coInterpolate = StartCoroutine(IEInterpolate(0.1f, 3f)); // 노트 위치 보간 TODO: 차후 튜닝 가능성 존재
+        coInterpolate = StartCoroutine(IEInterpolate(0.1f, 1f)); // 노트 위치 보간 TODO: 차후 튜닝 가능성 존재
     }
 
     public void Gen()
