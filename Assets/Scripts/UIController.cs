@@ -31,8 +31,8 @@ public class UIController : MonoBehaviour
         }
 
         //uiObjectDic["Btn_Play"].action = Play;
-        uiObjectDic["UI_Judgement"].action = GameManager.Instance.score.Ani;
-        uiObjectDic["UI_Combo"].action = GameManager.Instance.score.Ani;
+        uiObjectDic["UI_G_Judgement"].action = GameManager.Instance.score.Ani;
+        uiObjectDic["UI_G_Combo"].action = GameManager.Instance.score.Ani;
     }
 
     public UIActor FindUI(string uiName)

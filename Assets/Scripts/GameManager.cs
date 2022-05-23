@@ -38,7 +38,9 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         score = new Score();
+        // 캔버스 전부 켰다가
         UIController.Instance.Init();
+        // 필요한 캔버스 남기고 끄기
         score.Init();
 
         Select();
@@ -83,5 +85,39 @@ public class GameManager : MonoBehaviour
         // 게임 재생
         AudioManager.Instance.Play();
         // 노트 하강
+
+        StartCoroutine(IEEndPlay());
+    }
+
+    // 게임 끝
+    IEnumerator IEEndPlay()
+    {
+        while (true)
+        {
+            if (!AudioManager.Instance.IsPlaying())
+            {
+                break;
+            }
+            yield return new WaitForSeconds(1f);
+        }
+
+        // 화면 페이드 아웃
+
+        UIText rscore = UIController.Instance.FindUI("UI_R_Score").uiObject as UIText;
+        UIText rgreat = UIController.Instance.FindUI("UI_R_Great").uiObject as UIText;
+        UIText rgood = UIController.Instance.FindUI("UI_R_Good").uiObject as UIText;
+        UIText rmiss = UIController.Instance.FindUI("UI_R_Miss").uiObject as UIText;
+
+        rscore.SetText(score.data.score.ToString());
+        rgreat.SetText(score.data.great.ToString());
+        rgood.SetText(score.data.good.ToString());
+        rmiss.SetText(score.data.miss.ToString());
+
+        UIImage rBG = UIController.Instance.FindUI("UI_R_BG").uiObject as UIImage;
+        rBG.SetSprite(sheet.img);
+
+        // 화면 페이드 인
+        
+        
     }
 }

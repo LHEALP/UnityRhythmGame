@@ -14,7 +14,22 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    AudioSource audioSource;
+    public AudioSource audioSource;
+
+    public float Length
+    {
+        get
+        {
+            return audioSource.clip.length;
+        }
+    }
+    public float progressTime 
+    { 
+        get 
+        {
+            return audioSource.time;
+        } 
+    }
 
     void Awake()
     {
@@ -42,5 +57,10 @@ public class AudioManager : MonoBehaviour
     public float GetMilliSec()
     {
         return audioSource.time * 1000;
+    }
+
+    public bool IsPlaying()
+    {
+        return audioSource.isPlaying;
     }
 }

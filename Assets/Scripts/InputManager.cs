@@ -73,11 +73,12 @@ public class InputManager : MonoBehaviour
     {
         if (context.started)
         {
+            AudioManager.Instance.audioSource.time = AudioManager.Instance.Length; // 테스트코드
             GameManager.Instance.Speed -= 0.1f;
             NoteGenerator.Instance.Interpolate();
 
-            UIText speedUI = UIController.Instance.find.Invoke("UI_Speed").uiObject as UIText;
-            speedUI.SetText(GameManager.Instance.Speed.ToString("0.0"));
+            UIText speedUI = UIController.Instance.find.Invoke("UI_G_Speed").uiObject as UIText;
+            speedUI.SetText("Speed " + GameManager.Instance.Speed.ToString("0.0"));
         }
     }
     public void OnSpeedUp(InputAction.CallbackContext context)
@@ -87,8 +88,8 @@ public class InputManager : MonoBehaviour
             GameManager.Instance.Speed += 0.1f;
             NoteGenerator.Instance.Interpolate();
 
-            UIText speedUI = UIController.Instance.find.Invoke("UI_Speed").uiObject as UIText;
-            speedUI.SetText(GameManager.Instance.Speed.ToString("0.0"));
+            UIText speedUI = UIController.Instance.find.Invoke("UI_G_Speed").uiObject as UIText;
+            speedUI.SetText("Speed " + GameManager.Instance.Speed.ToString("0.0"));
         }
     }
 }

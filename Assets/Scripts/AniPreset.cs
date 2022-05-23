@@ -33,7 +33,6 @@ public class AniPreset : MonoBehaviour
     {
         signalDic[uiName] = false;
         Vector3 originPos = rect.anchoredPosition3D;
-        Vector3 targetPos = new Vector3(originPos.x, originPos.y + 5f, originPos.z) - originPos;
 
         float time = 0f;
         while (time < 1f)

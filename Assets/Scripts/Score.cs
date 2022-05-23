@@ -44,9 +44,9 @@ public class Score
 
     public void Init()
     {
-        uiJudgement = UIController.Instance.FindUI("UI_Judgement").uiObject as UIText;
-        uiCombo = UIController.Instance.FindUI("UI_Combo").uiObject as UIText;
-        uiScore = UIController.Instance.FindUI("UI_Score").uiObject as UIText;
+        uiJudgement = UIController.Instance.FindUI("UI_G_Judgement").uiObject as UIText;
+        uiCombo = UIController.Instance.FindUI("UI_G_Combo").uiObject as UIText;
+        uiScore = UIController.Instance.FindUI("UI_G_Score").uiObject as UIText;
 
         AniPreset.Instance.Join(uiJudgement.Name);
         AniPreset.Instance.Join(uiCombo.Name);
