@@ -45,4 +45,29 @@ public class AniPreset : MonoBehaviour
         rect.anchoredPosition3D = originPos;
         signalDic[uiName] = true;
     }
+
+    public IEnumerator IEAniFade(CanvasGroup cg, bool on, float speed)
+    {
+        float time = 0f;
+        if (on)
+        {
+            while (time < 1f)
+            {
+                cg.alpha = time;
+                time += Time.deltaTime * speed;
+                yield return null;
+            }
+            cg.alpha = 1f;
+        }
+        else
+        {
+            while (time < 1f)
+            {
+                cg.alpha = 1 - time;
+                time += Time.deltaTime * speed;
+                yield return null;
+            }
+            cg.alpha = 0f;
+        }
+    }
 }

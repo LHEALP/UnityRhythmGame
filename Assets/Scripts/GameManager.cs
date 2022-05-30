@@ -29,6 +29,18 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public List<GameObject> canvases = new List<GameObject>();
+    enum Canvas
+    {
+        Title,
+        Select,
+        SFX,
+        GameBGA,
+        Game,
+        Result,
+    }
+    CanvasGroup sfxFade;
+
     void Awake()
     {
         if (instance == null)
@@ -38,13 +50,18 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         score = new Score();
-        // 캔버스 전부 켰다가
+
+        foreach (GameObject go in canvases)
+        {
+            go.SetActive(true);
+        }
+        sfxFade = canvases[(int)Canvas.SFX].GetComponent<CanvasGroup>();
+        sfxFade.alpha = 1f;
+
         UIController.Instance.Init();
-        // 필요한 캔버스 남기고 끄기
         score.Init();
 
-        Select();
-        Play();
+        StartCoroutine(IETitle());
     }
 
 
@@ -66,9 +83,35 @@ public class GameManager : MonoBehaviour
         StartCoroutine(IEInitPlay());
     }
 
+    IEnumerator IETitle()
+    {
+        // UIObject들이 자기자신을 캐싱할때까지 여유를 주고 비활성화
+        yield return new WaitForSeconds(2f);
+        canvases[(int)Canvas.Game].SetActive(false);
+        canvases[(int)Canvas.GameBGA].SetActive(false);
+        canvases[(int)Canvas.Result].SetActive(false);
+        canvases[(int)Canvas.Select].SetActive(false);
+
+        // 화면 페이드 인
+        yield return StartCoroutine(AniPreset.Instance.IEAniFade(sfxFade, false, 1f));
+
+        // 타이틀 인트로 재생
+        canvases[(int)Canvas.Title].GetComponent<Animation>().Play();
+        yield return new WaitForSeconds(5f);
+
+        // 화면 페이드 아웃
+        yield return StartCoroutine(AniPreset.Instance.IEAniFade(sfxFade, true, 2f));
+        canvases[(int)Canvas.Title].SetActive(false);
+
+        // 선택화면(미구현), 일단 플레이로 바로
+        Select();
+        Play();
+    }
+
     IEnumerator IEInitPlay()
     {
         // 화면 페이드 아웃
+        //yield return StartCoroutine(AniPreset.Instance.IEAniFade(sfxFade, true, 2f));
 
         // Sheet 파싱
         yield return Parser.Instance.IEParse("Heart Shaker");
@@ -77,9 +120,11 @@ public class GameManager : MonoBehaviour
         // Audio 삽입
         AudioManager.Instance.Insert(sheet.clip);
 
-        // BGA 삽입
-        UIImage rBG = UIController.Instance.FindUI("UI_BGA").uiObject as UIImage;
-        rBG.SetSprite(sheet.img);
+        // Game UI 켜기
+        canvases[(int)Canvas.Game].SetActive(true);
+
+        // BGA 켜기
+        canvases[(int)Canvas.GameBGA].SetActive(true);
 
         // 판정 초기화
         FindObjectOfType<Judgement>().Init();
@@ -87,15 +132,16 @@ public class GameManager : MonoBehaviour
         // 점수 초기화
         score.Clear();
 
-        // 노트 생성
+        // 화면 페이드 인
+        yield return StartCoroutine(AniPreset.Instance.IEAniFade(sfxFade, false, 2f));
+
+        // Audio 재생
+        AudioManager.Instance.Play();
+
+        // Note 생성
         NoteGenerator.Instance.StartGen();
 
-        // 화면 페이드 인
-
-        // 게임 재생
-        AudioManager.Instance.Play();
-        // 노트 하강
-
+        // End 알리미
         StartCoroutine(IEEndPlay());
     }
 
@@ -112,6 +158,10 @@ public class GameManager : MonoBehaviour
         }
 
         // 화면 페이드 아웃
+        yield return StartCoroutine(AniPreset.Instance.IEAniFade(sfxFade, true, 2f));
+        canvases[(int)Canvas.Game].SetActive(false);
+        canvases[(int)Canvas.GameBGA].SetActive(false);
+        canvases[(int)Canvas.Result].SetActive(true);
 
         UIText rscore = UIController.Instance.FindUI("UI_R_Score").uiObject as UIText;
         UIText rgreat = UIController.Instance.FindUI("UI_R_Great").uiObject as UIText;
@@ -127,7 +177,7 @@ public class GameManager : MonoBehaviour
         rBG.SetSprite(sheet.img);
 
         // 화면 페이드 인
-
+        yield return StartCoroutine(AniPreset.Instance.IEAniFade(sfxFade, false, 2f));
 
     }
 }

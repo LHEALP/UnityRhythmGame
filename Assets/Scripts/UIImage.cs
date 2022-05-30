@@ -17,4 +17,9 @@ public class UIImage : UIObject
     {
         image.sprite = sprite;
     }
+
+    public void SetColor(Color color)
+    {
+        image.color = color;
+    }
 }
