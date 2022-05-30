@@ -70,15 +70,25 @@ public class GameManager : MonoBehaviour
     {
         // 화면 페이드 아웃
 
-        // 파싱, 생성 등
+        // Sheet 파싱
         yield return Parser.Instance.IEParse("Heart Shaker");
         sheet.Init();
+
+        // Audio 삽입
         AudioManager.Instance.Insert(sheet.clip);
-        Judgement judgement = FindObjectOfType<Judgement>();
-        judgement.Init();
+
+        // BGA 삽입
+        UIImage rBG = UIController.Instance.FindUI("UI_BGA").uiObject as UIImage;
+        rBG.SetSprite(sheet.img);
+
+        // 판정 초기화
+        FindObjectOfType<Judgement>().Init();
+
+        // 점수 초기화
         score.Clear();
+
+        // 노트 생성
         NoteGenerator.Instance.StartGen();
-        //NoteGenerator.Instance.Gen(sheet);
 
         // 화면 페이드 인
 
@@ -117,7 +127,7 @@ public class GameManager : MonoBehaviour
         rBG.SetSprite(sheet.img);
 
         // 화면 페이드 인
-        
-        
+
+
     }
 }
