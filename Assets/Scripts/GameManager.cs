@@ -14,7 +14,10 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public Sheet sheet;
+    public Dictionary<string, Sheet> sheets = new Dictionary<string, Sheet>();
+    public string selectedTitle;
+
+    //public Sheet sheet;
     public Score score;
     float speed = 1.0f;
     public float Speed
@@ -49,6 +52,7 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        SheetLoader.Instance.Init();
         score = new Score();
 
         foreach (GameObject go in canvases)
@@ -85,12 +89,16 @@ public class GameManager : MonoBehaviour
 
     IEnumerator IETitle()
     {
-        // UIObject들이 자기자신을 캐싱할때까지 여유를 주고 비활성화
+        // UIObject들이 자기자신을 캐싱할때까지 여유를 주고 비활성화(임시)
         yield return new WaitForSeconds(2f);
         canvases[(int)Canvas.Game].SetActive(false);
         canvases[(int)Canvas.GameBGA].SetActive(false);
         canvases[(int)Canvas.Result].SetActive(false);
         canvases[(int)Canvas.Select].SetActive(false);
+
+        // 선택화면 아이템 생성
+        yield return new WaitUntil(() => SheetLoader.Instance.bLoadFinish == true);
+        ItemGenerator.Instance.Init();
 
         // 화면 페이드 인
         yield return StartCoroutine(AniPreset.Instance.IEAniFade(sfxFade, false, 1f));
@@ -113,12 +121,11 @@ public class GameManager : MonoBehaviour
         // 화면 페이드 아웃
         //yield return StartCoroutine(AniPreset.Instance.IEAniFade(sfxFade, true, 2f));
 
-        // Sheet 파싱
-        yield return Parser.Instance.IEParse("Heart Shaker");
-        sheet.Init();
+        // Sheet 초기화
+        sheets[selectedTitle].Init();
 
         // Audio 삽입
-        AudioManager.Instance.Insert(sheet.clip);
+        AudioManager.Instance.Insert(sheets[selectedTitle].clip);
 
         // Game UI 켜기
         canvases[(int)Canvas.Game].SetActive(true);
@@ -174,7 +181,7 @@ public class GameManager : MonoBehaviour
         rmiss.SetText(score.data.miss.ToString());
 
         UIImage rBG = UIController.Instance.FindUI("UI_R_BG").uiObject as UIImage;
-        rBG.SetSprite(sheet.img);
+        rBG.SetSprite(sheets[selectedTitle].img);
 
         // 화면 페이드 인
         yield return StartCoroutine(AniPreset.Instance.IEAniFade(sfxFade, false, 2f));

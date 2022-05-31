@@ -34,7 +34,7 @@ public class Parser
 
     public IEnumerator IEParse(string title)
     {
-        Sheet sheet = new Sheet();
+        sheet = new Sheet();
         string readLine = string.Empty;
 
         using (StreamReader sr = new StreamReader($"{basePath}/{title}/{title}.sheet"))
@@ -101,7 +101,6 @@ public class Parser
 
         sheet.clip = clip;
         sheet.img = img;
-        GameManager.Instance.sheet = sheet;
     }
 
     public IEnumerator IEGetClip(string title)

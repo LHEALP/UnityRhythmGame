@@ -30,7 +30,7 @@ public class Judgement : MonoBehaviour
 
     public void Init()
     {
-        foreach (var note in GameManager.Instance.sheet.notes)
+        foreach (var note in GameManager.Instance.sheets[GameManager.Instance.selectedTitle].notes)
         {
             if (note.line == 1)
                 note1.Enqueue(note);
