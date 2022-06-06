@@ -29,17 +29,24 @@ public struct ScoreData
     }
 }
 
-public class Score
+public class Score : MonoBehaviour
 {
+    static Score instance;
+    public static Score Instance
+    {
+        get { return instance; }
+    }
+
     public ScoreData data;
 
     UIText uiJudgement;
     UIText uiCombo;
     UIText uiScore;
 
-    public Score()
+    void Awake()
     {
-
+        if (instance == null)
+            instance = this;
     }
 
     public void Init()
