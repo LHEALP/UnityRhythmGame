@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -14,11 +15,15 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public Dictionary<string, Sheet> sheets = new Dictionary<string, Sheet>();
-    public string selectedTitle;
+    /// <summary>
+    /// 게임 진행 상태. InputManager.OnEnter() 참고
+    /// </summary>
+    public bool isPlaying = true;
+    public string title;
+    Coroutine coPlaying;
 
-    //public Sheet sheet;
-    public Score score;
+    public Dictionary<string, Sheet> sheets = new Dictionary<string, Sheet>();
+
     float speed = 1.0f;
     public float Speed
     {
@@ -52,8 +57,48 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        StartCoroutine(IEInit());
+    }
+
+    public void Title()
+    {
+        StartCoroutine(IETitle());
+    }
+
+    public void Select()
+    {
+        StartCoroutine(IESelect());
+    }
+
+    public void Play()
+    {
+        StartCoroutine(IEInitPlay());
+    }
+
+    public void Stop()
+    {
+        // Game UI 끄기
+        canvases[(int)Canvas.Game].SetActive(false);
+
+        // playing timer 끄기
+        if (coPlaying != null)
+        {
+            StopCoroutine(coPlaying);
+            coPlaying = null;
+        }
+
+        // 노트 Gen 끄기
+        NoteGenerator.Instance.StopGen();
+
+        // 음악 끄기
+        AudioManager.Instance.Stop();
+
+        Select();
+    }
+
+    IEnumerator IEInit()
+    {
         SheetLoader.Instance.Init();
-        score = new Score();
 
         foreach (GameObject go in canvases)
         {
@@ -63,33 +108,9 @@ public class GameManager : MonoBehaviour
         sfxFade.alpha = 1f;
 
         UIController.Instance.Init();
-        score.Init();
+        Score.Instance.Init();
 
-        StartCoroutine(IETitle());
-    }
-
-
-    // 리스트에서 프리뷰하기 위해 아이템을 한 번 눌렀을 때
-    public void Select()
-    {
-        // UI에 앨범이미지, 음악등 미리보기
-
-        // 리스트UI에서 클릭되면 데이터 받아와서 Insert에 AudioClip 넘겨줘서 바인딩
-        //AudioManager.Instance.Insert();
-        //AudioManager.Instance.Play();
-
-        // 아무튼 앨범이미지 바인딩 등
-    }
-
-    // 리스트에서 플레이하기 위해 아이템을 두 번 눌렀을 때(게임 시작)
-    public void Play()
-    {
-        StartCoroutine(IEInitPlay());
-    }
-
-    IEnumerator IETitle()
-    {
-        // UIObject들이 자기자신을 캐싱할때까지 여유를 주고 비활성화(임시)
+        // UIObject들이 자기자신을 캐싱할때까지 여유를 주고 비활성화(임시코드)
         yield return new WaitForSeconds(2f);
         canvases[(int)Canvas.Game].SetActive(false);
         canvases[(int)Canvas.GameBGA].SetActive(false);
@@ -100,6 +121,13 @@ public class GameManager : MonoBehaviour
         yield return new WaitUntil(() => SheetLoader.Instance.bLoadFinish == true);
         ItemGenerator.Instance.Init();
 
+        // 타이틀 화면 시작
+        //Title();
+        Select();
+    }
+
+    IEnumerator IETitle()
+    {
         // 화면 페이드 인
         yield return StartCoroutine(AniPreset.Instance.IEAniFade(sfxFade, false, 1f));
 
@@ -107,25 +135,45 @@ public class GameManager : MonoBehaviour
         canvases[(int)Canvas.Title].GetComponent<Animation>().Play();
         yield return new WaitForSeconds(5f);
 
+        // 선택화면 시작
+        Select();
+    }
+
+    IEnumerator IESelect()
+    {        
         // 화면 페이드 아웃
         yield return StartCoroutine(AniPreset.Instance.IEAniFade(sfxFade, true, 2f));
+
+        // Title UI 끄기
         canvases[(int)Canvas.Title].SetActive(false);
 
-        // 선택화면(미구현), 일단 플레이로 바로
-        Select();
-        Play();
+        // Select UI 켜기
+        canvases[(int)Canvas.Select].SetActive(true);
+
+        // 화면 페이드 인
+        yield return StartCoroutine(AniPreset.Instance.IEAniFade(sfxFade, false, 2f));
+
+        // 새 게임을 시작할 수 있게 해줌
+        isPlaying = false;
     }
 
     IEnumerator IEInitPlay()
-    {
+    {        
+        // 새 게임을 시작할 수 없게 해줌
+        isPlaying = true;
+
         // 화면 페이드 아웃
-        //yield return StartCoroutine(AniPreset.Instance.IEAniFade(sfxFade, true, 2f));
+        yield return StartCoroutine(AniPreset.Instance.IEAniFade(sfxFade, true, 2f));
+
+        //  Select UI 끄기
+        canvases[(int)Canvas.Select].SetActive(false);
 
         // Sheet 초기화
-        sheets[selectedTitle].Init();
+        title = sheets.ElementAt(ItemController.Instance.page).Key;
+        sheets[title].Init();
 
         // Audio 삽입
-        AudioManager.Instance.Insert(sheets[selectedTitle].clip);
+        AudioManager.Instance.Insert(sheets[title].clip);
 
         // Game UI 켜기
         canvases[(int)Canvas.Game].SetActive(true);
@@ -137,7 +185,7 @@ public class GameManager : MonoBehaviour
         FindObjectOfType<Judgement>().Init();
 
         // 점수 초기화
-        score.Clear();
+        Score.Instance.Clear();
 
         // 화면 페이드 인
         yield return StartCoroutine(AniPreset.Instance.IEAniFade(sfxFade, false, 2f));
@@ -149,7 +197,7 @@ public class GameManager : MonoBehaviour
         NoteGenerator.Instance.StartGen();
 
         // End 알리미
-        StartCoroutine(IEEndPlay());
+        coPlaying = StartCoroutine(IEEndPlay());
     }
 
     // 게임 끝
@@ -175,16 +223,17 @@ public class GameManager : MonoBehaviour
         UIText rgood = UIController.Instance.FindUI("UI_R_Good").uiObject as UIText;
         UIText rmiss = UIController.Instance.FindUI("UI_R_Miss").uiObject as UIText;
 
-        rscore.SetText(score.data.score.ToString());
-        rgreat.SetText(score.data.great.ToString());
-        rgood.SetText(score.data.good.ToString());
-        rmiss.SetText(score.data.miss.ToString());
+        rscore.SetText(Score.Instance.data.score.ToString());
+        rgreat.SetText(Score.Instance.data.great.ToString());
+        rgood.SetText(Score.Instance.data.good.ToString());
+        rmiss.SetText(Score.Instance.data.miss.ToString());
 
         UIImage rBG = UIController.Instance.FindUI("UI_R_BG").uiObject as UIImage;
-        rBG.SetSprite(sheets[selectedTitle].img);
+        rBG.SetSprite(sheets[title].img);
 
         // 화면 페이드 인
         yield return StartCoroutine(AniPreset.Instance.IEAniFade(sfxFade, false, 2f));
 
+        isPlaying = false;
     }
 }

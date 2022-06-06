@@ -81,6 +81,8 @@ public class NoteGenerator : MonoBehaviour
     int prev = 0;
     List<NoteObject> toReleaseList = new List<NoteObject>();
 
+    Coroutine coGenTimer;
+    Coroutine coReleaseTimer;
     Coroutine coInterpolate;
 
     void Awake()
@@ -92,19 +94,42 @@ public class NoteGenerator : MonoBehaviour
     public void StartGen()
     {
         Interval = defaultInterval * GameManager.Instance.Speed;
-        StartCoroutine(IEGenTimer(GameManager.Instance.sheets[GameManager.Instance.selectedTitle].BarPerMilliSec * 0.001f)); // 음악의 1마디 시간마다 생성할 노트 오브젝트 탐색
-        StartCoroutine(IEReleaseTimer(GameManager.Instance.sheets[GameManager.Instance.selectedTitle].BarPerMilliSec * 0.001f * 0.5f)); // 1마디 시간의 절반 주기로 해제할 노트 오브젝트 탐색
+        coGenTimer = StartCoroutine(IEGenTimer(GameManager.Instance.sheets[GameManager.Instance.title].BarPerMilliSec * 0.001f)); // 음악의 1마디 시간마다 생성할 노트 오브젝트 탐색
+        coReleaseTimer = StartCoroutine(IEReleaseTimer(GameManager.Instance.sheets[GameManager.Instance.title].BarPerMilliSec * 0.001f * 0.5f)); // 1마디 시간의 절반 주기로 해제할 노트 오브젝트 탐색
         coInterpolate = StartCoroutine(IEInterpolate(0.1f, 1f)); // 노트 위치 보간 TODO: 차후 튜닝 가능성 존재
+    }
+
+    public void StopGen()
+    {
+        if (coGenTimer != null)
+        {
+            StopCoroutine(coGenTimer);
+            coGenTimer = null;
+        }
+        if (coReleaseTimer != null)
+        {
+            StopCoroutine(coReleaseTimer);
+            coReleaseTimer = null;
+        }
+        foreach (NoteObject note in toReleaseList)
+        {
+            note.gameObject.SetActive(false);
+        }
+
+        toReleaseList.Clear();
+        currentBar = 3;
+        next = 0;
+        prev = 0;
     }
 
     public void Gen()
     {
-        List<Note> notes = GameManager.Instance.sheets[GameManager.Instance.selectedTitle].notes;
+        List<Note> notes = GameManager.Instance.sheets[GameManager.Instance.title].notes;
         List<Note> reconNotes = new List<Note>();
 
         for (; next < notes.Count; next++)
         {
-            if (notes[next].time > currentBar * GameManager.Instance.sheets[GameManager.Instance.selectedTitle].BarPerMilliSec)
+            if (notes[next].time > currentBar * GameManager.Instance.sheets[GameManager.Instance.title].BarPerMilliSec)
             {
                 break;
             }

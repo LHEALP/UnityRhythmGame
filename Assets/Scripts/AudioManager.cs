@@ -49,6 +49,11 @@ public class AudioManager : MonoBehaviour
         audioSource.Play();
     }
 
+    public void Stop()
+    {
+        audioSource.Stop();
+    }
+
     public void Insert(AudioClip clip)
     {
         audioSource.clip = clip;

@@ -11,9 +11,6 @@ public enum JudgeType
 
 public class Judgement : MonoBehaviour
 {
-    // 노트시간을 알아야함
-    // 롱노트는 어떻게?
-
     readonly int miss = 600;
     readonly int good = 400;
     readonly int great = 250;
@@ -28,9 +25,17 @@ public class Judgement : MonoBehaviour
 
     int curruntTime = 0;
 
+    Coroutine coCheckMiss;
+
     public void Init()
     {
-        foreach (var note in GameManager.Instance.sheets[GameManager.Instance.selectedTitle].notes)
+        foreach (var note in notes)
+        {
+            note.Clear();
+        }
+        notes.Clear();
+
+        foreach (var note in GameManager.Instance.sheets[GameManager.Instance.title].notes)
         {
             if (note.line == 1)
                 note1.Enqueue(note);
@@ -46,7 +51,11 @@ public class Judgement : MonoBehaviour
         notes.Add(note3);
         notes.Add(note4);
 
-        StartCoroutine(IECheckMiss());
+        if (coCheckMiss != null)
+        {
+            StopCoroutine(coCheckMiss);
+        }
+        coCheckMiss = StartCoroutine(IECheckMiss());
     }
 
     public void Judge(int line)
@@ -63,23 +72,23 @@ public class Judgement : MonoBehaviour
             {
                 if (judgeTime < great && judgeTime > -great)
                 {
-                    GameManager.Instance.score.data.great++;
-                    GameManager.Instance.score.data.judge = JudgeType.Great;
+                    Score.Instance.data.great++;
+                    Score.Instance.data.judge = JudgeType.Great;
                 }
                 else
                 {
-                    GameManager.Instance.score.data.good++;
-                    GameManager.Instance.score.data.judge = JudgeType.Good;
+                    Score.Instance.data.good++;
+                    Score.Instance.data.judge = JudgeType.Good;
                 }
-                GameManager.Instance.score.data.combo++;
+                Score.Instance.data.combo++;
             }
             else
             {
-                GameManager.Instance.score.data.fastMiss++;
-                GameManager.Instance.score.data.judge = JudgeType.Miss;
-                GameManager.Instance.score.data.combo = 0;
+                Score.Instance.data.fastMiss++;
+                Score.Instance.data.judge = JudgeType.Miss;
+                Score.Instance.data.combo = 0;
             }
-            GameManager.Instance.score.SetScore();
+            Score.Instance.SetScore();
         }
 
         if (note.type == (int)NoteType.Short)
@@ -106,15 +115,15 @@ public class Judgement : MonoBehaviour
         {
             if (judgeTime < great && judgeTime > -great)
             {
-                GameManager.Instance.score.data.great++;
-                GameManager.Instance.score.data.judge = JudgeType.Great;
-                GameManager.Instance.score.data.combo++;
+                Score.Instance.data.great++;
+                Score.Instance.data.judge = JudgeType.Great;
+                Score.Instance.data.combo++;
             }
             else
             {
-                GameManager.Instance.score.data.longMiss++;
+                Score.Instance.data.longMiss++;
             }
-            GameManager.Instance.score.SetScore();
+            Score.Instance.SetScore();
             longNoteCheck[line] = 0;
             notes[line].Dequeue();
         }
@@ -139,10 +148,10 @@ public class Judgement : MonoBehaviour
                     {
                         if (judgeTime < -miss)
                         {
-                            GameManager.Instance.score.data.miss++;
-                            GameManager.Instance.score.data.judge = JudgeType.Miss;
-                            GameManager.Instance.score.data.combo = 0;
-                            GameManager.Instance.score.SetScore();
+                            Score.Instance.data.miss++;
+                            Score.Instance.data.judge = JudgeType.Miss;
+                            Score.Instance.data.combo = 0;
+                            Score.Instance.SetScore();
                             notes[i].Dequeue();
                         }
                     }
@@ -151,10 +160,10 @@ public class Judgement : MonoBehaviour
                 {
                     if (judgeTime < -miss)
                     {
-                        GameManager.Instance.score.data.miss++;
-                        GameManager.Instance.score.data.judge = JudgeType.Miss;
-                        GameManager.Instance.score.data.combo = 0;
-                        GameManager.Instance.score.SetScore();
+                        Score.Instance.data.miss++;
+                        Score.Instance.data.judge = JudgeType.Miss;
+                        Score.Instance.data.combo = 0;
+                        Score.Instance.SetScore();
                         notes[i].Dequeue();
                     }
                 }
