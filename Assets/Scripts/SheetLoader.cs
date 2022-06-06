@@ -35,7 +35,6 @@ public class SheetLoader : MonoBehaviour
             sheetCount = remain = d.GetFiles().Length;
         }
 
-        StartCoroutine(IECounter());
         StartCoroutine(IELoad());
     }
 
@@ -46,22 +45,8 @@ public class SheetLoader : MonoBehaviour
         {
             yield return Parser.Instance.IEParse(d.Name);
             GameManager.Instance.sheets.Add(d.Name, Parser.Instance.sheet);
-            remain--;
-        }
-    }
-
-    IEnumerator IECounter()
-    {
-        while (true)
-        {
-            if (remain <= 0)
-            {
+            if (--remain <= 0)
                 bLoadFinish = true;
-                break;
-            }
-
-            yield return null;
         }
-        yield break;
     }
 }
