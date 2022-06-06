@@ -187,6 +187,9 @@ public class GameManager : MonoBehaviour
         // 점수 초기화
         Score.Instance.Clear();
 
+        // 판정 이펙트 초기화
+        JudgeEffect.Instance.Init();
+
         // 화면 페이드 인
         yield return StartCoroutine(AniPreset.Instance.IEAniFade(sfxFade, false, 2f));
 

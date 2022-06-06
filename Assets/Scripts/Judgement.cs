@@ -89,6 +89,7 @@ public class Judgement : MonoBehaviour
                 Score.Instance.data.combo = 0;
             }
             Score.Instance.SetScore();
+            JudgeEffect.Instance.OnEffect(line);
         }
 
         if (note.type == (int)NoteType.Short)
