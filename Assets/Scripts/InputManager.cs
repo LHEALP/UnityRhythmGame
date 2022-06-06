@@ -73,7 +73,6 @@ public class InputManager : MonoBehaviour
     {
         if (context.started)
         {
-            AudioManager.Instance.audioSource.time = AudioManager.Instance.Length; // 테스트코드
             GameManager.Instance.Speed -= 0.1f;
             NoteGenerator.Instance.Interpolate();
 
@@ -91,5 +90,37 @@ public class InputManager : MonoBehaviour
             UIText speedUI = UIController.Instance.find.Invoke("UI_G_Speed").uiObject as UIText;
             speedUI.SetText("Speed " + GameManager.Instance.Speed.ToString("0.0"));
         }
+    }
+
+    public void OnItemMove(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            ItemController.Instance.Move(context.ReadValue<float>());
+        }
+    }
+
+    public void OnEnter(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            if (!GameManager.Instance.isPlaying)
+                GameManager.Instance.Play();
+        }
+    }
+    public void OnExit(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            if (GameManager.Instance.isPlaying)
+                GameManager.Instance.Stop();
+        }
+    }
+
+    // 테스트용 코드
+    public void OnTest(InputAction.CallbackContext context)
+    {
+        // Audio Time을 끝으로 옮겨 결과창을 바로 볼 수 있게 위함
+        AudioManager.Instance.audioSource.time = AudioManager.Instance.Length;
     }
 }
