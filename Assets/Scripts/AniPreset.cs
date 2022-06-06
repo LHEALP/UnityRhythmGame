@@ -70,4 +70,20 @@ public class AniPreset : MonoBehaviour
             cg.alpha = 0f;
         }
     }
+
+    public IEnumerator IEAniMoveToTarget(RectTransform start, RectTransform dest, float speed)
+    {
+        Vector3 v0 = start.anchoredPosition3D;
+        Vector3 v1 = dest.anchoredPosition3D - v0;
+
+        float time = 0f;
+        while (time < 1f)
+        {
+            start.anchoredPosition3D = v0 + v1 * time;
+
+            time += Time.deltaTime * speed;
+            yield return null;
+        }
+        start.anchoredPosition3D = v0 + v1;
+    }
 }
