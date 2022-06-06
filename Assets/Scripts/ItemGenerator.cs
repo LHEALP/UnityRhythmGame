@@ -18,6 +18,8 @@ public class ItemGenerator : MonoBehaviour
     List<GameObject> items = new List<GameObject>();
     public GameObject item;
 
+    int posX = 0;
+
     void Awake()
     {
         if (instance == null)
@@ -38,9 +40,13 @@ public class ItemGenerator : MonoBehaviour
             title.text = sheet.Value.title;
             artist.text = sheet.Value.artist;
 
-            GameObject go = Instantiate(item, transform.GetChild(0));
+            GameObject go = Instantiate(item, transform);
             go.name = sheet.Value.title;
+            RectTransform rect = go.GetComponent<RectTransform>();
+            rect.anchoredPosition3D = new Vector3(posX, 0f, 0f);
             items.Add(go);
+
+            posX += 1920;
         }
     }
 }
