@@ -147,6 +147,9 @@ public class GameManager : MonoBehaviour
         // Title UI 끄기
         canvases[(int)Canvas.Title].SetActive(false);
 
+        // Result UI 끄기
+        canvases[(int)Canvas.Result].SetActive(false);
+
         // Select UI 켜기
         canvases[(int)Canvas.Select].SetActive(true);
 
@@ -237,6 +240,10 @@ public class GameManager : MonoBehaviour
         // 화면 페이드 인
         yield return StartCoroutine(AniPreset.Instance.IEAniFade(sfxFade, false, 2f));
 
-        isPlaying = false;
+        // 5초 대기
+        yield return new WaitForSeconds(5f);
+
+        // 선택 화면 불러
+        Select();
     }
 }
