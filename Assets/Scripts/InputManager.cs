@@ -7,6 +7,7 @@ public class InputManager : MonoBehaviour
 {
     public GameObject[] keyEffects = new GameObject[4];
     Judgement judgement = null;
+    Sync sync = null;
 
     void Start()
     {
@@ -15,6 +16,7 @@ public class InputManager : MonoBehaviour
             effect.gameObject.SetActive(false);
         }
         judgement = FindObjectOfType<Judgement>();
+        sync = FindObjectOfType<Sync>();
     }
 
     public void OnNoteLine0(InputAction.CallbackContext context)
@@ -89,6 +91,22 @@ public class InputManager : MonoBehaviour
 
             UIText speedUI = UIController.Instance.find.Invoke("UI_G_Speed").uiObject as UIText;
             speedUI.SetText("Speed " + GameManager.Instance.Speed.ToString("0.0"));
+        }
+    }
+    public void OnJudgeDown(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            if (GameManager.Instance.isPlaying)
+                sync.Down();
+        }
+    }
+    public void OnJudgeUp(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            if (GameManager.Instance.isPlaying)
+                sync.Up();
         }
     }
 

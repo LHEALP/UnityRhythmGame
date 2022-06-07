@@ -24,6 +24,10 @@ public class Judgement : MonoBehaviour
     int[] longNoteCheck = new int[4] { 0, 0, 0, 0 };
 
     int curruntTime = 0;
+    /// <summary>
+    /// User에 의해 조정된 판정 타이밍
+    /// </summary>
+    public int judgeTimeFromUserSetting = 0;
 
     Coroutine coCheckMiss;
 
@@ -64,7 +68,7 @@ public class Judgement : MonoBehaviour
             return;
 
         Note note = notes[line].Peek();
-        int judgeTime = curruntTime - note.time;
+        int judgeTime = curruntTime - note.time + judgeTimeFromUserSetting;
 
         if (judgeTime < miss && judgeTime > -miss)
         {
@@ -111,7 +115,7 @@ public class Judgement : MonoBehaviour
         if (note.type != (int)NoteType.Long)
             return;
 
-        int judgeTime = curruntTime - note.tail;
+        int judgeTime = curruntTime - note.tail + judgeTimeFromUserSetting;
         if (judgeTime < good && judgeTime > -good)
         {
             if (judgeTime < great && judgeTime > -great)
@@ -141,7 +145,7 @@ public class Judgement : MonoBehaviour
                 if (notes[i].Count <= 0)
                     break;
                 Note note = notes[i].Peek();
-                int judgeTime = note.time - curruntTime;
+                int judgeTime = note.time - curruntTime + judgeTimeFromUserSetting;
 
                 if (note.type == (int)NoteType.Long)
                 {
