@@ -196,6 +196,9 @@ public class GameManager : MonoBehaviour
         // 화면 페이드 인
         yield return StartCoroutine(AniPreset.Instance.IEAniFade(sfxFade, false, 2f));
 
+        // 3초 대기
+        yield return new WaitForSeconds(3f);
+
         // Audio 재생
         AudioManager.Instance.Play();
 
