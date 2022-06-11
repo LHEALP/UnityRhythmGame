@@ -196,14 +196,14 @@ public class GameManager : MonoBehaviour
         // 화면 페이드 인
         yield return StartCoroutine(AniPreset.Instance.IEAniFade(sfxFade, false, 2f));
 
+        // Note 생성
+        NoteGenerator.Instance.StartGen();
+
         // 3초 대기
         yield return new WaitForSeconds(3f);
 
         // Audio 재생
         AudioManager.Instance.Play();
-
-        // Note 생성
-        NoteGenerator.Instance.StartGen();
 
         // End 알리미
         coPlaying = StartCoroutine(IEEndPlay());
