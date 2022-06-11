@@ -64,7 +64,7 @@ public class Judgement : MonoBehaviour
 
     public void Judge(int line)
     {
-        if (notes[line].Count <= 0)
+        if (notes[line].Count <= 0 || !AudioManager.Instance.IsPlaying())
             return;
 
         Note note = notes[line].Peek();
@@ -94,15 +94,15 @@ public class Judgement : MonoBehaviour
             }
             Score.Instance.SetScore();
             JudgeEffect.Instance.OnEffect(line);
-        }
 
-        if (note.type == (int)NoteType.Short)
-        {
-            notes[line].Dequeue();
-        }
-        else if (note.type == (int)NoteType.Long)
-        {
-            longNoteCheck[line] = 1;
+            if (note.type == (int)NoteType.Short)
+            {
+                notes[line].Dequeue();
+            }
+            else if (note.type == (int)NoteType.Long)
+            {
+                longNoteCheck[line] = 1;
+            }
         }
     }
     
