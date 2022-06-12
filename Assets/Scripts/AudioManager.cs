@@ -20,16 +20,36 @@ public class AudioManager : MonoBehaviour
     {
         get
         {
-            return audioSource.clip.length;
+            float len = 0f;
+            if (audioSource.clip != null)
+                len = audioSource.clip.length;
+            return len;
         }
     }
-    public float progressTime 
-    { 
-        get 
+    public float progressTime
+    {
+        get
         {
-            return audioSource.time;
-        } 
+            float time = 0f;
+            if (audioSource.clip != null)
+                time = audioSource.time;
+            return time;
+        }
+        set
+        {
+            if (audioSource.clip != null)
+                audioSource.time = value;
+        }
     }
+
+    public enum State
+    {
+        Playing,
+        Paused,
+        Unpaused,
+        Stop,
+    }
+    public State state = State.Stop;
 
     void Awake()
     {
@@ -41,16 +61,30 @@ public class AudioManager : MonoBehaviour
 
     void Start()
     {
-        
+
     }
 
     public void Play()
     {
+        state = State.Playing;
         audioSource.Play();
+    }
+
+    public void Pause()
+    {
+        state = State.Paused;
+        audioSource.Pause();
+    }
+
+    public void UnPause()
+    {
+        state = State.Unpaused;
+        audioSource.UnPause();
     }
 
     public void Stop()
     {
+        state = State.Stop;
         audioSource.Stop();
     }
 
