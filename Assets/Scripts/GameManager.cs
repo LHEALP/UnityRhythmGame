@@ -46,6 +46,7 @@ public class GameManager : MonoBehaviour
         GameBGA,
         Game,
         Result,
+        Editor,
     }
     CanvasGroup sfxFade;
 
@@ -248,5 +249,33 @@ public class GameManager : MonoBehaviour
 
         // 선택 화면 불러
         Select();
+    }
+
+    IEnumerator IEEdit()
+    {
+        // 새 게임을 시작할 수 없게 해줌
+        isPlaying = true;
+
+        // 화면 페이드 아웃
+        yield return StartCoroutine(AniPreset.Instance.IEAniFade(sfxFade, true, 2f));
+
+        //  Select UI 끄기
+        canvases[(int)Canvas.Select].SetActive(false);
+
+        // Sheet 초기화
+        title = sheets.ElementAt(ItemController.Instance.page).Key;
+        sheets[title].Init();
+
+        // Audio 삽입
+        AudioManager.Instance.Insert(sheets[title].clip);
+
+        // Editor UI 켜기
+        canvases[(int)Canvas.Editor].SetActive(true);
+
+        // 화면 페이드 인
+        yield return StartCoroutine(AniPreset.Instance.IEAniFade(sfxFade, false, 2f));
+
+        // Note 생성
+        NoteGenerator.Instance.GenAll();
     }
 }
