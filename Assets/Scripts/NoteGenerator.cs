@@ -91,12 +91,19 @@ public class NoteGenerator : MonoBehaviour
             instance = this;
     }
 
+    // 풀링 기반 생성 (게임 플레이 시 사용)
     public void StartGen()
     {
         Interval = defaultInterval * GameManager.Instance.Speed;
         coGenTimer = StartCoroutine(IEGenTimer(GameManager.Instance.sheets[GameManager.Instance.title].BarPerMilliSec * 0.001f)); // 음악의 1마디 시간마다 생성할 노트 오브젝트 탐색
         coReleaseTimer = StartCoroutine(IEReleaseTimer(GameManager.Instance.sheets[GameManager.Instance.title].BarPerMilliSec * 0.001f * 0.5f)); // 1마디 시간의 절반 주기로 해제할 노트 오브젝트 탐색
         coInterpolate = StartCoroutine(IEInterpolate(0.25f, 3.5f));
+    }
+
+    // 한 번에 다 생성 (에디팅할때 사용)
+    public void GenAll()
+    {
+        Gen2();
     }
 
     public void StopGen()
@@ -122,7 +129,7 @@ public class NoteGenerator : MonoBehaviour
         prev = 0;
     }
 
-    public void Gen()
+    void Gen()
     {
         List<Note> notes = GameManager.Instance.sheets[GameManager.Instance.title].notes;
         List<Note> reconNotes = new List<Note>();
@@ -150,7 +157,7 @@ public class NoteGenerator : MonoBehaviour
             {
                 case (int)NoteType.Short:
                     noteObject = PoolShort.Get();
-                    noteObject.SetPosition(new Vector3[] { new Vector3(linePos[note.line - 1], (note.time - currentTime) * Interval, 0f) }); // 2) 원칙대로
+                    noteObject.SetPosition(new Vector3[] { new Vector3(linePos[note.line - 1], (note.time - currentTime) * Interval, 0f) });
                     break;
                 case (int)NoteType.Long:
                     noteObject = PoolLong.Get();
@@ -172,7 +179,41 @@ public class NoteGenerator : MonoBehaviour
         }
     }
 
-    public void Release()
+    void Gen2()
+    {
+        List<Note> notes = GameManager.Instance.sheets[GameManager.Instance.title].notes;
+        Interval = defaultInterval * GameManager.Instance.Speed;
+        float noteSpeed = Interval * 1000;
+        foreach (Note note in notes)
+        {
+            NoteObject noteObject = null;
+
+            switch (note.type)
+            {
+                case (int)NoteType.Short:
+                    noteObject = PoolShort.Get();
+                    noteObject.SetPosition(new Vector3[] { new Vector3(linePos[note.line - 1], note.time * Interval, 0f) });
+                    break;
+                case (int)NoteType.Long:
+                    noteObject = PoolLong.Get();
+                    noteObject.SetPosition(new Vector3[] // 포지션은 노트 시간 - 현재 음악 시간
+                    {
+                        new Vector3(linePos[note.line - 1], note.time * Interval, 0f),
+                        new Vector3(linePos[note.line - 1], note.tail * Interval, 0f)
+                    });
+                    break;
+                default:
+                    break;
+            }
+            noteObject.speed = noteSpeed;
+            noteObject.note = note;
+            noteObject.life = true;
+            noteObject.gameObject.SetActive(true);
+            //noteObject.Move();
+        }
+    }
+
+    void Release()
     {
         List<NoteObject> reconNotes = new List<NoteObject>();
         foreach (NoteObject note in toReleaseList)
@@ -240,53 +281,4 @@ public class NoteGenerator : MonoBehaviour
             yield return new WaitForSeconds(rate);
         }
     }
-
-#if (LegacyGen)
-    List<NoteObject> noteList =  new List<NoteObject>();
-
-    /// <summary>
-    /// 노트를 한 번에 모두 생성하는 방식
-    /// </summary>
-    /// <param name="sheet"></param>
-    public void Gen(Sheet sheet)
-    {
-        foreach (Note note in sheet.notes)
-        {
-            int line = note.line - 1;
-            if (note.type == (int)NoteType.Short)
-            {
-                GameObject obj = Instantiate(notePrefab, new Vector3(linePos[line], note.time * defaultInterval, 0f), Quaternion.identity, parent.transform);
-                obj.AddComponent<NoteShort>();
-                noteList.Add(obj.GetComponent<NoteObject>());
-            }
-            else
-            {
-                // Head and Tail
-                GameObject obj = new GameObject("NoteLong");
-                obj.transform.parent = parent.transform;
-                GameObject head = Instantiate(notePrefab, new Vector3(linePos[line], note.tail * defaultInterval, 0f), Quaternion.identity, obj.transform);
-                GameObject tail = Instantiate(notePrefab, new Vector3(linePos[line], note.time * defaultInterval, 0f), Quaternion.identity, obj.transform);
-
-                head.AddComponent<LineRenderer>();
-                LineRenderer lineRenderer = head.GetComponent<LineRenderer>();
-                lineRenderer.material = lineRendererMaterial;
-                lineRenderer.sortingOrder = 3;
-                lineRenderer.widthMultiplier = 0.8f;
-                lineRenderer.positionCount = 2;
-                lineRenderer.SetPositions(new Vector3[] { head.transform.position, tail.transform.position });
-
-                obj.AddComponent<NoteLong>(); // 호출시점 주의
-                noteList.Add(obj.GetComponent<NoteObject>());
-            }
-        }
-
-        Drop();
-    }
-
-    public void Drop()
-    {
-        foreach (NoteObject noteObject in noteList)
-            noteObject.Move();
-    }
-#endif
 }
