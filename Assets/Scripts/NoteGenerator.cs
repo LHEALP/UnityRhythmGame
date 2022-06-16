@@ -179,6 +179,9 @@ public class NoteGenerator : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Editor Gen메소드, 노트의 이동은 노트 자신이 처리하지 않음.
+    /// </summary>
     void Gen2()
     {
         List<Note> notes = GameManager.Instance.sheets[GameManager.Instance.title].notes;
@@ -209,7 +212,7 @@ public class NoteGenerator : MonoBehaviour
             noteObject.note = note;
             noteObject.life = true;
             noteObject.gameObject.SetActive(true);
-            //noteObject.Move();
+            toReleaseList.Add(noteObject); // 에디팅끝나면 Release호출해서 해제해주기
         }
     }
 
