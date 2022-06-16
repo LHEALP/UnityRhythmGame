@@ -135,6 +135,42 @@ public class InputManager : MonoBehaviour
         }
     }
 
+    // 에디터
+    public void OnMouseBtn(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            Debug.Log(context.control.name);
+        }
+    }
+
+    public void OnMouseWheel(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            if (context.ReadValue<float>() >= 0)
+                Debug.Log("마우스 위로");
+            else
+                Debug.Log("마우스 아래로");
+        }
+    }
+
+    public void OnSpace(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            Debug.Log("Space");
+        }
+    }
+
+    public void OnCtrl(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            Debug.Log("Ctrl");
+        }
+    }
+
     // 테스트용 코드
     public void OnTest(InputAction.CallbackContext context)
     {
