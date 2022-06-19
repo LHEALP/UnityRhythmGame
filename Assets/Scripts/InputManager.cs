@@ -9,6 +9,8 @@ public class InputManager : MonoBehaviour
     Judgement judgement = null;
     Sync sync = null;
 
+    public Vector2 mousePos;
+
     void Start()
     {
         foreach (var effect in keyEffects)
@@ -17,6 +19,12 @@ public class InputManager : MonoBehaviour
         }
         judgement = FindObjectOfType<Judgement>();
         sync = FindObjectOfType<Sync>();
+    }
+
+    void Update()
+    {
+        if (GameManager.Instance.state == GameManager.GameState.Edit)
+            mousePos = Mouse.current.position.ReadValue();
     }
 
     public void OnNoteLine0(InputAction.CallbackContext context)
@@ -122,8 +130,16 @@ public class InputManager : MonoBehaviour
     {
         if (context.started)
         {
-            if (!GameManager.Instance.isPlaying)
-                GameManager.Instance.Play();
+            if (GameManager.Instance.state == GameManager.GameState.Game)
+            {
+                if (!GameManager.Instance.isPlaying)
+                    GameManager.Instance.Play();
+            }
+            else
+            {
+                if (!GameManager.Instance.isPlaying)
+                    GameManager.Instance.Edit();
+            }
         }
     }
     public void OnExit(InputAction.CallbackContext context)
@@ -140,7 +156,8 @@ public class InputManager : MonoBehaviour
     {
         if (context.started)
         {
-            Debug.Log(context.control.name);
+            if (GameManager.Instance.state == GameManager.GameState.Edit)
+                EditorController.Instance.MouseBtn(context.control.name);                
         }
     }
 
@@ -148,10 +165,10 @@ public class InputManager : MonoBehaviour
     {
         if (context.started)
         {
-            if (context.ReadValue<float>() >= 0)
-                Debug.Log("마우스 위로");
-            else
-                Debug.Log("마우스 아래로");
+            if (GameManager.Instance.state == GameManager.GameState.Edit)
+            {
+                EditorController.Instance.Scroll(context.ReadValue<float>());
+            }
         }
     }
 
@@ -159,7 +176,8 @@ public class InputManager : MonoBehaviour
     {
         if (context.started)
         {
-            Debug.Log("Space");
+            if (GameManager.Instance.state == GameManager.GameState.Edit)
+                EditorController.Instance.Space();
         }
     }
 
@@ -167,7 +185,16 @@ public class InputManager : MonoBehaviour
     {
         if (context.started)
         {
-            Debug.Log("Ctrl");
+            if (GameManager.Instance.state == GameManager.GameState.Edit)
+            {
+                EditorController.Instance.bCtrl = true;
+                EditorController.Instance.Ctrl();
+            }
+        }
+        else if (context.canceled)
+        {
+            if (GameManager.Instance.state == GameManager.GameState.Edit)
+                EditorController.Instance.bCtrl = false;
         }
     }
 
