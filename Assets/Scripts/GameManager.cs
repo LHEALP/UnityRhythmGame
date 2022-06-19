@@ -15,6 +15,13 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public enum GameState
+    {
+        Game,
+        Edit,
+    }
+    public GameState state = GameState.Game;
+
     /// <summary>
     /// 게임 진행 상태. InputManager.OnEnter() 참고
     /// </summary>
@@ -76,6 +83,11 @@ public class GameManager : MonoBehaviour
         StartCoroutine(IEInitPlay());
     }
 
+    public void Edit()
+    {
+        StartCoroutine(IEEdit());
+    }
+
     public void Stop()
     {
         // Game UI 끄기
@@ -116,7 +128,8 @@ public class GameManager : MonoBehaviour
         canvases[(int)Canvas.Game].SetActive(false);
         canvases[(int)Canvas.GameBGA].SetActive(false);
         canvases[(int)Canvas.Result].SetActive(false);
-        canvases[(int)Canvas.Select].SetActive(false);
+        canvases[(int)Canvas.Select].SetActive(false);        
+        canvases[(int)Canvas.Editor].SetActive(false);
 
         // 선택화면 아이템 생성
         yield return new WaitUntil(() => SheetLoader.Instance.bLoadFinish == true);
