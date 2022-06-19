@@ -51,41 +51,46 @@ public class Editor : MonoBehaviour
             slider.OnValue(value);
     }
 
+    public void Play()
+    {
+        switch (AudioManager.Instance.state)
+        {
+            case AudioManager.State.Playing:
+                {
+                    AudioManager.Instance.Pause();
+                    musicController.SetText(">");
+                }
+                break;
+            case AudioManager.State.Paused:
+                {
+                    AudioManager.Instance.UnPause();
+                    musicController.SetText("||");
+                }
+                break;
+            case AudioManager.State.Unpaused:
+                {
+                    AudioManager.Instance.Pause();
+                    musicController.SetText(">");
+                }
+                break;
+            case AudioManager.State.Stop:
+                {
+                    AudioManager.Instance.Play();
+                    musicController.SetText("||");
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
     public void Play(UIObject uiObject)
     {
         if (musicController == null)
             musicController = uiObject as UIButton;
         else
         {
-            switch (AudioManager.Instance.state)
-            {
-                case AudioManager.State.Playing:
-                    {
-                        AudioManager.Instance.Pause();
-                        musicController.SetText(">");
-                    }
-                    break;
-                case AudioManager.State.Paused:
-                    {
-                        AudioManager.Instance.UnPause();
-                        musicController.SetText("||");
-                    }
-                    break;
-                case AudioManager.State.Unpaused:
-                    {
-                        AudioManager.Instance.Pause();
-                        musicController.SetText(">");
-                    }
-                    break;
-                case AudioManager.State.Stop:
-                    {
-                        AudioManager.Instance.Play();
-                        musicController.SetText("||");
-                    }
-                    break;
-                default:
-                    break;
-            }
+            Play();
         }
     }
 
