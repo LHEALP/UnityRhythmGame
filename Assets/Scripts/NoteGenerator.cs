@@ -57,20 +57,25 @@ public class NoteGenerator : MonoBehaviour
     {
         GameObject note = new GameObject("NoteLong");
         note.transform.parent = parent.transform;
-        GameObject head = Instantiate(notePrefab); //new GameObject("head");
+        
+        GameObject head = Instantiate(notePrefab);
         head.name = "head";
         head.transform.parent = note.transform;
-        GameObject tail = Instantiate(notePrefab); //new GameObject("tail");
+
+        GameObject tail = Instantiate(notePrefab);
         tail.transform.parent = note.transform;
         tail.name = "tail";
 
-        head.AddComponent<LineRenderer>();
-        LineRenderer lineRenderer = head.GetComponent<LineRenderer>();
+        GameObject line = new GameObject("line");
+        line.transform.parent = note.transform;
+
+        line.AddComponent<LineRenderer>();
+        LineRenderer lineRenderer = line.GetComponent<LineRenderer>();
         lineRenderer.material = lineRendererMaterial;
         lineRenderer.sortingOrder = 3;
         lineRenderer.widthMultiplier = 0.8f;
         lineRenderer.positionCount = 2;
-        lineRenderer.SetPositions(new Vector3[] { head.transform.position, tail.transform.position });
+        lineRenderer.useWorldSpace = false;
 
         note.AddComponent<NoteLong>();
         return note.GetComponent<NoteLong>();
