@@ -282,6 +282,11 @@ public class GameManager : MonoBehaviour
         // Audio 火涝
         AudioManager.Instance.Insert(sheets[title].clip);
 
+        // Grid 积己
+        FindObjectOfType<GridGenerator>().Init();
+
+        // Note 积己
+
         // Editor UI 难扁
         canvases[(int)Canvas.Editor].SetActive(true);
 
