@@ -42,10 +42,18 @@ public class Sheet
     public AudioClip clip;
     public Sprite img;
     
+    public float BarPerSec { get; private set; }
+    public float BeatPerSec { get; private set; }
+
     public int BarPerMilliSec { get; private set; }
+    public int BeatPerMilliSec { get; private set; }
 
     public void Init()
     {
         BarPerMilliSec = (int)(signature[0] / (bpm / 60f) * 1000);
+        BeatPerMilliSec = BarPerMilliSec / 32;
+
+        BarPerSec = BarPerMilliSec * 0.001f;
+        BeatPerSec = BarPerSec / 32;
     }
 }
