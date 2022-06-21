@@ -4,15 +4,24 @@ using UnityEngine;
 
 public class GridGenerator : MonoBehaviour
 {
+    public GameObject grid;
+
+    readonly int gridInterval = 8;
+
     // Start is called before the first frame update
     void Start()
     {
         
     }
 
-    // Update is called once per frame
-    void Update()
+    public void Init()
     {
-        
+        int count = (int)(AudioManager.Instance.Length * 1000 / GameManager.Instance.sheets[GameManager.Instance.title].BarPerMilliSec);
+
+        for (int i = 0; i < count; i++)
+        {
+            GameObject obj = Instantiate(grid, transform);
+            obj.transform.position = Vector3.up * i * gridInterval;
+        }
     }
 }
