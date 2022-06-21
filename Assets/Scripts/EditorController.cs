@@ -49,7 +49,7 @@ public class EditorController : MonoBehaviour
     {
         if (btnName == "leftButton")
         {
-
+            
         }
         else if (btnName == "rightButton")
         {
