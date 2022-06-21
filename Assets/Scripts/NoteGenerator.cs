@@ -189,9 +189,13 @@ public class NoteGenerator : MonoBehaviour
     /// </summary>
     void Gen2()
     {
-        List<Note> notes = GameManager.Instance.sheets[GameManager.Instance.title].notes;
-        Interval = defaultInterval * GameManager.Instance.Speed;
-        float noteSpeed = Interval * 1000;
+        Sheet sheet = GameManager.Instance.sheets[GameManager.Instance.title];
+
+        List<Note> notes = sheet.notes;
+
+        // (노트시간 - 오프셋) / 1비트(32비트시간값) = 노트의 위치
+        // 노트의 위치 * 0.25(그리드의 32비트기준 간격) = 최종적인 노트의 위치
+
         foreach (Note note in notes)
         {
             NoteObject noteObject = null;
@@ -200,20 +204,33 @@ public class NoteGenerator : MonoBehaviour
             {
                 case (int)NoteType.Short:
                     noteObject = PoolShort.Get();
-                    noteObject.SetPosition(new Vector3[] { new Vector3(linePos[note.line - 1], note.time * Interval, 0f) });
+                    if (note.time - sheet.offset <= 0)
+                        noteObject.SetPosition(new Vector3[] { new Vector3(linePos[note.line - 1], 0f, 0f) });
+                    else
+                        noteObject.SetPosition(new Vector3[] { new Vector3(linePos[note.line - 1], (note.time - sheet.offset) / sheet.BeatPerMilliSec * 0.25f, 0f) });
                     break;
                 case (int)NoteType.Long:
                     noteObject = PoolLong.Get();
-                    noteObject.SetPosition(new Vector3[] // 포지션은 노트 시간 - 현재 음악 시간
+                    if (note.time - sheet.offset <= 0)
                     {
-                        new Vector3(linePos[note.line - 1], note.time * Interval, 0f),
-                        new Vector3(linePos[note.line - 1], note.tail * Interval, 0f)
-                    });
+                        noteObject.SetPosition(new Vector3[] // 포지션은 노트 시간 - 현재 음악 시간
+{
+                        new Vector3(linePos[note.line - 1], 0f, 0f),
+                        new Vector3(linePos[note.line - 1], (note.tail - sheet.offset) / sheet.BeatPerMilliSec * 0.25f, 0f)
+});
+                    }
+                    else
+                    {
+                        noteObject.SetPosition(new Vector3[] // 포지션은 노트 시간 - 현재 음악 시간
+                        {
+                        new Vector3(linePos[note.line - 1], (note.time - sheet.offset) / sheet.BeatPerMilliSec * 0.25f, 0f),
+                        new Vector3(linePos[note.line - 1], (note.tail - sheet.offset) / sheet.BeatPerMilliSec * 0.25f, 0f)
+                        });
+                    }
                     break;
                 default:
                     break;
             }
-            noteObject.speed = noteSpeed;
             noteObject.note = note;
             noteObject.life = true;
             noteObject.gameObject.SetActive(true);
