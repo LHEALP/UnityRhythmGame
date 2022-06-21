@@ -32,7 +32,8 @@ public class EditorController : MonoBehaviour
 
     void Update()
     {
-        
+        // 그리드에 레이쏴서 위치 알아내야함
+        // 현재 스냅에 따라, 스냅될 위치 알아내야함
         //inputManager.mousePos;
     }
 
@@ -76,16 +77,25 @@ public class EditorController : MonoBehaviour
     {
         while (bCtrl)
         {
-            if (scrollValue >= 0)
+            if (scrollValue > 0)
             {
                 // 스냅업
+                Editor.Instance.Snap *= 2;
             }
-            else
+            else if (scrollValue < 0)
             {
                 // 스냅다운
+                Editor.Instance.Snap /= 2;
             }
+            scrollValue = 0;
 
             yield return null;
         }
+    }
+
+    private void OnGUI()
+    {
+        GUI.Label(new Rect(100, 100, 100, 100), scrollValue.ToString());
+        GUI.Label(new Rect(100, 200, 100, 100), Editor.Instance.Snap.ToString());
     }
 }

@@ -17,6 +17,18 @@ public class Editor : MonoBehaviour
     UISilder slider = null;
     UIButton musicController = null;
 
+
+    int snap = 4;
+    public int Snap
+    {
+        get { return snap; }
+        set
+        {            
+            snap = Mathf.Clamp(value, 4, 32);
+        }
+    }
+
+
     private void Awake()
     {
         if (instance == null)
@@ -25,16 +37,6 @@ public class Editor : MonoBehaviour
 
     // Start is called before the first frame update
     void Start()
-    {
-
-    }
-
-    public void Up()
-    {
-
-    }
-
-    public void Down()
     {
 
     }

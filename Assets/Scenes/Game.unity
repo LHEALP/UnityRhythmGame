@@ -1339,6 +1339,7 @@ MonoBehaviour:
   - {fileID: 916983018}
   - {fileID: 378477905}
   - {fileID: 20679755}
+  mousePos: {x: 0, y: 0}
 --- !u!114 &372347932
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21076,6 +21077,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1785715175}
   - component: {fileID: 1785715174}
+  - component: {fileID: 1785715176}
   m_Layer: 0
   m_Name: Editor
   m_TagString: Untagged
@@ -21110,6 +21112,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 21
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1785715176
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1785715173}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7173efd6eb6fb444da5b5482113cd5d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bCtrl: 0
 --- !u!1 &1809573596
 GameObject:
   m_ObjectHideFlags: 0
@@ -21316,6 +21331,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cec735d1d0ffd474c9cb26a1fad5eea7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  state: 0
   isPlaying: 0
   title: 
   canvases:
