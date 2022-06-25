@@ -51,9 +51,9 @@ public class Sheet
     public void Init()
     {
         BarPerMilliSec = (int)(signature[0] / (bpm / 60f) * 1000);
-        BeatPerMilliSec = BarPerMilliSec / 32;
+        BeatPerMilliSec = BarPerMilliSec / 64;
 
         BarPerSec = BarPerMilliSec * 0.001f;
-        BeatPerSec = BarPerSec / 32;
+        BeatPerSec = BarPerMilliSec / 64f;
     }
 }
