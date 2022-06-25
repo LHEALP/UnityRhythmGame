@@ -6,7 +6,7 @@ public class GridGenerator : MonoBehaviour
 {
     public GameObject grid;
 
-    readonly int gridInterval = 8;
+    readonly int gridInterval = 16;
 
     // Start is called before the first frame update
     void Start()
@@ -22,6 +22,6 @@ public class GridGenerator : MonoBehaviour
         {
             GameObject obj = Instantiate(grid, transform);
             obj.transform.position = Vector3.up * i * gridInterval;
-        }
+        }        
     }
 }

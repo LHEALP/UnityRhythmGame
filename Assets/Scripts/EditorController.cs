@@ -18,6 +18,8 @@ public class EditorController : MonoBehaviour
     Coroutine coCtrl;
 
     InputManager inputManager;
+    AudioManager audioManager;
+    Editor editor;
 
     private void Awake()
     {
@@ -28,14 +30,16 @@ public class EditorController : MonoBehaviour
     void Start()
     {
         inputManager = FindObjectOfType<InputManager>();
+        audioManager = AudioManager.Instance;
+        editor = Editor.Instance;
     }
 
-    void Update()
-    {
-        // 그리드에 레이쏴서 위치 알아내야함
-        // 현재 스냅에 따라, 스냅될 위치 알아내야함
-        //inputManager.mousePos;
-    }
+    //void Update()
+    //{
+    //    // 그리드에 레이쏴서 위치 알아내야함
+    //    // 현재 스냅에 따라, 스냅될 위치 알아내야함
+    //    //inputManager.mousePos;
+    //}
 
     // 스페이스 - 재생/일시정지( Space - Play/Puase )
     public void Space()

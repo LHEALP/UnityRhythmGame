@@ -57,7 +57,7 @@ public class NoteGenerator : MonoBehaviour
     {
         GameObject note = new GameObject("NoteLong");
         note.transform.parent = parent.transform;
-        
+
         GameObject head = Instantiate(notePrefab);
         head.name = "head";
         head.transform.parent = note.transform;
@@ -84,7 +84,7 @@ public class NoteGenerator : MonoBehaviour
     int currentBar = 3; // 최초 플레이 시 3마디 먼저 생성
     int next = 0;
     int prev = 0;
-    List<NoteObject> toReleaseList = new List<NoteObject>();
+    public List<NoteObject> toReleaseList = new List<NoteObject>();
 
     Coroutine coGenTimer;
     Coroutine coReleaseTimer;
@@ -102,7 +102,7 @@ public class NoteGenerator : MonoBehaviour
         Interval = defaultInterval * GameManager.Instance.Speed;
         coGenTimer = StartCoroutine(IEGenTimer(GameManager.Instance.sheets[GameManager.Instance.title].BarPerMilliSec * 0.001f)); // 음악의 1마디 시간마다 생성할 노트 오브젝트 탐색
         coReleaseTimer = StartCoroutine(IEReleaseTimer(GameManager.Instance.sheets[GameManager.Instance.title].BarPerMilliSec * 0.001f * 0.5f)); // 1마디 시간의 절반 주기로 해제할 노트 오브젝트 탐색
-        coInterpolate = StartCoroutine(IEInterpolate(0.25f, 3.5f));
+        coInterpolate = StartCoroutine(IEInterpolate(0.1f, 4f));
     }
 
     // 한 번에 다 생성 (에디팅할때 사용)
@@ -193,47 +193,88 @@ public class NoteGenerator : MonoBehaviour
 
         List<Note> notes = sheet.notes;
 
-        // (노트시간 - 오프셋) / 1비트(32비트시간값) = 노트의 위치
-        // 노트의 위치 * 0.25(그리드의 32비트기준 간격) = 최종적인 노트의 위치
+        // (노트시간 - 오프셋) / 1비트(1박당 32비트시간값) = 노트의 위치
+        // 노트의 위치 * 0.25(그리드의 1박당 32비트기준 간격) = 최종적인 노트의 위치
+
+        float gridLineInterval = 0.25f;
+
+        float shortPrevPos = 0;
+        int shortPrevTime = 0;
+
+        float headLongPrevPos = 0;
+        int headLongPrevTime = 0;
+
+        float tailLongPrevPos = 0;
+        int tailLongPrevTime = 0;
 
         foreach (Note note in notes)
         {
             NoteObject noteObject = null;
-
             switch (note.type)
             {
                 case (int)NoteType.Short:
                     noteObject = PoolShort.Get();
-                    if (note.time - sheet.offset <= 0)
-                        noteObject.SetPosition(new Vector3[] { new Vector3(linePos[note.line - 1], 0f, 0f) });
+                    if (shortPrevTime == 0)
+                    {
+                        int pos = Mathf.RoundToInt((note.time - shortPrevTime - sheet.offset) / sheet.BeatPerSec);
+                        shortPrevPos += pos;
+
+                        noteObject.SetPosition(new Vector3[] { new Vector3(linePos[note.line - 1], shortPrevPos, 0f) });
+                    }
                     else
-                        noteObject.SetPosition(new Vector3[] { new Vector3(linePos[note.line - 1], (note.time - sheet.offset) / sheet.BeatPerMilliSec * 0.25f, 0f) });
+                    {
+                        int pos = Mathf.RoundToInt((note.time - shortPrevTime) / sheet.BeatPerSec);
+                        shortPrevPos += pos;
+
+                        noteObject.SetPosition(new Vector3[] { new Vector3(linePos[note.line - 1], shortPrevPos * gridLineInterval, 0f) });
+                    }
+
+                    shortPrevTime = note.time;
+
                     break;
                 case (int)NoteType.Long:
-                    noteObject = PoolLong.Get();
-                    if (note.time - sheet.offset <= 0)
                     {
-                        noteObject.SetPosition(new Vector3[] // 포지션은 노트 시간 - 현재 음악 시간
-{
-                        new Vector3(linePos[note.line - 1], 0f, 0f),
-                        new Vector3(linePos[note.line - 1], (note.tail - sheet.offset) / sheet.BeatPerMilliSec * 0.25f, 0f)
-});
-                    }
-                    else
-                    {
-                        noteObject.SetPosition(new Vector3[] // 포지션은 노트 시간 - 현재 음악 시간
+                        noteObject = PoolLong.Get();
+                        if (headLongPrevTime == 0)
                         {
-                        new Vector3(linePos[note.line - 1], (note.time - sheet.offset) / sheet.BeatPerMilliSec * 0.25f, 0f),
-                        new Vector3(linePos[note.line - 1], (note.tail - sheet.offset) / sheet.BeatPerMilliSec * 0.25f, 0f)
-                        });
+                            int pos = Mathf.RoundToInt((note.time - headLongPrevTime - sheet.offset) / sheet.BeatPerSec);
+                            headLongPrevPos += pos;
+
+                            int pos2 = Mathf.RoundToInt((note.tail - tailLongPrevTime - sheet.offset) / sheet.BeatPerSec);
+                            tailLongPrevPos += pos2;
+
+                            noteObject.SetPosition(new Vector3[]
+                            {
+                                new Vector3(linePos[note.line - 1], headLongPrevPos * gridLineInterval, 0f),
+                                new Vector3(linePos[note.line - 1], tailLongPrevPos * gridLineInterval, 0f)
+                            });
+                        }
+                        else
+                        {
+                            int pos = Mathf.RoundToInt((note.time - headLongPrevTime) / sheet.BeatPerSec);
+                            headLongPrevPos += pos;
+
+                            int pos2 = Mathf.RoundToInt((note.tail - tailLongPrevTime) / sheet.BeatPerSec);
+                            tailLongPrevPos += pos2;
+
+                            noteObject.SetPosition(new Vector3[]
+                            {
+                            new Vector3(linePos[note.line - 1], headLongPrevPos * gridLineInterval, 0f),
+                            new Vector3(linePos[note.line - 1], tailLongPrevPos * gridLineInterval, 0f)
+                            });
+                        }
+                        headLongPrevTime = note.time;
+                        tailLongPrevTime = note.tail;
+
+                        break;
                     }
-                    break;
                 default:
                     break;
             }
             noteObject.note = note;
             noteObject.life = true;
             noteObject.gameObject.SetActive(true);
+            //noteObject.Move();
             toReleaseList.Add(noteObject); // 에디팅끝나면 Release호출해서 해제해주기
         }
     }

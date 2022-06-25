@@ -17,6 +17,8 @@ public class Editor : MonoBehaviour
     UISilder slider = null;
     UIButton musicController = null;
 
+    public GameObject objects;
+
 
     int snap = 4;
     public int Snap
@@ -35,22 +37,48 @@ public class Editor : MonoBehaviour
             instance = this;
     }
 
-    // Start is called before the first frame update
-    void Start()
+    float speed;
+    public void Init()
     {
+        StartCoroutine(IESlider());
 
+        speed = 16 / GameManager.Instance.sheets[GameManager.Instance.title].BarPerSec;
+        objects.transform.position += Vector3.up * speed * GameManager.Instance.sheets[GameManager.Instance.title].offset * 0.001f;
+
+        
     }
 
-    void Update()
+    void Move()
     {
-        float value = 1 / AudioManager.Instance.Length * AudioManager.Instance.progressTime;
-        if (float.IsNaN(value))
-            return;
+        StartCoroutine(IEMove());
+    }
 
-        if (slider == null)
-            slider = UIController.Instance.FindUI("UI_E_ProgressBar").uiObject as UISilder;
-        else
-            slider.OnValue(value);
+
+    IEnumerator IESlider()
+    {
+        WaitForSeconds wait = new WaitForSeconds(0.2f);
+        while (true)
+        {
+            float value = 1 / AudioManager.Instance.Length * AudioManager.Instance.progressTime;
+            if (float.IsNaN(value))
+                continue;
+
+            if (slider == null)
+                slider = UIController.Instance.FindUI("UI_E_ProgressBar").uiObject as UISilder;
+            else
+                slider.OnValue(value);
+
+            yield return wait;
+        }
+    }
+
+    IEnumerator IEMove()
+    {
+        while (true)
+        {
+            objects.transform.position += Vector3.down * Time.deltaTime * speed;
+            yield return null;
+        }
     }
 
     public void Play()
@@ -79,6 +107,7 @@ public class Editor : MonoBehaviour
                 {
                     AudioManager.Instance.Play();
                     musicController.SetText("||");
+                    Move();
                 }
                 break;
             default:
