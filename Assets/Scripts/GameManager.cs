@@ -286,14 +286,17 @@ public class GameManager : MonoBehaviour
         FindObjectOfType<GridGenerator>().Init();
 
         // Note 생성
+        NoteGenerator.Instance.GenAll();
+
+        AudioManager.Instance.Play();
+
+        // Editor 초기화
+        Editor.Instance.Init();
 
         // Editor UI 켜기
         canvases[(int)Canvas.Editor].SetActive(true);
 
         // 화면 페이드 인
         yield return StartCoroutine(AniPreset.Instance.IEAniFade(sfxFade, false, 2f));
-
-        // Note 생성
-        NoteGenerator.Instance.GenAll();
     }
 }
