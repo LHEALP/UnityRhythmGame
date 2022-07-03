@@ -187,14 +187,14 @@ public class InputManager : MonoBehaviour
         {
             if (GameManager.Instance.state == GameManager.GameState.Edit)
             {
-                EditorController.Instance.bCtrl = true;
+                EditorController.Instance.isCtrl = true;
                 EditorController.Instance.Ctrl();
             }
         }
         else if (context.canceled)
         {
             if (GameManager.Instance.state == GameManager.GameState.Edit)
-                EditorController.Instance.bCtrl = false;
+                EditorController.Instance.isCtrl = false;
         }
     }
 
