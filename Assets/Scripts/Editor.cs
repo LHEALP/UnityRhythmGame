@@ -26,7 +26,7 @@ public class Editor : MonoBehaviour
         get { return snap; }
         set
         {            
-            snap = Mathf.Clamp(value, 4, 32);
+            snap = Mathf.Clamp(value, 1, 16);
         }
     }
 
