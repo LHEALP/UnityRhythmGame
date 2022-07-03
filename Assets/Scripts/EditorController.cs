@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -20,6 +21,8 @@ public class EditorController : MonoBehaviour
     InputManager inputManager;
     AudioManager audioManager;
     Editor editor;
+
+    public Action<int> GridSnapListener;
 
     private void Awake()
     {
@@ -84,14 +87,16 @@ public class EditorController : MonoBehaviour
             if (scrollValue > 0)
             {
                 // ½º³À¾÷
-                Editor.Instance.Snap *= 2;
+                Editor.Instance.Snap /= 2;
             }
             else if (scrollValue < 0)
             {
                 // ½º³À´Ù¿î
-                Editor.Instance.Snap /= 2;
+                Editor.Instance.Snap *= 2;
             }
             scrollValue = 0;
+
+            GridSnapListener.Invoke(Editor.Instance.Snap);
 
             yield return null;
         }
