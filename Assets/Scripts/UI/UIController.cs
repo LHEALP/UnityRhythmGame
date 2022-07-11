@@ -30,7 +30,6 @@ public class UIController : MonoBehaviour
             uiObjectDic.Add(obj.Name, new UIActor(obj, null));
         }
 
-        //uiObjectDic["Btn_Play"].action = Play;
         uiObjectDic["UI_G_Judgement"].action = Score.Instance.Ani;
         uiObjectDic["UI_G_Combo"].action = Score.Instance.Ani;
 
@@ -47,8 +46,9 @@ public class UIController : MonoBehaviour
         return actor;
     }
 
-    void Play(UIObject uiObject)
+    public UIActor GetUI(string uiName)
     {
-        Debug.Log("PlayAction");
+        UIActor actor = uiObjectDic[uiName];
+        return actor;
     }
 }
