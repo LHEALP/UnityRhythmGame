@@ -18,7 +18,7 @@ public class Editor : MonoBehaviour
     UIButton musicController = null;
 
     public GameObject objects;
-
+    Coroutine coMove;
 
     int snap = 4;
     public int Snap
@@ -30,6 +30,8 @@ public class Editor : MonoBehaviour
         }
     }
 
+    public int currentBar = 0;
+
 
     private void Awake()
     {
@@ -40,33 +42,59 @@ public class Editor : MonoBehaviour
     float speed;
     public void Init()
     {
+        slider = UIController.Instance.GetUI("UI_E_ProgressBar").uiObject as UISilder;
+        musicController = UIController.Instance.GetUI("UI_E_Play").uiObject as UIButton;
+
+        StartCoroutine(IEBarTimer());
         StartCoroutine(IESlider());
 
         speed = 16 / GameManager.Instance.sheets[GameManager.Instance.title].BarPerSec;
         objects.transform.position += Vector3.up * speed * GameManager.Instance.sheets[GameManager.Instance.title].offset * 0.001f;
-
-        
     }
 
-    void Move()
+    public void Play()
     {
-        StartCoroutine(IEMove());
+        if (AudioManager.Instance.IsPlaying())
+        {
+            AudioManager.Instance.Pause();
+            musicController.SetText(">");
+            if (coMove != null)
+                StopCoroutine(coMove);
+        }
+        else
+        {
+            AudioManager.Instance.Play();
+            musicController.SetText("||");
+            coMove = StartCoroutine(IEMove());
+        }
     }
 
+    public void Stop()
+    {
+        if (coMove != null)
+            StopCoroutine(coMove);
+
+        AudioManager.Instance.Stop();
+        musicController.SetText(">");
+    }
+
+    IEnumerator IEBarTimer()
+    {
+        WaitForSeconds wait = new WaitForSeconds(0.1f);
+        while (true)
+        {
+            currentBar = (int)(AudioManager.Instance.progressTime * 1000 / GameManager.Instance.sheets[GameManager.Instance.title].BarPerMilliSec);
+            yield return wait;
+        }
+    }
 
     IEnumerator IESlider()
     {
         WaitForSeconds wait = new WaitForSeconds(0.2f);
         while (true)
         {
-            float value = 1 / AudioManager.Instance.Length * AudioManager.Instance.progressTime;
-            if (float.IsNaN(value))
-                continue;
-
-            if (slider == null)
-                slider = UIController.Instance.FindUI("UI_E_ProgressBar").uiObject as UISilder;
-            else
-                slider.OnValue(value);
+            float value = Mathf.Clamp(1 / AudioManager.Instance.Length * AudioManager.Instance.progressTime, 0f, 1f);
+            slider.OnValue(value);
 
             yield return wait;
         }
@@ -81,55 +109,14 @@ public class Editor : MonoBehaviour
         }
     }
 
-    public void Play()
-    {
-        switch (AudioManager.Instance.state)
-        {
-            case AudioManager.State.Playing:
-                {
-                    AudioManager.Instance.Pause();
-                    musicController.SetText(">");
-                }
-                break;
-            case AudioManager.State.Paused:
-                {
-                    AudioManager.Instance.UnPause();
-                    musicController.SetText("||");
-                }
-                break;
-            case AudioManager.State.Unpaused:
-                {
-                    AudioManager.Instance.Pause();
-                    musicController.SetText(">");
-                }
-                break;
-            case AudioManager.State.Stop:
-                {
-                    AudioManager.Instance.Play();
-                    musicController.SetText("||");
-                    Move();
-                }
-                break;
-            default:
-                break;
-        }
-    }
-
     public void Play(UIObject uiObject)
     {
-        if (musicController == null)
-            musicController = uiObject as UIButton;
-        else
-        {
-            Play();
-        }
+        Play();
     }
 
     public void Stop(UIObject uiObject)
     {
-        AudioManager.Instance.Stop();
-        if (musicController != null)
-            musicController.SetText(">");
+        Stop();
     }
 
     public void Progress(UIObject uiObject)
