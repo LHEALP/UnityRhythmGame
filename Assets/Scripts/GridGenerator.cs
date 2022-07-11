@@ -21,6 +21,8 @@ public class GridGenerator : MonoBehaviour
         for (int i = 0; i < count; i++)
         {
             GameObject obj = Instantiate(grid, transform);
+            obj.name = $"Grid_{i}";
+            obj.GetComponent<GridObject>().index = i;
             obj.transform.position = Vector3.up * i * gridInterval;
         }        
     }
