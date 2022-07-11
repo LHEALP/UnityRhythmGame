@@ -109,6 +109,19 @@ public class EditorController : MonoBehaviour
     public void Scroll(float value)
     {
         scrollValue = value;
+
+        // 스크롤 시 해당 스냅만큼 이동 (컨트롤키가 입력되지않았을때만)
+        if (!isCtrl)
+        {
+            if (scrollValue > 0)
+            {
+                Editor.Instance.objects.transform.position += Vector3.up * Editor.Instance.Snap * 0.25f;
+            }
+            else if (scrollValue < 0)
+            {
+                Editor.Instance.objects.transform.position += Vector3.down * Editor.Instance.Snap * 0.25f;
+            }
+        }
     }
 
     /// <summary>
