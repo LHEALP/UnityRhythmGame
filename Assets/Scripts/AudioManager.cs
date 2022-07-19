@@ -88,6 +88,16 @@ public class AudioManager : MonoBehaviour
         audioSource.Stop();
     }
 
+    public void MovePosition(float time)
+    {
+        float currentTime = audioSource.time;
+
+        currentTime += time;
+        currentTime = Mathf.Clamp(currentTime, 0f, audioSource.clip.length - 0.0001f);
+
+        audioSource.time = currentTime;
+    }
+
     public void Insert(AudioClip clip)
     {
         audioSource.clip = clip;
