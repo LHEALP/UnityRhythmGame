@@ -25,13 +25,13 @@ public class Editor : MonoBehaviour
     {
         get { return snap; }
         set
-        {            
+        {
             snap = Mathf.Clamp(value, 1, 16);
         }
     }
 
     public int currentBar = 0;
-
+    public float offsetPosition;
 
     private void Awake()
     {
@@ -46,10 +46,10 @@ public class Editor : MonoBehaviour
         musicController = UIController.Instance.GetUI("UI_E_Play").uiObject as UIButton;
 
         StartCoroutine(IEBarTimer());
-        StartCoroutine(IESlider());
 
         speed = 16 / GameManager.Instance.sheets[GameManager.Instance.title].BarPerSec;
-        objects.transform.position += Vector3.up * speed * GameManager.Instance.sheets[GameManager.Instance.title].offset * 0.001f;
+        offsetPosition = speed * GameManager.Instance.sheets[GameManager.Instance.title].offset * 0.001f;
+        objects.transform.position = offsetPosition * Vector3.up;
     }
 
     public void Play()
@@ -88,15 +88,12 @@ public class Editor : MonoBehaviour
         }
     }
 
-    IEnumerator IESlider()
+    void Update()
     {
-        WaitForSeconds wait = new WaitForSeconds(0.2f);
-        while (true)
+        float value = Mathf.Clamp(1 / AudioManager.Instance.Length * AudioManager.Instance.progressTime, 0f, 1f);
+        if (slider != null)
         {
-            float value = Mathf.Clamp(1 / AudioManager.Instance.Length * AudioManager.Instance.progressTime, 0f, 1f);
-            slider.OnValue(value);
-
-            yield return wait;
+            slider.slider.value = value;
         }
     }
 
@@ -119,12 +116,26 @@ public class Editor : MonoBehaviour
         Stop();
     }
 
-    public void Progress(UIObject uiObject)
+    public void Progress()
     {
         if (slider != null)
         {
             float time = AudioManager.Instance.Length * slider.slider.value;
-            AudioManager.Instance.progressTime = time;
+            AudioManager.Instance.MovePosition(time);
+
+            // 음악 타임에 맞춰서 오브젝트스 이동
+            // 한마디에 16씩 이동
+            // time / 한마디 시간
+            //float pos = (time / GameManager.Instance.sheets[GameManager.Instance.title].BarPerSec * 16) + (GameManager.Instance.sheets[GameManager.Instance.title].offset * speed * 0.001f);
+            //Vector3 objPos = objects.transform.position;
+            //objPos.y = -pos;
+            //objects.transform.position = objPos;
         }
+    }
+
+    public void Progress(float snapValue)
+    {
+        Debug.Log(GameManager.Instance.sheets[GameManager.Instance.title].BarPerSec / snapValue);
+        AudioManager.Instance.MovePosition(GameManager.Instance.sheets[GameManager.Instance.title].BarPerSec / snapValue);
     }
 }
