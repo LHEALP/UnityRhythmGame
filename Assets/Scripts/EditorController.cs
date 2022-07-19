@@ -113,14 +113,18 @@ public class EditorController : MonoBehaviour
         // 스크롤 시 해당 스냅만큼 이동 (컨트롤키가 입력되지않았을때만)
         if (!isCtrl)
         {
+            float snap = Editor.Instance.Snap * 0.25f;
             if (scrollValue > 0)
             {
-                Editor.Instance.objects.transform.position += Vector3.up * Editor.Instance.Snap * 0.25f;
+                snap = -1 * Editor.Instance.Snap * 0.25f;
+                Editor.Instance.objects.transform.position += Vector3.up * snap;
             }
             else if (scrollValue < 0)
             {
-                Editor.Instance.objects.transform.position += Vector3.down * Editor.Instance.Snap * 0.25f;
+                snap = Editor.Instance.Snap * 0.25f;
+                Editor.Instance.objects.transform.position += Vector3.up * snap;
             }
+            Editor.Instance.Progress(-snap);
         }
     }
 
@@ -165,5 +169,6 @@ public class EditorController : MonoBehaviour
         GUI.Label(new Rect(100, 100, 100, 100), "Mouse Pos : " + inputManager.mousePos.ToString(), style);
         GUI.Label(new Rect(100, 200, 100, 100), "ScreenToWorld : " + worldPos.ToString(), style);
         GUI.Label(new Rect(100, 300, 100, 100), "CurrentBar : " + Editor.Instance.currentBar.ToString(), style);
+        GUI.Label(new Rect(100, 400, 100, 100), "Snap : " + Editor.Instance.Snap.ToString(), style);
     }
 }
