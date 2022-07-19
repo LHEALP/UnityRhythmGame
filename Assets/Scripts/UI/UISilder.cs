@@ -10,12 +10,11 @@ public class UISilder : UIObject
     void Start()
     {
         slider = GetComponent<Slider>();
-        slider.onValueChanged.AddListener(OnValue);
+        //slider.onValueChanged.AddListener(OnValue);
     }
 
     public void OnValue(float value)
     {
-        slider.value = value;
         UIController.Instance.find.Invoke(Name);
     }
 }
