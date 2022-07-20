@@ -66,21 +66,31 @@ public class EditorController : MonoBehaviour
         {
             int line = int.Parse(hit.transform.name.Split('_')[1]);
             int index = hit.transform.parent.GetComponent<GridObject>().index;
+            float y = hit.transform.TransformDirection(hit.transform.position).y;
             if (worldPos.x < -1f && worldPos.x > -2f)
             {
-                Debug.Log($"0번 레인 : {index}번 그리드 : {line} 비트");
+                //Debug.Log($"0번 레인 : {index}번 그리드 : {line} 비트");
+
+
+                cursorObj.transform.position = new Vector3(-1.5f, y, 0f);
             }
-            else if (worldPos.x < 0.5f && worldPos.x > -1f)
+            else if (worldPos.x < 0f && worldPos.x > -1f)
             {
-                Debug.Log($"1번 레인 : {index}번 그리드 : {line} 비트");
+                //Debug.Log($"1번 레인 : {index}번 그리드 : {line} 비트");
+
+                cursorObj.transform.position = new Vector3(-0.5f, y, 0f);
             }
-            else if (worldPos.x < 1f && worldPos.x > 0.5f)
+            else if (worldPos.x < 1f && worldPos.x > 0f)
             {
-                Debug.Log($"2번 레인 : {index}번 그리드 : {line} 비트");
+                //Debug.Log($"2번 레인 : {index}번 그리드 : {line} 비트");
+
+                cursorObj.transform.position = new Vector3(0.5f, y, 0f);
             }
-            else if (worldPos.x < 1.5f && worldPos.x > 1f)
+            else if (worldPos.x < 2f && worldPos.x > 1f)
             {
-                Debug.Log($"3번 레인 : {index}번 그리드 : {line} 비트");
+                //Debug.Log($"3번 레인 : {index}번 그리드 : {line} 비트");
+
+                cursorObj.transform.position = new Vector3(1.5f, y, 0f);
             }
         }
     }
