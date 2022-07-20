@@ -113,18 +113,19 @@ public class EditorController : MonoBehaviour
         // 스크롤 시 해당 스냅만큼 이동 (컨트롤키가 입력되지않았을때만)
         if (!isCtrl)
         {
-            float snap = Editor.Instance.Snap * 0.25f;
+            float snap = Editor.Instance.Snap;
             if (scrollValue > 0)
             {
-                snap = -1 * Editor.Instance.Snap * 0.25f;
-                Editor.Instance.objects.transform.position += Vector3.up * snap;
+                Editor.Instance.objects.transform.position += Vector3.down * snap * 0.25f;
+                AudioManager.Instance.MovePosition(GameManager.Instance.sheets[GameManager.Instance.title].BeatPerSec * 0.001f * snap);
+                //Debug.Log(GameManager.Instance.sheets[GameManager.Instance.title].BeatPerSec * 0.001f * snap);
             }
             else if (scrollValue < 0)
             {
-                snap = Editor.Instance.Snap * 0.25f;
-                Editor.Instance.objects.transform.position += Vector3.up * snap;
+                Editor.Instance.objects.transform.position += Vector3.up * snap * 0.25f;
+                AudioManager.Instance.MovePosition(-GameManager.Instance.sheets[GameManager.Instance.title].BeatPerSec * 0.001f * snap);
+                //Debug.Log(-GameManager.Instance.sheets[GameManager.Instance.title].BeatPerSec * 0.001f * snap);
             }
-            Editor.Instance.Progress(-snap);
         }
     }
 

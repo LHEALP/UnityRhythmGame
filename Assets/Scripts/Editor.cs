@@ -52,6 +52,15 @@ public class Editor : MonoBehaviour
         objects.transform.position = offsetPosition * Vector3.up;
     }
 
+    void Update()
+    {
+        float value = Mathf.Clamp(1 / AudioManager.Instance.Length * AudioManager.Instance.progressTime, 0f, 1f);
+        if (slider != null)
+        {
+            slider.slider.value = value;
+        }
+    }
+
     public void Play()
     {
         if (AudioManager.Instance.IsPlaying())
@@ -78,24 +87,22 @@ public class Editor : MonoBehaviour
         musicController.SetText(">");
     }
 
+    public void CaculateCurrnetBar()
+    {
+        currentBar = (int)(AudioManager.Instance.progressTime * 1000 / GameManager.Instance.sheets[GameManager.Instance.title].BarPerMilliSec);
+    }
+
     IEnumerator IEBarTimer()
     {
         WaitForSeconds wait = new WaitForSeconds(0.1f);
         while (true)
         {
-            currentBar = (int)(AudioManager.Instance.progressTime * 1000 / GameManager.Instance.sheets[GameManager.Instance.title].BarPerMilliSec);
+            CaculateCurrnetBar();
             yield return wait;
         }
     }
 
-    void Update()
-    {
-        float value = Mathf.Clamp(1 / AudioManager.Instance.Length * AudioManager.Instance.progressTime, 0f, 1f);
-        if (slider != null)
-        {
-            slider.slider.value = value;
-        }
-    }
+
 
     IEnumerator IEMove()
     {
@@ -121,21 +128,21 @@ public class Editor : MonoBehaviour
         if (slider != null)
         {
             float time = AudioManager.Instance.Length * slider.slider.value;
-            AudioManager.Instance.MovePosition(time);
+            AudioManager.Instance.progressTime = time;
 
             // 음악 타임에 맞춰서 오브젝트스 이동
             // 한마디에 16씩 이동
             // time / 한마디 시간
-            //float pos = (time / GameManager.Instance.sheets[GameManager.Instance.title].BarPerSec * 16) + (GameManager.Instance.sheets[GameManager.Instance.title].offset * speed * 0.001f);
-            //Vector3 objPos = objects.transform.position;
-            //objPos.y = -pos;
-            //objects.transform.position = objPos;
-        }
-    }
 
-    public void Progress(float snapValue)
-    {
-        Debug.Log(GameManager.Instance.sheets[GameManager.Instance.title].BarPerSec / snapValue);
-        AudioManager.Instance.MovePosition(GameManager.Instance.sheets[GameManager.Instance.title].BarPerSec / snapValue);
+            CaculateCurrnetBar();
+
+            // 한 그리드(한 마디)의 게임오브젝트 y좌표의 높이는 16
+            // 현재 음악위치 * 16 = 높이s
+            float barPerTime = GameManager.Instance.sheets[GameManager.Instance.title].BarPerSec;
+            float pos = time / barPerTime * 16;
+
+            objects.transform.position = new Vector3(0f, -pos + offsetPosition, 0f);
+
+        }
     }
 }
