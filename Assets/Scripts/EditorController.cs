@@ -14,6 +14,9 @@ public class EditorController : MonoBehaviour
         }
     }
 
+    public GameObject cursorPrefab;
+    GameObject cursorObj;
+
     public bool isCtrl;
     float scrollValue;
     Coroutine coCtrl;
@@ -40,6 +43,8 @@ public class EditorController : MonoBehaviour
         inputManager = FindObjectOfType<InputManager>();
         audioManager = AudioManager.Instance;
         editor = Editor.Instance;
+
+        cursorObj = Instantiate(cursorPrefab);
     }
 
     void Update()
@@ -51,6 +56,9 @@ public class EditorController : MonoBehaviour
         mousePos.z = -cam.transform.position.z;
         worldPos = cam.ScreenToWorldPoint(mousePos);
         //int layerMask = (1 << LayerMask.NameToLayer("Grid")) + (1 << LayerMask.NameToLayer("Note"));
+
+        // Ä¿¼­ ÁÂÇ¥
+        cursorObj.transform.position = worldPos;
 
         Debug.DrawRay(worldPos, cam.transform.forward * 2, Color.red, 0.2f);
         RaycastHit2D hit = Physics2D.Raycast(worldPos, cam.transform.forward, 2f);
