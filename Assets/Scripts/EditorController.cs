@@ -66,7 +66,7 @@ public class EditorController : MonoBehaviour
         {
             int line = int.Parse(hit.transform.name.Split('_')[1]);
             int index = hit.transform.parent.GetComponent<GridObject>().index;
-            float y = hit.transform.TransformDirection(hit.transform.position).y;
+            float y = hit.transform.TransformDirection(hit.transform.position).y; // Local Position To World Position
             if (worldPos.x < -1f && worldPos.x > -2f)
             {
                 //Debug.Log($"0번 레인 : {index}번 그리드 : {line} 비트");
