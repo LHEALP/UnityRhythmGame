@@ -33,6 +33,7 @@ public class EditorController : MonoBehaviour
     GameObject selectedNoteObject;
     Vector3 selectedGridPosition;
     Vector3 lastSelectedGridPosition;
+    Transform headTemp;
     int selectedLine = 0;
 
     int longNoteMakingCount = 0;
@@ -114,6 +115,16 @@ public class EditorController : MonoBehaviour
                 selectedLine = 3;
             }
 
+
+            /*
+             * 롱노트 배치 버그 수정 솔루션
+                헤드를 찍고 스크롤을 올리거나 내리고
+                테일을 찍으면 헤드가 따라올라오거나 내려감..
+             */
+            if (longNoteMakingCount == 0)
+                headTemp = hit.transform; // head 기억해놨다가 활용
+
+
             selectedGridPosition = new Vector3(NoteGenerator.Instance.linePos[selectedLine], y, 0f);
             cursorObj.transform.position = selectedGridPosition;
 
@@ -149,6 +160,7 @@ public class EditorController : MonoBehaviour
                     if (longNoteMakingCount == 0)
                     {
                         lastSelectedGridPosition = selectedGridPosition;
+
                         NoteGenerator.Instance.DisposeNoteLong(longNoteMakingCount, new Vector3[] { lastSelectedGridPosition, selectedGridPosition });
 
                         longNoteMakingCount++;
@@ -157,7 +169,18 @@ public class EditorController : MonoBehaviour
                     {
                         Vector3 tailPositon = selectedGridPosition;
                         tailPositon.x = lastSelectedGridPosition.x; // 롱노트는 사선으로 작성될 수 없으므로, 다른 라인(x)에 찍어도 종전과 동일한 위치를 유지
-                        NoteGenerator.Instance.DisposeNoteLong(longNoteMakingCount, new Vector3[] { lastSelectedGridPosition, tailPositon });
+                        lastSelectedGridPosition.y = headTemp.TransformDirection(headTemp.transform.position).y;
+
+                        // tail을 head보다 낮게 배치했을 경우 뒤집어주어야함
+                        if (lastSelectedGridPosition.y < tailPositon.y)
+                        {
+                            NoteGenerator.Instance.DisposeNoteLong(longNoteMakingCount, new Vector3[] { lastSelectedGridPosition, tailPositon });
+                        }
+                        else
+                        {
+                            NoteGenerator.Instance.DisposeNoteLong(longNoteMakingCount, new Vector3[] { tailPositon, lastSelectedGridPosition });
+                        }
+
                         longNoteMakingCount = 0;
                     }
                 }
@@ -246,13 +269,13 @@ public class EditorController : MonoBehaviour
         }
     }
 
-    //private void OnGUI()
-    //{
-    //    GUIStyle style = new GUIStyle();
-    //    style.fontSize = 36;
-    //    GUI.Label(new Rect(100, 100, 100, 100), "Mouse Pos : " + inputManager.mousePos.ToString(), style);
-    //    GUI.Label(new Rect(100, 200, 100, 100), "ScreenToWorld : " + worldPos.ToString(), style);
-    //    GUI.Label(new Rect(100, 300, 100, 100), "CurrentBar : " + Editor.Instance.currentBar.ToString(), style);
-    //    GUI.Label(new Rect(100, 400, 100, 100), "Snap : " + Editor.Instance.Snap.ToString(), style);
-    //}
+    private void OnGUI()
+    {
+        GUIStyle style = new GUIStyle();
+        style.fontSize = 36;
+        GUI.Label(new Rect(100, 100, 100, 100), "Mouse Pos : " + inputManager.mousePos.ToString(), style);
+        GUI.Label(new Rect(100, 200, 100, 100), "ScreenToWorld : " + worldPos.ToString(), style);
+        GUI.Label(new Rect(100, 300, 100, 100), "CurrentBar : " + Editor.Instance.currentBar.ToString(), style);
+        GUI.Label(new Rect(100, 400, 100, 100), "Snap : " + Editor.Instance.Snap.ToString(), style);
+    }
 }
