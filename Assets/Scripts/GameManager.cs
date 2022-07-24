@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -68,6 +69,22 @@ public class GameManager : MonoBehaviour
         StartCoroutine(IEInit());
     }
 
+    public void ChangeMode(UIObject uiObject)
+    {
+        if (state == GameState.Game)
+        {
+            state = GameState.Edit;
+            TextMeshProUGUI text = uiObject.transform.GetComponentInChildren<TextMeshProUGUI>();
+            text.text = "Edit\nMode";
+        }
+        else
+        {
+            state = GameState.Game;
+            TextMeshProUGUI text = uiObject.transform.GetComponentInChildren<TextMeshProUGUI>();
+            text.text = "Game\nMode";
+        }
+    }
+
     public void Title()
     {
         StartCoroutine(IETitle());
@@ -107,6 +124,10 @@ public class GameManager : MonoBehaviour
             // Editor UI 끄기
             canvases[(int)Canvas.Editor].SetActive(false);
             Editor.Instance.Stop();
+
+            // 에디터에서 수정된 오브젝트가 있을 수 있으므로 갱신해줌
+            StartCoroutine(Parser.Instance.IEParse(title));
+            sheets[title] = Parser.Instance.sheet;
         }
 
         // 노트 Gen 끄기
@@ -153,6 +174,7 @@ public class GameManager : MonoBehaviour
     IEnumerator IETitle()
     {
         // 화면 페이드 인
+        canvases[(int)Canvas.SFX].SetActive(true);
         yield return StartCoroutine(AniPreset.Instance.IEAniFade(sfxFade, false, 1f));
 
         // 타이틀 인트로 재생
@@ -164,8 +186,9 @@ public class GameManager : MonoBehaviour
     }
 
     IEnumerator IESelect()
-    {        
+    {
         // 화면 페이드 아웃
+        canvases[(int)Canvas.SFX].SetActive(true);
         yield return StartCoroutine(AniPreset.Instance.IEAniFade(sfxFade, true, 2f));
 
         // Title UI 끄기
@@ -179,6 +202,7 @@ public class GameManager : MonoBehaviour
 
         // 화면 페이드 인
         yield return StartCoroutine(AniPreset.Instance.IEAniFade(sfxFade, false, 2f));
+        canvases[(int)Canvas.SFX].SetActive(false);
 
         // 새 게임을 시작할 수 있게 해줌
         isPlaying = false;
@@ -190,6 +214,7 @@ public class GameManager : MonoBehaviour
         isPlaying = true;
 
         // 화면 페이드 아웃
+        canvases[(int)Canvas.SFX].SetActive(true);
         yield return StartCoroutine(AniPreset.Instance.IEAniFade(sfxFade, true, 2f));
 
         //  Select UI 끄기
@@ -219,6 +244,7 @@ public class GameManager : MonoBehaviour
 
         // 화면 페이드 인
         yield return StartCoroutine(AniPreset.Instance.IEAniFade(sfxFade, false, 2f));
+        canvases[(int)Canvas.SFX].SetActive(false);
 
         // Note 생성
         NoteGenerator.Instance.StartGen();
@@ -247,6 +273,7 @@ public class GameManager : MonoBehaviour
         }
 
         // 화면 페이드 아웃
+        canvases[(int)Canvas.SFX].SetActive(true);
         yield return StartCoroutine(AniPreset.Instance.IEAniFade(sfxFade, true, 2f));
         canvases[(int)Canvas.Game].SetActive(false);
         canvases[(int)Canvas.GameBGA].SetActive(false);
@@ -270,6 +297,7 @@ public class GameManager : MonoBehaviour
 
         // 화면 페이드 인
         yield return StartCoroutine(AniPreset.Instance.IEAniFade(sfxFade, false, 2f));
+        canvases[(int)Canvas.SFX].SetActive(false);
 
         // 5초 대기
         yield return new WaitForSeconds(5f);
@@ -284,6 +312,7 @@ public class GameManager : MonoBehaviour
         isPlaying = true;
 
         // 화면 페이드 아웃
+        canvases[(int)Canvas.SFX].SetActive(true);
         yield return StartCoroutine(AniPreset.Instance.IEAniFade(sfxFade, true, 2f));
 
         //  Select UI 끄기
@@ -311,5 +340,6 @@ public class GameManager : MonoBehaviour
 
         // 화면 페이드 인
         yield return StartCoroutine(AniPreset.Instance.IEAniFade(sfxFade, false, 2f));
+        canvases[(int)Canvas.SFX].SetActive(false);
     }
 }
