@@ -217,6 +217,7 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(3f);
 
         // Audio 재생
+        AudioManager.Instance.progressTime = 0f;
         AudioManager.Instance.Play();
 
         // End 알리미
@@ -253,6 +254,9 @@ public class GameManager : MonoBehaviour
 
         UIImage rBG = UIController.Instance.FindUI("UI_R_BG").uiObject as UIImage;
         rBG.SetSprite(sheets[title].img);
+
+        NoteGenerator.Instance.StopGen();
+        AudioManager.Instance.Stop();
 
         // 화면 페이드 인
         yield return StartCoroutine(AniPreset.Instance.IEAniFade(sfxFade, false, 2f));

@@ -203,5 +203,7 @@ public class InputManager : MonoBehaviour
     {
         // Audio Time을 끝으로 옮겨 결과창을 바로 볼 수 있게 위함
         AudioManager.Instance.audioSource.time = AudioManager.Instance.Length;
+
+        //FindObjectOfType<SheetStorage>().Save();
     }
 }
