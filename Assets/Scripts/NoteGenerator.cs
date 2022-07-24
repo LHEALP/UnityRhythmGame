@@ -124,6 +124,7 @@ public class NoteGenerator : MonoBehaviour
             coReleaseTimer = null;
         }
         ReleaseCompleted();
+        Editor.Instance.objects.transform.position = Vector3.zero;
 
         toReleaseList.Clear();
         currentBar = 3;
