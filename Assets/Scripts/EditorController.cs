@@ -171,7 +171,7 @@ public class EditorController : MonoBehaviour
         {
             if (selectedNoteObject != null)
             {
-                Debug.Log("노트 삭제");
+                //Debug.Log("노트 삭제");
                 if (isLongNoteActive)
                 {
                     // long은 부모 찾아서 비활성화

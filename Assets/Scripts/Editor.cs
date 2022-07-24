@@ -145,4 +145,22 @@ public class Editor : MonoBehaviour
 
         }
     }
+
+    public void SelectShortNote()
+    {
+        if (EditorController.Instance.isLongNoteActive)
+        {
+            EditorController.Instance.isLongNoteActive = false;
+        }
+        EditorController.Instance.isShortNoteActive = !EditorController.Instance.isShortNoteActive;
+    }
+
+    public void SelectLongNote()
+    {
+        if (EditorController.Instance.isShortNoteActive)
+        {
+            EditorController.Instance.isShortNoteActive = false;
+        }
+        EditorController.Instance.isLongNoteActive = !EditorController.Instance.isLongNoteActive;
+    }
 }

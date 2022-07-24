@@ -8864,7 +8864,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1785715174}
         m_TargetAssemblyTypeName: Editor, Assembly-CSharp
-        m_MethodName: Down
+        m_MethodName: SelectLongNote
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -14109,7 +14109,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1785715174}
         m_TargetAssemblyTypeName: Editor, Assembly-CSharp
-        m_MethodName: Up
+        m_MethodName: SelectShortNote
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -20804,6 +20804,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cursorPrefab: {fileID: 524847784843648390, guid: 1d4ec21ac21dd674c878e4213b049d1c, type: 3}
   isCtrl: 0
+  isShortNoteActive: 0
+  isLongNoteActive: 0
 --- !u!50 &1785715177
 Rigidbody2D:
   serializedVersion: 4
