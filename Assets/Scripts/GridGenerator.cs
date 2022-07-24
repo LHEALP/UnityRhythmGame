@@ -8,22 +8,31 @@ public class GridGenerator : MonoBehaviour
 
     readonly int gridInterval = 16;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    List<GameObject> gridList = new List<GameObject>();
+
 
     public void Init()
     {
-        int count = (int)(AudioManager.Instance.Length * 1000 / GameManager.Instance.sheets[GameManager.Instance.title].BarPerMilliSec);
+        int barCount = (int)(AudioManager.Instance.Length * 1000 / GameManager.Instance.sheets[GameManager.Instance.title].BarPerMilliSec);
 
-        for (int i = 0; i < count; i++)
+        if (gridList.Count < barCount)
         {
-            GameObject obj = Instantiate(grid, transform);
+            int failCount = barCount - gridList.Count;
+            for (int i = gridList.Count; i < failCount; i++)
+            {
+                GameObject obj = Instantiate(grid, transform);
+                obj.SetActive(false);
+                gridList.Add(obj);
+            }
+        }
+
+        for (int i = 0; i < gridList.Count; i++)
+        {
+            GameObject obj = gridList[i];
             obj.name = $"Grid_{i}";
             obj.GetComponent<GridObject>().index = i;
-            obj.transform.position = Vector3.up * i * gridInterval;
-        }        
+            obj.transform.localPosition = Vector3.up * i * gridInterval;
+            obj.SetActive(true);
+        }
     }
 }
