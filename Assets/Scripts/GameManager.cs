@@ -125,6 +125,8 @@ public class GameManager : MonoBehaviour
             canvases[(int)Canvas.Editor].SetActive(false);
             Editor.Instance.Stop();
 
+            FindObjectOfType<GridGenerator>().InActivate();
+
             // 에디터에서 수정된 오브젝트가 있을 수 있으므로 갱신해줌
             StartCoroutine(Parser.Instance.IEParse(title));
             sheets[title] = Parser.Instance.sheet;

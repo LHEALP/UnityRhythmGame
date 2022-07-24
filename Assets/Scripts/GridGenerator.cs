@@ -35,4 +35,12 @@ public class GridGenerator : MonoBehaviour
             obj.SetActive(true);
         }
     }
+
+    public void InActivate()
+    {
+        foreach (GameObject obj in gridList)
+        {
+            obj.SetActive(false);
+        }
+    }
 }
