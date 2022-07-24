@@ -286,6 +286,7 @@ public class NoteGenerator : MonoBehaviour
         NoteObject noteObject = poolShort.Get();
         noteObject.SetPosition(new Vector3[] { pos });
         noteObject.SetCollider();
+        toReleaseList.Add(noteObject);
     }
 
     NoteObject noteObjectTemp;
@@ -300,6 +301,7 @@ public class NoteGenerator : MonoBehaviour
         {
             noteObjectTemp.SetPosition(new Vector3[] { pos[0], pos[1] });
             noteObjectTemp.SetCollider();
+            toReleaseList.Add(noteObjectTemp);
             noteObjectTemp = null;
         }
     }
