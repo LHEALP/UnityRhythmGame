@@ -27,6 +27,12 @@ public abstract class NoteObject : MonoBehaviour
     public abstract void SetPosition(Vector3[] pos);
 
     public abstract void Interpolate(float curruntTime, float interval);
+
+    /// <summary>
+    /// Editor - Collider optimization
+    /// </summary>
+    public abstract void SetCollider();
+    public abstract IEnumerator IECheckCollier();
 }
 
 public class NoteShort : NoteObject
@@ -56,6 +62,38 @@ public class NoteShort : NoteObject
     public override void Interpolate(float curruntTime, float interval)
     {
         transform.position = new Vector3(transform.position.x, (note.time - curruntTime) * interval, transform.position.z);
+    }
+
+    public override void SetCollider()
+    {
+        if (GameManager.Instance.state == GameManager.GameState.Game)
+        {
+            GetComponent<BoxCollider2D>().enabled = false;
+        }
+        else
+        {
+            StartCoroutine(IECheckCollier());
+        }
+    }
+
+    public override IEnumerator IECheckCollier()
+    {
+        WaitForSeconds wait = new WaitForSeconds(0.1f);
+        int time = (int)transform.position.y;
+        while (true)
+        {
+            int currentBar = Editor.Instance.currentBar;
+            if (time >= (currentBar - 3) * 16 && time <= (currentBar + 3) * 16)
+            {
+                GetComponent<BoxCollider2D>().enabled = true;
+            }
+            else
+            {
+                GetComponent<BoxCollider2D>().enabled = false;
+            }
+
+            yield return wait;
+        }
     }
 }
 
@@ -116,5 +154,40 @@ public class NoteLong : NoteObject
         linePos.x = 0f;
         linePos.z = 0f;
         lineRenderer.SetPosition(1, linePos);
+    }
+
+    public override void SetCollider()
+    {
+        if (GameManager.Instance.state == GameManager.GameState.Game)
+        {
+            head.GetComponent<BoxCollider2D>().enabled = false;
+            tail.GetComponent<BoxCollider2D>().enabled = false;
+        }
+        else
+        {
+            StartCoroutine(IECheckCollier());
+        }
+    }
+
+    public override IEnumerator IECheckCollier()
+    {
+        WaitForSeconds wait = new WaitForSeconds(0.1f);
+        int time = (int)transform.position.y;
+        while (true)
+        {
+            int currentBar = Editor.Instance.currentBar;
+            if (time >= (currentBar - 3) * 16 && time <= (currentBar + 3) * 16)
+            {
+                head.GetComponent<BoxCollider2D>().enabled = true;
+                tail.GetComponent<BoxCollider2D>().enabled = true;
+            }
+            else
+            {
+                head.GetComponent<BoxCollider2D>().enabled = false;
+                tail.GetComponent<BoxCollider2D>().enabled = false;
+            }
+
+            yield return wait;
+        }
     }
 }

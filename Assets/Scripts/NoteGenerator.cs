@@ -179,6 +179,7 @@ public class NoteGenerator : MonoBehaviour
             noteObject.note = note;
             noteObject.life = true;
             noteObject.gameObject.SetActive(true);
+            noteObject.SetCollider();
             noteObject.Move();
             toReleaseList.Add(noteObject);
         }
@@ -274,6 +275,7 @@ public class NoteGenerator : MonoBehaviour
             noteObject.note = note;
             noteObject.life = true;
             noteObject.gameObject.SetActive(true);
+            noteObject.SetCollider();
             //noteObject.Move();
             toReleaseList.Add(noteObject); // 에디팅끝나면 Release호출해서 해제해주기
         }
@@ -283,6 +285,7 @@ public class NoteGenerator : MonoBehaviour
     {
         NoteObject noteObject = poolShort.Get();
         noteObject.SetPosition(new Vector3[] { pos });
+        noteObject.SetCollider();
     }
 
     NoteObject noteObjectTemp;
@@ -296,6 +299,7 @@ public class NoteGenerator : MonoBehaviour
         else if (makingCount == 1)
         {
             noteObjectTemp.SetPosition(new Vector3[] { pos[0], pos[1] });
+            noteObjectTemp.SetCollider();
             noteObjectTemp = null;
         }
     }
