@@ -90,20 +90,30 @@ public class GameManager : MonoBehaviour
 
     public void Stop()
     {
-        // Game UI ≤Ù±‚
-        canvases[(int)Canvas.Game].SetActive(false);
-
-        // playing timer ≤Ù±‚
-        if (coPlaying != null)
+        if (state == GameState.Game)
         {
-            StopCoroutine(coPlaying);
-            coPlaying = null;
+            // Game UI ≤Ù±‚
+            canvases[(int)Canvas.Game].SetActive(false);
+
+            // playing timer ≤Ù±‚
+            if (coPlaying != null)
+            {
+                StopCoroutine(coPlaying);
+                coPlaying = null;
+            }
+        }
+        else
+        {
+            // Editor UI ≤Ù±‚
+            canvases[(int)Canvas.Editor].SetActive(false);
+            Editor.Instance.Stop();
         }
 
         // ≥Î∆Æ Gen ≤Ù±‚
         NoteGenerator.Instance.StopGen();
 
         // ¿Ωæ« ≤Ù±‚
+        AudioManager.Instance.progressTime = 0f;
         AudioManager.Instance.Stop();
 
         Select();
