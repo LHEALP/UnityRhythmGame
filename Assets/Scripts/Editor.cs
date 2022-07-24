@@ -163,4 +163,9 @@ public class Editor : MonoBehaviour
         }
         EditorController.Instance.isLongNoteActive = !EditorController.Instance.isLongNoteActive;
     }
+
+    public void FileSave()
+    {
+        FindObjectOfType<SheetStorage>().Save();
+    }
 }
