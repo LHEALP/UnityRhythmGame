@@ -83,6 +83,8 @@ public class Editor : MonoBehaviour
         if (coMove != null)
             StopCoroutine(coMove);
 
+        objects.transform.position = new Vector3(0f, offsetPosition, 0f);
+        AudioManager.Instance.progressTime = 0f;        
         AudioManager.Instance.Stop();
         musicController.SetText(">");
     }
