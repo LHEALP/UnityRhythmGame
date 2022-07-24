@@ -123,10 +123,7 @@ public class NoteGenerator : MonoBehaviour
             StopCoroutine(coReleaseTimer);
             coReleaseTimer = null;
         }
-        foreach (NoteObject note in toReleaseList)
-        {
-            note.gameObject.SetActive(false);
-        }
+        ReleaseCompleted();
 
         toReleaseList.Clear();
         currentBar = 3;
@@ -303,6 +300,19 @@ public class NoteGenerator : MonoBehaviour
             noteObjectTemp.SetCollider();
             toReleaseList.Add(noteObjectTemp);
             noteObjectTemp = null;
+        }
+    }
+
+    void ReleaseCompleted()
+    {
+        foreach (NoteObject note in toReleaseList)
+        {
+            note.gameObject.SetActive(false);
+
+            if (note is NoteShort)
+                PoolShort.Release(note as NoteShort);
+            else
+                PoolLong.Release(note as NoteLong);
         }
     }
 
