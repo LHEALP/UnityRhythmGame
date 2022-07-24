@@ -100,8 +100,8 @@ public class NoteShort : NoteObject
 public class NoteLong : NoteObject
 {
     LineRenderer lineRenderer;
-    GameObject head;
-    GameObject tail;
+    public GameObject head;
+    public GameObject tail;
     GameObject line;
 
     void Awake()
