@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityEngine;
 
 public class SheetStorage : MonoBehaviour
@@ -23,7 +25,8 @@ public class SheetStorage : MonoBehaviour
     {
         Sheet sheet = GameManager.Instance.sheets[GameManager.Instance.title];
 
-        string notes = string.Empty;
+        List<Note> notes = new List<Note>();
+        string noteStr = string.Empty;
         float baseTime = sheet.BarPerSec / 16;
         foreach (NoteObject note in NoteGenerator.Instance.toReleaseList)
         {
@@ -52,18 +55,37 @@ public class SheetStorage : MonoBehaviour
             if (note is NoteShort)
             {
                 NoteShort noteShort = note as NoteShort;
-                int noteTime = (int)(noteShort.transform.position.y * baseTime * 1000);
+                int noteTime = (int)(noteShort.transform.localPosition.y * baseTime * 1000) + sheet.offset;
 
-                notes += $"{noteTime}, {(int)NoteType.Short}, {findLine + 1}\n";
+                notes.Add(new Note(noteTime, (int)NoteType.Short, findLine + 1, -1));
+                //noteStr += $"{noteTime}, {(int)NoteType.Short}, {findLine + 1}\n";
             }
             else if (note is NoteLong)
             {
                 NoteLong noteLong = note as NoteLong;
-                int headTime = (int)(noteLong.transform.position.y * baseTime * 1000);
-                int tailTime = (int)((noteLong.transform.position.y + noteLong.tail.transform.position.y - noteLong.transform.position.y) * baseTime * 1000);
-                notes += $"{headTime}, {(int)NoteType.Long}, {findLine + 1}, {tailTime}\n";
+                int headTime = (int)(noteLong.transform.localPosition.y * baseTime * 1000) + sheet.offset;
+                int tailTime = (int)((noteLong.transform.localPosition.y + noteLong.tail.transform.localPosition.y) * baseTime * 1000) + sheet.offset;
+
+                notes.Add(new Note(headTime, (int)NoteType.Long, findLine + 1, tailTime));
+                //noteStr += $"{headTime}, {(int)NoteType.Long}, {findLine + 1}, {tailTime}\n";
             }
         }
+
+        notes = notes.OrderBy(a => a.time).ToList();
+
+        foreach (Note n in notes)
+        {
+            switch (n.type)
+            {
+                case (int)NoteType.Short:
+                    noteStr += $"{n.time}, {n.type}, {n.line}\n";
+                    break;
+                case (int)NoteType.Long:
+                    noteStr += $"{n.time}, {n.type}, {n.line}, {n.tail}\n";
+                    break;
+            }
+        }
+
 
         string writer = $"[Description]\n" +
             $"Title: {sheet.title}\n" +
@@ -73,7 +95,7 @@ public class SheetStorage : MonoBehaviour
             $"Offset: {sheet.offset}\n" +
             $"Signature: {sheet.signature[0]}/{sheet.signature[1]}\n\n" +
             $"[Note]\n" +
-            $"{notes}";
+            $"{noteStr}";
 
         writer.TrimEnd('\r', '\n');
 
