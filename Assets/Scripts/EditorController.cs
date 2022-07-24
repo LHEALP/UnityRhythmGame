@@ -30,6 +30,18 @@ public class EditorController : MonoBehaviour
 
     public Action<int> GridSnapListener;
 
+    GameObject selectedNoteObject;
+    Vector3 selectedGridPosition;
+    Vector3 lastSelectedGridPosition;
+    int selectedLine = 0;
+
+    int longNoteMakingCount = 0;
+    GameObject longNoteTemp;
+    bool isDispose;
+
+    public bool isShortNoteActive;
+    public bool isLongNoteActive;
+
     private void Awake()
     {
         if (instance == null)
@@ -62,36 +74,50 @@ public class EditorController : MonoBehaviour
 
         Debug.DrawRay(worldPos, cam.transform.forward * 2, Color.red, 0.2f);
         RaycastHit2D hit = Physics2D.Raycast(worldPos, cam.transform.forward, 2f);
-        if (hit)
+        if (hit.transform == null)
         {
-            int line = int.Parse(hit.transform.name.Split('_')[1]);
+            isDispose = false;
+            selectedNoteObject = null;
+            return;
+        }
+        else if (hit.transform.CompareTag("Note"))
+        {
+            //Debug.Log("note");
+            isDispose = false;
+            selectedNoteObject = hit.transform.gameObject;
+        }
+        else
+        {
+            //Debug.Log("grid");
+            int beat = int.Parse(hit.transform.name.Split('_')[1]);
             int index = hit.transform.parent.GetComponent<GridObject>().index;
             float y = hit.transform.TransformDirection(hit.transform.position).y; // Local Position To World Position
+
             if (worldPos.x < -1f && worldPos.x > -2f)
             {
-                //Debug.Log($"0번 레인 : {index}번 그리드 : {line} 비트");
-
-
-                cursorObj.transform.position = new Vector3(-1.5f, y, 0f);
+                //Debug.Log($"0번 레인 : {index}번 그리드 : {beat} 비트");
+                selectedLine = 0;
             }
             else if (worldPos.x < 0f && worldPos.x > -1f)
             {
-                //Debug.Log($"1번 레인 : {index}번 그리드 : {line} 비트");
-
-                cursorObj.transform.position = new Vector3(-0.5f, y, 0f);
+                //Debug.Log($"1번 레인 : {index}번 그리드 : {beat} 비트");
+                selectedLine = 1;
             }
             else if (worldPos.x < 1f && worldPos.x > 0f)
             {
-                //Debug.Log($"2번 레인 : {index}번 그리드 : {line} 비트");
-
-                cursorObj.transform.position = new Vector3(0.5f, y, 0f);
+                //Debug.Log($"2번 레인 : {index}번 그리드 : {beat} 비트");
+                selectedLine = 2;
             }
             else if (worldPos.x < 2f && worldPos.x > 1f)
             {
-                //Debug.Log($"3번 레인 : {index}번 그리드 : {line} 비트");
-
-                cursorObj.transform.position = new Vector3(1.5f, y, 0f);
+                //Debug.Log($"3번 레인 : {index}번 그리드 : {beat} 비트");
+                selectedLine = 3;
             }
+
+            selectedGridPosition = new Vector3(NoteGenerator.Instance.linePos[selectedLine], y, 0f);
+            cursorObj.transform.position = selectedGridPosition;
+
+            isDispose = true;
         }
     }
 
@@ -112,11 +138,50 @@ public class EditorController : MonoBehaviour
     {
         if (btnName == "leftButton")
         {
-            
+            if (selectedNoteObject != null)
+            {
+                Debug.Log("노트가 이미 존재합니다");
+            }
+            if (isDispose)
+            {
+                if (isLongNoteActive)
+                {
+                    if (longNoteMakingCount == 0)
+                    {
+                        lastSelectedGridPosition = selectedGridPosition;
+                        NoteGenerator.Instance.DisposeNoteLong(longNoteMakingCount, new Vector3[] { lastSelectedGridPosition, selectedGridPosition });
+
+                        longNoteMakingCount++;
+                    }
+                    else if (longNoteMakingCount == 1)
+                    {
+                        Vector3 tailPositon = selectedGridPosition;
+                        tailPositon.x = lastSelectedGridPosition.x; // 롱노트는 사선으로 작성될 수 없으므로, 다른 라인(x)에 찍어도 종전과 동일한 위치를 유지
+                        NoteGenerator.Instance.DisposeNoteLong(longNoteMakingCount, new Vector3[] { lastSelectedGridPosition, tailPositon });
+                        longNoteMakingCount = 0;
+                    }
+                }
+                else if (isShortNoteActive)
+                {
+                    NoteGenerator.Instance.DisposeNoteShort(NoteType.Short, selectedGridPosition );
+                }
+            }
         }
         else if (btnName == "rightButton")
         {
-
+            if (selectedNoteObject != null)
+            {
+                Debug.Log("노트 삭제");
+                if (isLongNoteActive)
+                {
+                    // long은 부모 찾아서 비활성화
+                    selectedNoteObject.transform.parent.gameObject.SetActive(false);
+                }
+                else if (isShortNoteActive)
+                {
+                    selectedNoteObject.SetActive(false);
+                }
+            }
         }
     }
 

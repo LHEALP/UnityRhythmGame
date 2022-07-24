@@ -18,7 +18,7 @@ public class NoteGenerator : MonoBehaviour
     public GameObject notePrefab;
     public Material lineRendererMaterial;
 
-    readonly float[] linePos = { -1.5f, -0.5f, 0.5f, 1.5f };
+    public readonly float[] linePos = { -1.5f, -0.5f, 0.5f, 1.5f };
     readonly float defaultInterval = 0.005f; // 1배속 기준점 (1마디 전체가 화면에 그려지는 정도를 정의)
     public float Interval { get; private set; }
 
@@ -276,6 +276,27 @@ public class NoteGenerator : MonoBehaviour
             noteObject.gameObject.SetActive(true);
             //noteObject.Move();
             toReleaseList.Add(noteObject); // 에디팅끝나면 Release호출해서 해제해주기
+        }
+    }
+
+    public void DisposeNoteShort(NoteType type, Vector3 pos)
+    {
+        NoteObject noteObject = poolShort.Get();
+        noteObject.SetPosition(new Vector3[] { pos });
+    }
+
+    NoteObject noteObjectTemp;
+    public void DisposeNoteLong(int makingCount, Vector3[] pos)
+    {
+        if (makingCount == 0)
+        {
+            noteObjectTemp = poolLong.Get();
+            noteObjectTemp.SetPosition(new Vector3[] { pos[0], pos[1] });
+        }
+        else if (makingCount == 1)
+        {
+            noteObjectTemp.SetPosition(new Vector3[] { pos[0], pos[1] });
+            noteObjectTemp = null;
         }
     }
 
