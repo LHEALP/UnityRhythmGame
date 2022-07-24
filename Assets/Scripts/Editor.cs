@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,6 +17,7 @@ public class Editor : MonoBehaviour
 
     UISilder slider = null;
     UIButton musicController = null;
+    UIText timer = null;
 
     public GameObject objects;
     Coroutine coMove;
@@ -44,6 +46,7 @@ public class Editor : MonoBehaviour
     {
         slider = UIController.Instance.GetUI("UI_E_ProgressBar").uiObject as UISilder;
         musicController = UIController.Instance.GetUI("UI_E_Play").uiObject as UIButton;
+        timer = UIController.Instance.GetUI("UI_E_Time").uiObject as UIText;
 
         StartCoroutine(IEBarTimer());
 
@@ -58,6 +61,10 @@ public class Editor : MonoBehaviour
         if (slider != null)
         {
             slider.slider.value = value;
+        }
+        if (timer != null)
+        {
+            timer.SetText(TimeSpan.FromSeconds(AudioManager.Instance.progressTime).ToString(@"mm\:ss\:fff"));
         }
     }
 
