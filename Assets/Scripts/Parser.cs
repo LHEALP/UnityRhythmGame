@@ -82,6 +82,9 @@ public class Parser
                 }
                 else if (currentStep == Step.Note)
                 {
+                    if (string.IsNullOrEmpty(readLine))
+                        break;
+
                     string[] s = readLine.Split(',');
                     int time = int.Parse(s[0].Trim());
                     int type = int.Parse(s[1].Trim());
