@@ -79,10 +79,11 @@ public class NoteShort : NoteObject
     public override IEnumerator IECheckCollier()
     {
         WaitForSeconds wait = new WaitForSeconds(0.1f);
-        int time = (int)transform.position.y;
         while (true)
         {
+            int time = (int)transform.localPosition.y;
             int currentBar = Editor.Instance.currentBar;
+            //Debug.Log(time + " @  " + (currentBar - 3) * 16 + " / " + (currentBar + 3) * 16);
             if (time >= (currentBar - 3) * 16 && time <= (currentBar + 3) * 16)
             {
                 GetComponent<BoxCollider2D>().enabled = true;
@@ -172,9 +173,9 @@ public class NoteLong : NoteObject
     public override IEnumerator IECheckCollier()
     {
         WaitForSeconds wait = new WaitForSeconds(0.1f);
-        int time = (int)transform.position.y;
         while (true)
         {
+            int time = (int)transform.localPosition.y;
             int currentBar = Editor.Instance.currentBar;
             if (time >= (currentBar - 3) * 16 && time <= (currentBar + 3) * 16)
             {
