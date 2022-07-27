@@ -281,7 +281,7 @@ public class NoteGenerator : MonoBehaviour
 
     public void DisposeNoteShort(NoteType type, Vector3 pos)
     {
-        NoteObject noteObject = poolShort.Get();
+        NoteObject noteObject = PoolShort.Get();
         noteObject.SetPosition(new Vector3[] { pos });
         noteObject.SetCollider();
         toReleaseList.Add(noteObject);
@@ -292,7 +292,7 @@ public class NoteGenerator : MonoBehaviour
     {
         if (makingCount == 0)
         {
-            noteObjectTemp = poolLong.Get();
+            noteObjectTemp = PoolLong.Get();
             noteObjectTemp.SetPosition(new Vector3[] { pos[0], pos[1] });
         }
         else if (makingCount == 1)
@@ -300,7 +300,6 @@ public class NoteGenerator : MonoBehaviour
             noteObjectTemp.SetPosition(new Vector3[] { pos[0], pos[1] });
             noteObjectTemp.SetCollider();
             toReleaseList.Add(noteObjectTemp);
-            noteObjectTemp = null;
         }
     }
 
