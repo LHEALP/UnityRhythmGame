@@ -283,6 +283,7 @@ public class NoteGenerator : MonoBehaviour
     {
         NoteObject noteObject = PoolShort.Get();
         noteObject.SetPosition(new Vector3[] { pos });
+        noteObject.gameObject.SetActive(true);
         noteObject.SetCollider();
         toReleaseList.Add(noteObject);
     }
@@ -294,6 +295,7 @@ public class NoteGenerator : MonoBehaviour
         {
             noteObjectTemp = PoolLong.Get();
             noteObjectTemp.SetPosition(new Vector3[] { pos[0], pos[1] });
+            noteObjectTemp.gameObject.SetActive(true);
         }
         else if (makingCount == 1)
         {
