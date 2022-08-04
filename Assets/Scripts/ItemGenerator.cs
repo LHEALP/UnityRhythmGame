@@ -36,7 +36,7 @@ public class ItemGenerator : MonoBehaviour
         foreach (var sheet in GameManager.Instance.sheets)
         {
             cover.sprite = sheet.Value.img;
-            level.text = "Normal";
+            level.text = "";
             title.text = sheet.Value.title;
             artist.text = sheet.Value.artist;
 
