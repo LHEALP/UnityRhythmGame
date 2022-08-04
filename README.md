@@ -1,8 +1,9 @@
 # UnityRhythmGame2
 유니티엔진 리듬게임2
 
-아마 큰 차이는 없을 것 같고 그냥 다시 만들어보고 싶어서 생성
-
+* OST</br>
+Smilegate RPG</br>
+</br>
 * 2.0 변경점</br>
 에디터 추가</br>
 롱노트 추가</br>
