@@ -66,6 +66,7 @@ ESC - 게임 중단 ( ESC - Stop Game )</br>
 
 ## 잘모르겠어요
 1.0 버전에서는 리듬게임 제작 방식에 대한 문서가 준비되어 있습니다.</br>
+[1.0 브랜치로 이동](https://github.com/LHEALP/UnityRhythmGame/tree/1.0)</br>
 </br>
 
 ## 여담
