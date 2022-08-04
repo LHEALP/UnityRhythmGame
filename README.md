@@ -18,7 +18,7 @@ Editor</br>
 * 롱노트 추가</br>
 </br>
 
-## OST - Smilgate RPG
+## OST - Smilegate RPG
 * 영혼을 데우는 스프(Consolation)</br>
 * 화려한 서커스(Splendid Circus)</br>
 </br>
