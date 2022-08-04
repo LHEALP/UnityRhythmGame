@@ -3,6 +3,9 @@
 
 * OST</br>
 Smilegate RPG</br>
+목록</br>
+영혼을 데우는 스프(Consolation)</br>
+화려한 서커스(Splendid Circus)</br>
 </br>
 * 2.0 변경점</br>
 에디터 추가</br>
