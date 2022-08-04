@@ -31,6 +31,19 @@ https://creativecommons.org/licenses/by-nc-sa/4.0/deed.ko
 폴더 및 파일들은 확장자를 제외하고 반드시 이름이 동일해야 합니다.</br>
 파일들의 확장자는 위에서 제시한 것을 따라야 합니다.</br>
 </br>
+
+## 조작법
+방향키 - 곡 고르기 ( Arrow - Select music )</br>
+엔터 - 게임 시작 ( Enter - Start Game )</br>
+ESC - 게임 중단 ( ESC - Stop Game )</br>
+1, 2 - 배속 변경 ( 1, 2 - Change note speed )</br>
+3, 4 - 판정선 변경 ( 3, 4 - Change judge position )</br>
+</br>
+
+## 게임/에디터 모드 전환
+곡 선택화면의 왼쪽 상단에 Game/Edit mode 전환 버튼이 있습니다.</br>
+</br>
+
 ## Editor Hotkey
 스페이스 - 재생/일시정지 ( Space - Play/Puase )<br/>
 마우스좌클릭 - 노트 배치 ( Mouse leftBtn - Dispose note )<br/>
