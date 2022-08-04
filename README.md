@@ -1,47 +1,10 @@
 # UnityRhythmGame
 
-오랜만입니다. <br/>
-프로젝트를 새롭게 시작하였습니다. <br/>
-브랜치에서 2.0을 선택하면 작업중인 모습을 확인하실 수 있습니다. <br/>
-새롭게 만든 이유는 그냥 취미입니다. <br/>
-기존 코드는 학부 시절에 정말 리듬게임이 너무 만들어보고 싶어, 좋은 코드보다 일단 만들자였기 때문에<br/>
-지금 제가 보기에도 남들이 보기에도 너무나 이해하기 어려운 코드인 것 같습니다.<br/>
-다소 복잡한 개념인 timeSamples까지 들어가 있고, 게다가 사실 제대로 활용한 것 같지도 않네요.<br/>
-2.0 에서는 게임과 에디터를 동시에 마주칠 수 있을 것이며 조금 더 이해하기 쉬운 프로그램을 만들기 위해 노력하겠습니다.<br/>
-2022년 5월 7일 LHEALP 작성.<br/>
-
-
-## 중요! Important!
-
-https://github.com/LHEALP/Runthm <br/>
-노트 에디터 프로젝트가 **공개**되었습니다! <br/>
-Note editor project has been **public**!<br/>
-<br/>
-오랜만입니다.<br/>
-노트 에디터를 공개할 예정입니다. https://github.com/LHEALP/Runthm <br/>
-11월부터 프로젝트를 새롭게 생성하여 조금씩 작업하였으며 어느정도 큰 틀은 완성된 상태입니다.<br/>
-현재 프로젝트와 병합을 시도하려 했으나 여러 문제가 예측되어 아쉽게도 취소하였습니다.<br/>
-그리고 프로젝트 변경사항으로 인해 문서가 일치하지 않는 부분이 생겼을 것으로 보이나(SongSelect 씬), 오히려 사용법이 매우 간소화 되었기 때문에 큰 상관은 없을 것입니다.<br/>
-<br/>
-Long time no see.<br/>
-I'm going to release a note editor. https://github.com/LHEALP/Runthm <br/>
-From November, a new project was created and worked little by little, and a somewhat large frame was completed.<br/>
-I tried to merge with the current project, but it was unfortunately canceled because several problems were predicted.<br/>
-And it seems that there are some inconsistencies in the documentation due to changes in the project (SongSelect scene), but it doesn't matter much because the usage is very simplified.<br/>
-
-
-## 프로젝트 업데이트 Project Update
-+ 유니티 버전업 2019.3.10f1 에서 2019.4.9f1
++ 유니티 2019.4.9f1
 + 음악 선택씬의 리스트뷰 자동화. Resources 폴더 내의 항목들을 읽어 알아서 생성하도록 변경.
 + 에디터와 관련해, 시트 포맷이 일부 변경되어 구별하기 위한 코드 추가. (기존 시트도 여전히 사용 가능)
 + 가독성을 떨어트리는 의미없는 주석 및 코드 최소화
 + 여담.. 이 코드 누가 짠거야! 어? 나네? 😂
-
-+ upgrade unity from 2019.3.10f1 to 2019.4.9f1
-+ Automated list view of music selection scene. Changed to automatically create by reading items in the Resources folder.
-+ Regarding the editor, the sheet format has been partially changed, so the code to distinguish it has been added. (Existing sheets can still be used)
-+ Minimize meaningless comments and code that degrade readability
-+ Aside... who wrote this code! uh? Me? 😂
 
 Doc(Eng) used a translator.<br/>
 https://translate.kakao.com/<br/>
