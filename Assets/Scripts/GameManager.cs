@@ -169,8 +169,7 @@ public class GameManager : MonoBehaviour
         ItemGenerator.Instance.Init();
 
         // 타이틀 화면 시작
-        //Title();
-        Select();
+        Title();
     }
 
     IEnumerator IETitle()
@@ -181,7 +180,7 @@ public class GameManager : MonoBehaviour
 
         // 타이틀 인트로 재생
         canvases[(int)Canvas.Title].GetComponent<Animation>().Play();
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(5.6f);
 
         // 선택화면 시작
         Select();
