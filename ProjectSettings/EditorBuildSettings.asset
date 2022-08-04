@@ -5,22 +5,8 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
-    path: 
-    guid: 00000000000000000000000000000000
   - enabled: 1
-    path: Assets/Scenes/Home.unity
-    guid: 26427f70dd67e30468a4a5b01698f3a4
-  - enabled: 1
-    path: Assets/Scenes/SongSelect.unity
-    guid: a36b3a1c40184104991b125c2196119e
-  - enabled: 1
-    path: Assets/Scenes/Play.unity
-    guid: 8b11fdb03cfc30249a43755483c5cc2a
-  - enabled: 1
-    path: Assets/Scenes/PlayResult.unity
-    guid: 6ab0598771911f34f807ad17f7b1c4ca
-  - enabled: 1
-    path: Assets/Scenes/NoteEditor.unity
-    guid: 8ae64369a76a2ae41996c648abe17809
-  m_configObjects: {}
+    path: Assets/Scenes/SampleScene.unity
+    guid: 8c9cfa26abfee488c85f1582747f6a02
+  m_configObjects:
+    com.unity.input.settings: {fileID: 11400000, guid: a59f1365a24f1af439f28b52ab675b2a, type: 2}
