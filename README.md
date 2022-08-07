@@ -3,7 +3,7 @@
 </br>
 이 프로젝트는 유니티 2021.3.1f1에서 생성되었습니다.</br>
 </br>
-
+## 프리뷰
 Game</br>
 ![GIF 2022-08-05 오전 12-28-40](https://user-images.githubusercontent.com/57874136/182889438-4359bff0-f735-4736-8f56-fc495e2ecae2.gif)
 </br>
@@ -18,9 +18,16 @@ Editor</br>
 * 롱노트 추가</br>
 </br>
 
+## 플레이 영상
+[![화려한 서커스(Splendid Circus)](http://img.youtube.com/vi/DoIjQyL5_zo/0.jpg)](https://youtu.be/DoIjQyL5_zo)</br>
+화려한 서커스(Splendid Circus) - Youtube</br></br>
+[![영혼을 데우는 스프(Consolation)](http://img.youtube.com/vi/2dKAS7o_zO8/0.jpg)](https://youtu.be/2dKAS7o_zO8)</br>
+영혼을 데우는 스프(Consolation) - Youtube</br></br>
+</br>
+
 ## OST - Smilegate RPG
-* 영혼을 데우는 스프(Consolation)</br>
 * 화려한 서커스(Splendid Circus)</br>
+* 영혼을 데우는 스프(Consolation)</br>
 </br>
 음원의 저작권은 아래를 따르고 있으며 지켜져야 합니다.</br>
 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.ko
